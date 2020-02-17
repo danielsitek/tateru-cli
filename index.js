@@ -8,6 +8,10 @@ const path = require('path');
 const Twig = require('twig');
 const YAML = require('yaml');
 const minify = require('html-minifier').minify;
+const MyPipe = require('./src/myPipe');
+const saveFile = require('./src/pipes/saveFile');
+const printLog = require('./src/pipes/printLog');
+const prodMinifyHtml = require('./src/pipes/prodMinifyHtml');
 
 const cli = meow(`
 Usage:
@@ -71,27 +75,6 @@ const renderOptions = _merge(
 
 const renderSrcDir = path.resolve(rootDir, configFile.options.src);
 const renderExtDir = path.resolve(rootDir, configFile.options.ext);
-
-
-/**
- * Piping middleware.
- *
- * @param {Any} data
- */
-function MyPipe(data) {
-    this.data = data;
-    return this;
-};
-
-MyPipe.prototype.pipe = function(fn) {
-    const data = this.data;
-    const pipedData = fn(data);
-    this.data = {
-        ...data,
-        ...pipedData
-    };
-    return this;
-};
 
 
 /**
@@ -174,54 +157,6 @@ const renderPage = (pageName) => {
         renderOptions: fileRenderOptions
     });
 };
-
-/**
- * Print console log.
- *
- * @param {Object} data
- */
-const printLog = (data) => {
-    console.log(`Created:\t${data.relativeFileExt}`);
-    // console.log(data);
-    return data;
-};
-
-/**
- * Save generated html in file.
- *
- * @param {Object} data
- */
-const saveFile = (data) => {
-    const fileDir = path.dirname(data.filePathExt);
-    const filePath = data.filePathExt;
-    const fileSource = data.source;
-
-    if (!fs.existsSync(fileDir)) {
-        fs.mkdirSync(fileDir, { recursive: true });
-    }
-    fs.writeFileSync(filePath, fileSource);
-    return data;
-}
-
-const minifyHtml = (data) => {
-    let fileSource = data.source;
-    fileSource = minify(fileSource, {
-        collapseWhitespace: true,
-        minifyCSS: true,
-        minifyJS: true,
-    });
-
-    data.source = fileSource;
-    return data;
-};
-
-const prodMinifyHtml = (data) => {
-    if (options.env === 'prod') {
-        return minifyHtml(data);
-    }
-    return data;
-}
-
 
 /**
  * Generate pages.
