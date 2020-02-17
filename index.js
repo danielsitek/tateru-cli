@@ -1,17 +1,16 @@
 'use strict';
 
-const _get = require('lodash.get');
-const _merge = require('lodash.merge');
 const fs = require('fs');
-const meow = require('meow');
 const path = require('path');
+const lodash = require('lodash');
+const meow = require('meow');
 const Twig = require('twig');
-const YAML = require('yaml');
-const minify = require('html-minifier').minify;
 const MyPipe = require('./src/myPipe');
 const saveFile = require('./src/pipes/saveFile');
 const printLog = require('./src/pipes/printLog');
-const prodMinifyHtml = require('./src/pipes/prodMinifyHtml');
+
+const _get = lodash.get;
+const _merge = lodash.merge;
 
 const cli = meow(`
 Usage:
@@ -52,17 +51,28 @@ if (process.env.NODE_ENV) {
     }
 }
 
-const rootDir = path.resolve(__dirname, '../');
+const rootDir = path.resolve(process.cwd())
 const configFileSrc = path.resolve(rootDir, options.configFile);
 
-// TODO: Test if config file is loaded.
-const configFile = require(configFileSrc);
+if (!fs.existsSync(options.configFile)) {
+    console.error(`Cannot find config file "${options.configFile}" on path "${configFileSrc}"`);
+    process.exit(1);
+} else {
+    console.log(`Config file "${options.configFile}" loaded`)
+}
+
+let configFile;
+
+try {
+    configFile = require(configFileSrc);
+} catch (e) {
+    console.error(`Cannot load config file "${configFileSrc}"`)
+}
 
 const hrefData = {};
 Object.keys(configFile.pages.cs).forEach(item => {
     hrefData[item] = `/${configFile.pages.cs[item].ext}`;
 });
-
 
 const renderOptions = _merge(
     configFile.options.data,
@@ -81,7 +91,7 @@ const renderExtDir = path.resolve(rootDir, configFile.options.ext);
  * Translations
  */
 const translationFile = fs.readFileSync(path.resolve(rootDir, configFile.translations.cs.src));
-const translations = YAML.parse(translationFile.toString());
+const translations = JSON.parse(translationFile.toString());
 
 Twig.extendFunction('trans', (value) => {
     return _get(translations, value) || value;
@@ -114,6 +124,8 @@ Twig.extendFilter('sort_by', (value, key) => {
  */
 const renderPage = (pageName) => {
     if (!configFile.pages.cs[pageName]) {
+        console.error(`"${pageName}" were not found in config file.`);
+        process.exit(1);
         return false;
     }
 
@@ -159,26 +171,41 @@ const renderPage = (pageName) => {
 };
 
 /**
+ * Save generated html in file.
+ *
+ * @param {Object} data
+ */
+
+const prodMinifyHtml = (data) => {
+    if (options.env === 'prod') {
+        return minifyHtml(data);
+    }
+    return data;
+}
+
+/**
  * Generate pages.
  */
 
+const renderPipeline = (page) => {
+    renderPage(page)
+        .pipe(prodMinifyHtml)
+        .pipe(printLog)
+        .pipe(saveFile);
+}
 
 const run = () => {
     console.log(`Environment:\t${options.env}`);
 
     if (cli.flags.page) {
-        renderPage(cli.flags.page)
-            .pipe(prodMinifyHtml)
-            .pipe(printLog)
-            .pipe(saveFile);
+        renderPipeline(cli.flags.page);
     } else {
         Object.keys(configFile.pages.cs).forEach(item => {
-            renderPage(item)
-                .pipe(prodMinifyHtml)
-                .pipe(printLog)
-                .pipe(saveFile);
+            renderPipeline(item);
         });
     }
+
+    process.exit(0);
 }
 
 module.exports = run;

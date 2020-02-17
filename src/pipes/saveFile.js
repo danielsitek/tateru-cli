@@ -1,3 +1,5 @@
+const fs = require('fs');
+const path = require('path');
 
 /**
  * Save generated html in file.

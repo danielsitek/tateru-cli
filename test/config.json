@@ -1,0 +1,49 @@
+{
+    "env": {
+        "dev": {
+            "data": {
+                "app": {
+                    "environment": "dev"
+                }
+            }
+        },
+        "prod": {
+            "data": {
+                "app": {
+                    "environment": "prod"
+                }
+            }
+        }
+    },
+
+    "options": {
+        "data": {
+            "app": {
+                "environment": "dev",
+                "root": "/"
+            },
+            "title": "Tateru CLI Example"
+        },
+        "src": "src/twig",
+        "ext": "dist"
+    },
+
+    "translations": {
+        "cs": {
+            "src": "src/translations/cs.json",
+            "ext": ""
+        }
+    },
+
+    "pages": {
+        "cs": {
+            "index": {
+                "data": {
+                    "page": "index"
+                },
+                "src": "views/index.html.twig",
+                "ext": "index.html"
+            }
+        }
+    }
+}
