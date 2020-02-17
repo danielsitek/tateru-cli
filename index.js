@@ -136,6 +136,11 @@ const renderPage = (pageName) => {
     const relativeFileSrc = path.join(configFile.options.src, buildPageConfig.src);
 
     // TODO: test jestli byl readFileSync success.
+    if (!fs.existsSync(pathToSrc)) {
+        console.error(`File "${pathToSrc}" does not exits`);
+        process.exit(1);
+    }
+
     const templateFile = fs.readFileSync(pathToSrc);
     const fileTwigConfig = {
         id: Math.floor(Math.random() * 1000000),
@@ -156,7 +161,6 @@ const renderPage = (pageName) => {
 
     const template = Twig.twig(fileTwigConfig).render(fileRenderOptions);
 
-    // return template;
     return new MyPipe({
         source: template,
         filePathExt: pathToExt,

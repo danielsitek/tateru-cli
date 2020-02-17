@@ -2,7 +2,7 @@
   "name": "tateru-cli",
   "version": "1.0.0",
   "description": "Static site builder with twig",
-  "bin": "./bin/tateru.js",
+  "bin": "./bin/tateru-cli.js",
   "main": "index.js",
   "dependencies": {
     "html-minifier": "^4.0.0",
