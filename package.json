@@ -1,41 +1,47 @@
 {
   "name": "tateru-cli",
   "version": "1.0.0",
-  "description": "Static site builder with twig",
-  "bin": "./bin/tateru-cli.js",
+  "description": "Simple CLI static site builder tool with Twig.",
+  "keywords": [
+    "cli",
+    "generator",
+    "html",
+    "javascript",
+    "npm",
+    "site",
+    "static",
+    "static-site-generation",
+    "static-site-generator",
+    "twig",
+    "twigjs"
+  ],
+  "homepage": "https://github.com/danielsitek/tateru-cli#readme",
+  "repository": "github:danielsitek/tateru-cli",
+  "license": "MIT",
+  "author": {
+    "name": "Daniel Sitek",
+    "email": "dan.sitek@gmail.com",
+    "url": "https://danielsitek.cz"
+  },
+  "files": [
+    "index.js",
+    "src",
+    "bin"
+  ],
   "main": "index.js",
+  "bin": "./bin/tateru-cli.js",
+  "scripts": {
+    "example": "cd ./test && node ../bin/tateru-cli.js config.json",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
   "dependencies": {
     "html-minifier": "^4.0.0",
     "lodash": "^4.17.15",
     "meow": "^6.0.1",
     "twig": "^1.14.0"
   },
-  "devDependencies": {
-    "@types/lodash": "^4.14.149",
-    "@types/node": "^13.7.1"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [
-    "static",
-    "site",
-    "html",
-    "generator",
-    "twig"
-  ],
-  "author": {
-    "name": "Daniel Sitek",
-    "email": "dan.sitek@gmail.com",
-    "url": "https://danielsitek.cz"
-  },
-  "license": "MIT",
+  "devDependencies": {},
   "engines": {
     "node": ">= 0.10"
-  },
-  "files": [
-    "index.js",
-    "src",
-    "bin"
-  ]
+  }
 }
