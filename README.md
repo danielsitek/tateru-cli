@@ -1,6 +1,6 @@
 # Tateru CLI
 
-Simple CLI static site builder tool based on Twig.
+Simple CLI static site builder tool with Twig.
 
 ## Install
 
