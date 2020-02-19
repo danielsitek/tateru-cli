@@ -19,7 +19,6 @@ Usage:
 Options:
 \t--env     \tSet build environment - dev or prod. Default is dev.
 \t--page  -p\tBuild only single page from config.
-\t--lang  -l\tSelect language subset to build
 \t--help    \tDisplay help and usage details
 `, {
     flags: {
@@ -36,7 +35,7 @@ Options:
         },
         lang: {
             type: 'string',
-            default: '',
+            default: 'cs',
             alias: 'l',
             description: 'Select language subset to build.'
         }
