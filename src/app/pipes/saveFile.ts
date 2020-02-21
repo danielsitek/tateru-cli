@@ -1,5 +1,6 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+import { PipelineData } from '../../types';
 
 /**
  * Save generated html in file.
@@ -7,7 +8,7 @@ const path = require('path');
  * @param {Object} data
  */
 
- const saveFile = (data) => {
+ const saveFile = (data: PipelineData): PipelineData => {
     const fileDir = path.dirname(data.filePathExt);
     const filePath = data.filePathExt;
     const fileSource = data.source;
@@ -19,4 +20,4 @@ const path = require('path');
     return data;
 }
 
-module.exports = saveFile;
+export default saveFile;

@@ -1,16 +1,15 @@
 'use strict';
 
-const fs = require('fs');
-const path = require('path');
-const lodash = require('lodash');
-const meow = require('meow');
-const Twig = require('twig');
-const MyPipe = require('./src/myPipe');
-const saveFile = require('./src/pipes/saveFile');
-const printLog = require('./src/pipes/printLog');
-
-const _get = lodash.get;
-const _merge = lodash.merge;
+import fs from 'fs';
+import path from 'path';
+import { get, merge } from 'lodash';
+import meow from 'meow';
+import Twig from 'twig';
+import Pipeline from './app/utils/pipeline';
+import { BuilderOptions, ConfigFile, HrefData, PipelineData, Environment, TwigConfiguration } from './types';
+import minifyHtml from './app/pipes/minifyHtml';
+import saveFile from './app/pipes/saveFile';
+import printLog from './app/pipes/printLog';
 
 const cli = meow(`
 Usage:
@@ -42,13 +41,13 @@ Options:
     }
 });
 
-const ENV_DEVELOPMENT = 'dev';
-const ENV_PRODUCTION = 'prod';
-const LANG_DEFAULT = 'cs';
+const ENV_DEVELOPMENT: Environment = 'dev';
+const ENV_PRODUCTION: Environment = 'prod';
+const LANG_DEFAULT: string = 'cs';
 
-const options = {
+const options: BuilderOptions = {
     configFile: cli.input[0] || 'config.json',
-    env: cli.flags.env || ENV_DEVELOPMENT,
+    env: cli.flags.env as Environment || ENV_DEVELOPMENT,
     lang: cli.flags.lang || LANG_DEFAULT,
 };
 
@@ -64,14 +63,14 @@ if (process.env.NODE_ENV) {
 const rootDir = path.resolve(process.cwd())
 const configFileSrc = path.resolve(rootDir, options.configFile);
 
-if (!fs.existsSync(options.configFile)) {
+if (!fs.existsSync(configFileSrc)) {
     console.error(`Cannot find config file "${options.configFile}" on path "${configFileSrc}"`);
     process.exit(1);
 } else {
     console.log(`Config file "${options.configFile}" loaded`)
 }
 
-let configFile;
+let configFile: ConfigFile;
 
 try {
     configFile = require(configFileSrc);
@@ -80,7 +79,7 @@ try {
     process.exit(1);
 }
 
-const hrefData = {};
+const hrefData: HrefData = {};
 try {
     Object.keys(configFile.pages[options.lang]).forEach(item => {
         try {
@@ -95,7 +94,7 @@ try {
 }
 
 
-const renderOptions = _merge(
+const renderOptions = merge(
     configFile.options.data,
     configFile.env[options.env].data,
     {
@@ -103,6 +102,8 @@ const renderOptions = _merge(
         lang: options.lang
     }
 );
+
+// console.log(renderOptions);
 
 const renderSrcDir = path.resolve(rootDir, configFile.options.src);
 const renderExtDir = path.resolve(rootDir, configFile.options.ext);
@@ -119,12 +120,12 @@ if (!fs.existsSync(translationFilePath)) {
 const translationFileContent = fs.readFileSync(translationFilePath);
 const translations = JSON.parse(translationFileContent.toString());
 
-Twig.extendFunction('trans', (value) => {
-    return _get(translations, value) || value;
+Twig.extendFunction('trans', (value: string) => {
+    return get(translations, value) || value;
 });
 
 
-Twig.extendFilter('sort_by', (value, key) => {
+Twig.extendFilter('sort_by', (value: any, key: any): any => {
     if (!Array.isArray(value)) {
         return value;
     }
@@ -142,17 +143,41 @@ Twig.extendFilter('sort_by', (value, key) => {
     return value;
 });
 
+const prepareTwigConfiguration = (pathToTwigFile: string, twigBase: string): TwigConfiguration => {
+    try {
+        if (!fs.existsSync(pathToTwigFile)) {
+            throw new Error(`File "${pathToTwigFile}" does not exits`);
+        }
+
+        const fileContent = fs.readFileSync(pathToTwigFile);
+        const fileTwigConfig = {
+            id: Math.floor(Math.random() * 1000000),
+            path: pathToTwigFile,
+            base: twigBase,
+            // allowInlineIncludes: true,
+            namespaces: {
+                'Main': twigBase + path.sep,
+            },
+            data: fileContent.toString('utf-8'),
+            // debug: true,
+            // trace: true,
+        };
+
+        return fileTwigConfig;
+    } catch (e) {
+        throw new Error(e)
+    }
+}
 
 /**
  * Render Twig template with configuration from config.json.
  *
  * @param {String} pageName Page name in config.json file.
  */
-const renderPage = (pageName) => {
+const renderPage = (pageName: string): Pipeline => {
     if (!configFile.pages[options.lang][pageName]) {
         console.error(`"${pageName}" were not found in config file.`);
         process.exit(1);
-        return false;
     }
 
     const buildPageConfig = configFile.pages[options.lang][pageName];
@@ -166,27 +191,16 @@ const renderPage = (pageName) => {
         process.exit(1);
     }
 
-    const templateFile = fs.readFileSync(pathToSrc);
-    const fileTwigConfig = {
-        id: Math.floor(Math.random() * 1000000),
-        path: pathToSrc,
-        base: renderSrcDir,
-        // allowInlineIncludes: true,
-        namespaces: {
-            'Main': renderSrcDir + path.sep,
-        },
-        data: templateFile.toString(),
-        // debug: true,
-        // trace: true,
-    };
-    const fileRenderOptions = _merge(
+    const fileTwigConfig = prepareTwigConfiguration(pathToSrc, renderSrcDir);
+
+    const fileRenderOptions: any = merge(
         renderOptions,
         buildPageConfig.data
     );
 
-    const template = Twig.twig(fileTwigConfig).render(fileRenderOptions);
+    const template = Twig.twig(fileTwigConfig).render(fileRenderOptions) as string;
 
-    return new MyPipe({
+    return new Pipeline({
         source: template,
         filePathExt: pathToExt,
         filePathSrc: pathToSrc,
@@ -205,7 +219,7 @@ const renderPage = (pageName) => {
  * @param {Object} data
  */
 
-const prodMinifyHtml = (data) => {
+const prodMinifyHtml = (data: PipelineData): PipelineData => {
     if (options.env === 'prod') {
         return minifyHtml(data);
     }
@@ -213,16 +227,19 @@ const prodMinifyHtml = (data) => {
 }
 
 /**
- * Generate pages.
+ * Generate page.
  */
 
-const renderPipeline = (page) => {
+const renderPipeline = (page: string): void => {
     renderPage(page)
         .pipe(prodMinifyHtml)
         .pipe(printLog)
         .pipe(saveFile);
 }
 
+/**
+ * Run builder
+ */
 const run = () => {
     try {
         console.log(`Environment:\t${options.env}`);
