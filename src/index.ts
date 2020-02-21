@@ -6,10 +6,11 @@ import { get, merge } from 'lodash';
 import meow from 'meow';
 import Twig from 'twig';
 import Pipeline from './app/utils/pipeline';
-import { BuilderOptions, ConfigFile, HrefData, PipelineData, Environment, TwigConfiguration } from './types';
+import { BuilderOptions, ConfigFile, PagesUrlObject, PipelineData, Environment } from './types';
 import minifyHtml from './app/pipes/minifyHtml';
 import saveFile from './app/pipes/saveFile';
 import printLog from './app/pipes/printLog';
+import prepareTwigConfiguration from './app/twig/prepareTwigConfiguration';
 
 const cli = meow(`
 Usage:
@@ -143,31 +144,7 @@ Twig.extendFilter('sort_by', (value: any, key: any): any => {
     return value;
 });
 
-const prepareTwigConfiguration = (pathToTwigFile: string, twigBase: string): TwigConfiguration => {
-    try {
-        if (!fs.existsSync(pathToTwigFile)) {
-            throw new Error(`File "${pathToTwigFile}" does not exits`);
-        }
 
-        const fileContent = fs.readFileSync(pathToTwigFile);
-        const fileTwigConfig = {
-            id: Math.floor(Math.random() * 1000000),
-            path: pathToTwigFile,
-            base: twigBase,
-            // allowInlineIncludes: true,
-            namespaces: {
-                'Main': twigBase + path.sep,
-            },
-            data: fileContent.toString('utf-8'),
-            // debug: true,
-            // trace: true,
-        };
-
-        return fileTwigConfig;
-    } catch (e) {
-        throw new Error(e)
-    }
-}
 
 /**
  * Render Twig template with configuration from config.json.
