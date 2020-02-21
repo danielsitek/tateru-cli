@@ -1,7 +1,22 @@
+import Twig from 'twig'
 
 export type Environment = 'dev' | 'prod'
 
 export type DataType = {}
+
+export type ShortLangString = string
+
+export type PageNameString = string
+
+export type FileSystemPath = string
+
+interface CustomKey<T> {
+    [key: string]: T
+}
+
+export interface DataObject<T = DataType> {
+    data: T
+}
 
 export interface BuilderOptions {
     configFile: string
@@ -9,64 +24,159 @@ export interface BuilderOptions {
     lang: string
 }
 
-export interface DataObject {
-    data: DataType
+/**
+ * Config file content
+ */
+export interface ConfigFile {
+    /**
+     * Modifications based on environment - dev ot prod.
+     */
+    readonly env: ConfigFileEnvironment
+
+    /**
+     *
+     */
+    readonly options: ConfigFileOptions
+
+    /**
+     * Translations configuration.
+     */
+    readonly translations: ConfigFileTranslations
+
+    /**
+     * Pages configuration
+     */
+    readonly pages: ConfigFilePages
+}
+
+export interface EnvironmentData extends DataObject<EnvironmentOptions> {}
+
+export interface EnvironmentOptions {
+    app: {
+        /**
+         *
+         */
+        environment: Environment
+
+        [key: string]: any
+    }
 }
 
 export interface ConfigFileEnvironment {
-    dev: DataObject
-    prod: DataObject
+    dev: EnvironmentData
+    prod: EnvironmentData
 }
 
-interface CustomKey<T> {
-    [key: string]: T
+export interface ConfigFileTranslations {
+    [shortLangString: string]: FileSystemPathSettings
 }
 
-export interface ConfigFile {
-    env: ConfigFileEnvironment
-    options: BaseSourceConfigWithData
-    translations: CustomKey<BaseSourceConfig>
-    pages: CustomKey<CustomKey<BaseSourceConfigWithData>>
+export interface ConfigFilePages extends CustomKey<CustomKey<ConfigFileOptions>> {
+    [shortLangString: string]: {
+        [pageNameString: string]: ConfigFileOptions
+    }
 }
 
-export interface BaseSourceConfig {
-    readonly src: string
-    readonly ext: string
+export interface ConfigFileOptions extends FileSystemPathSettings, DataObject<ConfigFileOptionsData> {}
+
+export interface FileSystemPathSettings {
+    /**
+     * Path to source file or folder.
+     */
+    readonly src: FileSystemPath
+
+    /**
+     * Path to generated file or folder.
+     */
+    readonly ext: FileSystemPath
 }
 
-export interface BaseSourceConfigWithData extends BaseSourceConfig, DataObject {}
+export interface ConfigFileOptionsData extends EnvironmentOptions {}
 
-export interface HrefData extends CustomKey<string>{}
+export interface PagesUrlObject {
+    [pageName: string]: FileSystemPath
+}
 
 export interface PipelineData {
+    /**
+     * Compiled source from twig file.
+     */
     source: string
-    filePathExt: string
-    filePathSrc: string
-    relativeFileExt: string
-    relativeFileSrc: string
-    renderSrcDir: string
-    renderExtDir: string
-    twigConfig: TwigConfiguration
-    renderOptions: PipelineDataRenderOptions
+
+    /**
+     * Absolute path to compiled file.
+     */
+    filePathExt: FileSystemPath
+
+    /**
+     * Absolute path to twig file.
+     */
+    filePathSrc: FileSystemPath
+
+    /**
+     * Relative path to compiled file.
+     */
+    relativeFileExt: FileSystemPath
+
+    /**
+     * Relative path to twig file.
+     */
+    relativeFileSrc: FileSystemPath
+
+    /**
+     * Absolute path to folder with twig files.
+     */
+    renderSrcDir: FileSystemPath
+
+    /**
+     * Absolute path to folder for compiled files.
+     */
+    renderExtDir: FileSystemPath
+
+    twigConfig?: TwigConfiguration
+    renderOptions: PageRenderOptions
 }
 
-export interface PipelineDataRenderOptions extends RenderOptions, CustomKey<any> {}
-
-export interface RenderOptions {
-    href: CustomKey<string>
-    lang: string
-    page: string
+/**
+ * Concatenated data from ConfigFile.options, ConfigFile.env and ConfigFile.page options for single page.
+ */
+export interface PageRenderOptions extends ConfigFileOptionsData {
+    href: PagesUrlObject
+    lang: ShortLangString
+    page: PageNameString
 }
 
-export interface TwigConfiguration {
+export interface TwigConfiguration extends Twig.Parameters {
+    /**
+     * Random unique ID.
+     */
     id: number
-    path: string
-    base: string
+
+    /**
+     * Absolute path to twig file.
+     */
+    path: FileSystemPath
+
+    /**
+     * Absolute path to twig root folder.
+     */
+    base: FileSystemPath
+
+    /**
+     * Declared namespaces.
+     */
     namespaces: TwigConfigurationNamespaces
+
+    /**
+     * Content of the twig file.
+     */
     data: string
 }
 
 export interface TwigConfigurationNamespaces {
-    Main: string
+    /**
+     * Absolute path to declared Main namespace.
+     */
+    Main: FileSystemPath
 }
 

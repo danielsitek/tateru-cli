@@ -79,7 +79,7 @@ try {
     process.exit(1);
 }
 
-const hrefData: HrefData = {};
+const hrefData: PagesUrlObject = {};
 try {
     Object.keys(configFile.pages[options.lang]).forEach(item => {
         try {
