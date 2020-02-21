@@ -31,7 +31,7 @@
   "main": "index.js",
   "bin": "./bin/tateru-cli.js",
   "scripts": {
-    "example": "cd ./test && node ../bin/tateru-cli.js config.json",
+    "example": "cd ./example && node ../bin/tateru-cli.js config.json",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
