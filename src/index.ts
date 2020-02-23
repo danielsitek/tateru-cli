@@ -5,33 +5,14 @@ import path from 'path';
 import { get, merge } from 'lodash';
 import Twig from 'twig';
 import Pipeline from './app/utils/pipeline';
-import { BuilderOptions, ConfigFile, PagesUrlObject, PipelineData, Environment } from './types';
+import { ConfigFile, PagesUrlObject, PipelineData } from './types';
 import minifyHtml from './app/pipes/minifyHtml';
 import saveFile from './app/pipes/saveFile';
 import printLog from './app/pipes/printLog';
 import prepareTwigConfiguration from './app/twig/prepareTwigConfiguration';
 import CliService from './app/services/cliService';
 
-const cli = CliService();
-
-const ENV_DEVELOPMENT: Environment = 'dev';
-const ENV_PRODUCTION: Environment = 'prod';
-const LANG_DEFAULT: string = 'cs';
-
-const options: BuilderOptions = {
-    configFile: cli.input[0] || 'config.json',
-    env: cli.flags.env as Environment || ENV_DEVELOPMENT,
-    lang: cli.flags.lang || LANG_DEFAULT,
-};
-
-if (process.env.NODE_ENV) {
-    if (process.env.NODE_ENV === 'development') {
-        options.env = ENV_DEVELOPMENT;
-    }
-    if (process.env.NODE_ENV === 'production') {
-        options.env = ENV_PRODUCTION;
-    }
-}
+const options = CliService.init();
 
 const rootDir = path.resolve(process.cwd())
 const configFileSrc = path.resolve(rootDir, options.configFile);
@@ -189,20 +170,20 @@ const renderPipeline = (page: string): void => {
 /**
  * Run builder
  */
-const run = () => {
+const run = (): void => {
     try {
         console.log(`Environment:\t${options.env}`);
 
-        if (cli.flags.page && cli.flags.lang) {
+        if (options.flags.page && options.flags.lang) {
             // Build single page in selected lang
-            console.log(`Going to build page "${cli.flags.page}" in "${cli.flags.lang}" group.`)
-            renderPipeline(cli.flags.page);
-        } else if (cli.flags.page) {
-            console.log(`Going to build page "${cli.flags.page}" in "${options.lang}" group.`)
-            renderPipeline(cli.flags.page);
-        } else if (cli.flags.lang) {
+            console.log(`Going to build page "${options.flags.page}" in "${options.flags.lang}" group.`)
+            renderPipeline(options.flags.page);
+        } else if (options.flags.page) {
+            console.log(`Going to build page "${options.flags.page}" in "${options.lang}" group.`)
+            renderPipeline(options.flags.page);
+        } else if (options.flags.lang) {
             // Build all pages in single lang
-            console.log(`Going to build pages in "${cli.flags.lang}" group.`)
+            console.log(`Going to build pages in "${options.flags.lang}" group.`)
             Object.keys(configFile.pages[options.lang]).forEach(item => {
                 renderPipeline(item);
             });

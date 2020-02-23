@@ -22,6 +22,9 @@ export interface BuilderOptions {
     configFile: string
     env: Environment
     lang: string
+    flags: {
+        [flagName: string]: any
+    }
 }
 
 /**
