@@ -176,20 +176,20 @@ const run = (): void => {
 
         if (options.flags.page && options.flags.lang) {
             // Build single page in selected lang
-            console.log(`Going to build page "${options.flags.page}" in "${options.flags.lang}" group.`)
+            // console.log(`Going to build page "${options.flags.page}" in "${options.flags.lang}" group.`)
             renderPipeline(options.flags.page);
         } else if (options.flags.page) {
-            console.log(`Going to build page "${options.flags.page}" in "${options.lang}" group.`)
+            // console.log(`Going to build page "${options.flags.page}" in "${options.lang}" group.`)
             renderPipeline(options.flags.page);
         } else if (options.flags.lang) {
             // Build all pages in single lang
-            console.log(`Going to build pages in "${options.flags.lang}" group.`)
+            // console.log(`Going to build pages in "${options.flags.lang}" group.`)
             Object.keys(configFile.pages[options.lang]).forEach(item => {
                 renderPipeline(item);
             });
         } else {
             // Build everything
-            console.log(`Going to build all pages in all groups.`)
+            // console.log(`Going to build all pages in all groups.`)
             Object.keys(configFile.pages).forEach(lang => {
                 Object.keys(configFile.pages[lang]).forEach(item => {
                     renderPipeline(item);

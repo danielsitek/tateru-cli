@@ -12,7 +12,7 @@ Options:
 \t--help    \tDisplay help and usage details
 `
 
-const environmentOptions = (options: BuilderOptions) => {
+const environmentOptions = (options: BuilderOptions): BuilderOptions => {
 
     if (process.env.NODE_ENV) {
         if (process.env.NODE_ENV === 'development') {
