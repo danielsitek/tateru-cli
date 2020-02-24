@@ -1,77 +1,30 @@
 'use strict';
 
-const fs = require('fs');
-const path = require('path');
-const lodash = require('lodash');
-const meow = require('meow');
-const Twig = require('twig');
-const MyPipe = require('./src/myPipe');
-const saveFile = require('./src/pipes/saveFile');
-const printLog = require('./src/pipes/printLog');
+import fs from 'fs';
+import path from 'path';
+import { get, merge } from 'lodash';
+import Twig from 'twig';
+import Pipeline from './app/utils/pipeline';
+import { ConfigFile, PagesUrlObject, PipelineData } from './types';
+import minifyHtml from './app/pipes/minifyHtml';
+import saveFile from './app/pipes/saveFile';
+import printLog from './app/pipes/printLog';
+import prepareTwigConfiguration from './app/twig/prepareTwigConfiguration';
+import CliService from './app/services/cliService';
 
-const _get = lodash.get;
-const _merge = lodash.merge;
-
-const cli = meow(`
-Usage:
-\tnpx tateru-cli [CONFIG FILE] [OPTIONS] [ARGS]
-
-Options:
-\t--env     \tSet build environment - dev or prod. Default is dev.
-\t--page  -p\tBuild only single page from config.
-\t--help    \tDisplay help and usage details
-`, {
-    flags: {
-        env: {
-            type: 'string',
-            default: '',
-            description: 'Set build environment.'
-        },
-        page: {
-            type: 'string',
-            default: '',
-            alias: 'p',
-            description: 'Build only single page from config.'
-        },
-        lang: {
-            type: 'string',
-            default: 'cs',
-            alias: 'l',
-            description: 'Select language subset to build.'
-        }
-    }
-});
-
-const ENV_DEVELOPMENT = 'dev';
-const ENV_PRODUCTION = 'prod';
-const LANG_DEFAULT = 'cs';
-
-const options = {
-    configFile: cli.input[0] || 'config.json',
-    env: cli.flags.env || ENV_DEVELOPMENT,
-    lang: cli.flags.lang || LANG_DEFAULT,
-};
-
-if (process.env.NODE_ENV) {
-    if (process.env.NODE_ENV === 'development') {
-        options.env = ENV_DEVELOPMENT;
-    }
-    if (process.env.NODE_ENV === 'production') {
-        options.env = ENV_PRODUCTION;
-    }
-}
+const options = CliService.init();
 
 const rootDir = path.resolve(process.cwd())
 const configFileSrc = path.resolve(rootDir, options.configFile);
 
-if (!fs.existsSync(options.configFile)) {
+if (!fs.existsSync(configFileSrc)) {
     console.error(`Cannot find config file "${options.configFile}" on path "${configFileSrc}"`);
     process.exit(1);
 } else {
     console.log(`Config file "${options.configFile}" loaded`)
 }
 
-let configFile;
+let configFile: ConfigFile = {} as ConfigFile;
 
 try {
     configFile = require(configFileSrc);
@@ -80,11 +33,11 @@ try {
     process.exit(1);
 }
 
-const hrefData = {};
+const hrefData: PagesUrlObject = {};
 try {
-    Object.keys(configFile.pages[options.lang]).forEach(item => {
+    Object.keys(configFile.pages[options.lang]).forEach(pageName => {
         try {
-            hrefData[item] = `/${configFile.pages[options.lang][item].ext}`;
+            hrefData[pageName] = `/${configFile.pages[options.lang][pageName].ext}`;
         } catch (e) {
             console.error(`Cannot find page ext in lang group "${options.lang}".`);
         }
@@ -95,7 +48,7 @@ try {
 }
 
 
-const renderOptions = _merge(
+const renderOptions = merge(
     configFile.options.data,
     configFile.env[options.env].data,
     {
@@ -103,6 +56,8 @@ const renderOptions = _merge(
         lang: options.lang
     }
 );
+
+// console.log(renderOptions);
 
 const renderSrcDir = path.resolve(rootDir, configFile.options.src);
 const renderExtDir = path.resolve(rootDir, configFile.options.ext);
@@ -119,12 +74,12 @@ if (!fs.existsSync(translationFilePath)) {
 const translationFileContent = fs.readFileSync(translationFilePath);
 const translations = JSON.parse(translationFileContent.toString());
 
-Twig.extendFunction('trans', (value) => {
-    return _get(translations, value) || value;
+Twig.extendFunction('trans', (value: string) => {
+    return get(translations, value) || value;
 });
 
 
-Twig.extendFilter('sort_by', (value, key) => {
+Twig.extendFilter('sort_by', (value: any, key: any): any => {
     if (!Array.isArray(value)) {
         return value;
     }
@@ -143,16 +98,16 @@ Twig.extendFilter('sort_by', (value, key) => {
 });
 
 
+
 /**
  * Render Twig template with configuration from config.json.
  *
  * @param {String} pageName Page name in config.json file.
  */
-const renderPage = (pageName) => {
+const renderPage = (pageName: string): Pipeline => {
     if (!configFile.pages[options.lang][pageName]) {
         console.error(`"${pageName}" were not found in config file.`);
         process.exit(1);
-        return false;
     }
 
     const buildPageConfig = configFile.pages[options.lang][pageName];
@@ -166,27 +121,16 @@ const renderPage = (pageName) => {
         process.exit(1);
     }
 
-    const templateFile = fs.readFileSync(pathToSrc);
-    const fileTwigConfig = {
-        id: Math.floor(Math.random() * 1000000),
-        path: pathToSrc,
-        base: renderSrcDir,
-        // allowInlineIncludes: true,
-        namespaces: {
-            'Main': renderSrcDir + path.sep,
-        },
-        data: templateFile.toString(),
-        // debug: true,
-        // trace: true,
-    };
-    const fileRenderOptions = _merge(
+    const fileTwigConfig = prepareTwigConfiguration(pathToSrc, renderSrcDir);
+
+    const fileRenderOptions: any = merge(
         renderOptions,
         buildPageConfig.data
     );
 
-    const template = Twig.twig(fileTwigConfig).render(fileRenderOptions);
+    const template = Twig.twig(fileTwigConfig).render(fileRenderOptions) as string;
 
-    return new MyPipe({
+    return new Pipeline({
         source: template,
         filePathExt: pathToExt,
         filePathSrc: pathToSrc,
@@ -205,7 +149,7 @@ const renderPage = (pageName) => {
  * @param {Object} data
  */
 
-const prodMinifyHtml = (data) => {
+const prodMinifyHtml = (data: PipelineData): PipelineData => {
     if (options.env === 'prod') {
         return minifyHtml(data);
     }
@@ -213,36 +157,39 @@ const prodMinifyHtml = (data) => {
 }
 
 /**
- * Generate pages.
+ * Generate page.
  */
 
-const renderPipeline = (page) => {
+const renderPipeline = (page: string): void => {
     renderPage(page)
         .pipe(prodMinifyHtml)
         .pipe(printLog)
         .pipe(saveFile);
 }
 
-const run = () => {
+/**
+ * Run builder
+ */
+const run = (): void => {
     try {
         console.log(`Environment:\t${options.env}`);
 
-        if (cli.flags.page && cli.flags.lang) {
+        if (options.flags.page && options.flags.lang) {
             // Build single page in selected lang
-            console.log(`Going to build page "${cli.flags.page}" in "${cli.flags.lang}" group.`)
-            renderPipeline(cli.flags.page);
-        } else if (cli.flags.page) {
-            console.log(`Going to build page "${cli.flags.page}" in "${options.lang}" group.`)
-            renderPipeline(cli.flags.page);
-        } else if (cli.flags.lang) {
+            // console.log(`Going to build page "${options.flags.page}" in "${options.flags.lang}" group.`)
+            renderPipeline(options.flags.page);
+        } else if (options.flags.page) {
+            // console.log(`Going to build page "${options.flags.page}" in "${options.lang}" group.`)
+            renderPipeline(options.flags.page);
+        } else if (options.flags.lang) {
             // Build all pages in single lang
-            console.log(`Going to build pages in "${cli.flags.lang}" group.`)
+            // console.log(`Going to build pages in "${options.flags.lang}" group.`)
             Object.keys(configFile.pages[options.lang]).forEach(item => {
                 renderPipeline(item);
             });
         } else {
             // Build everything
-            console.log(`Going to build all pages in all groups.`)
+            // console.log(`Going to build all pages in all groups.`)
             Object.keys(configFile.pages).forEach(lang => {
                 Object.keys(configFile.pages[lang]).forEach(item => {
                     renderPipeline(item);
