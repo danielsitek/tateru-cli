@@ -43,6 +43,14 @@
                 },
                 "src": "views/index.html.twig",
                 "ext": "index.html"
+            },
+            "about": {
+                "data": {
+                    "page": "about",
+                    "title": "About Page"
+                },
+                "src": "views/about.html.twig",
+                "ext": "about.html"
             }
         }
     }
