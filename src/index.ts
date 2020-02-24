@@ -24,7 +24,7 @@ if (!fs.existsSync(configFileSrc)) {
     console.log(`Config file "${options.configFile}" loaded`)
 }
 
-let configFile: ConfigFile;
+let configFile: ConfigFile = {} as ConfigFile;
 
 try {
     configFile = require(configFileSrc);
@@ -35,9 +35,9 @@ try {
 
 const hrefData: PagesUrlObject = {};
 try {
-    Object.keys(configFile.pages[options.lang]).forEach(item => {
+    Object.keys(configFile.pages[options.lang]).forEach(pageName => {
         try {
-            hrefData[item] = `/${configFile.pages[options.lang][item].ext}`;
+            hrefData[pageName] = `/${configFile.pages[options.lang][pageName].ext}`;
         } catch (e) {
             console.error(`Cannot find page ext in lang group "${options.lang}".`);
         }
