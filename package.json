@@ -24,7 +24,6 @@
     "url": "https://danielsitek.cz"
   },
   "files": [
-    "index.js",
     "dist",
     "bin"
   ],
