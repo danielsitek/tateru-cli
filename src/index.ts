@@ -2,8 +2,7 @@
 
 import fs from 'fs';
 import path from 'path';
-import { get, merge } from 'lodash';
-import Twig from 'twig';
+import { merge } from 'lodash';
 import Pipeline from './app/utils/pipeline';
 import { ConfigFile, PagesUrlObject, PipelineData } from './types';
 import minifyHtml from './app/pipes/minifyHtml';
@@ -11,6 +10,8 @@ import saveFile from './app/pipes/saveFile';
 import printLog from './app/pipes/printLog';
 import prepareTwigConfiguration from './app/twig/prepareTwigConfiguration';
 import CliService from './app/services/cliService';
+import TranslationsService from './app/services/translationsService';
+import TwigService from './app/services/twigService';
 
 const options = CliService.init();
 
@@ -66,37 +67,7 @@ const renderExtDir = path.resolve(rootDir, configFile.options.ext);
 /**
  * Translations
  */
-const translationFilePath = path.resolve(rootDir, configFile.translations[options.lang].src);
-if (!fs.existsSync(translationFilePath)) {
-    console.error(`Cannot find translation file on path "${translationFilePath}"`);
-    process.exit(1);
-}
-const translationFileContent = fs.readFileSync(translationFilePath);
-const translations = JSON.parse(translationFileContent.toString());
-
-Twig.extendFunction('trans', (value: string) => {
-    return get(translations, value) || value;
-});
-
-
-Twig.extendFilter('sort_by', (value: any, key: any): any => {
-    if (!Array.isArray(value)) {
-        return value;
-    }
-    value.sort((a, b) => {
-        if (!a[key]) return 0;
-        if (a[key] < b[key]) {
-            return -1;
-        }
-        if (a[key] > b[key]) {
-            return 1;
-        }
-        return 0;
-    });
-
-    return value;
-});
-
+const translations = TranslationsService.getTranslations(rootDir, configFile.translations[options.lang].src)
 
 
 /**
@@ -128,7 +99,7 @@ const renderPage = (pageName: string): Pipeline => {
         buildPageConfig.data
     );
 
-    const template = Twig.twig(fileTwigConfig).render(fileRenderOptions) as string;
+    const template = TwigService.render(fileTwigConfig, fileRenderOptions, translations);
 
     return new Pipeline({
         source: template,
