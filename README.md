@@ -1,5 +1,7 @@
 # Tateru CLI
 
+[![Maintainability](https://api.codeclimate.com/v1/badges/a27bd4122e740512c6f9/maintainability)](https://codeclimate.com/github/danielsitek/tateru-cli/maintainability)
+
 Simple CLI static site builder tool with Twig.
 
 ## Install
