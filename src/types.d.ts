@@ -4,6 +4,8 @@ export type Environment = 'dev' | 'prod'
 
 export type DataType = {}
 
+export type Translations = {}
+
 export type ShortLangString = string
 
 export type PageNameString = string
@@ -37,7 +39,7 @@ export interface ConfigFile {
     readonly env: ConfigFileEnvironment
 
     /**
-     *
+     * Options configuration.
      */
     readonly options: ConfigFileOptions
 
@@ -57,7 +59,7 @@ export interface EnvironmentData extends DataObject<EnvironmentOptions> {}
 export interface EnvironmentOptions {
     app: {
         /**
-         *
+         * Working environment.
          */
         environment: Environment
 

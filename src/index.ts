@@ -4,7 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import { merge } from 'lodash';
 import Pipeline from './app/utils/pipeline';
-import { ConfigFile, PagesUrlObject, PipelineData } from './types';
+import { ConfigFile, PagesUrlObject, PipelineData, Translations } from './types';
 import minifyHtml from './app/pipes/minifyHtml';
 import saveFile from './app/pipes/saveFile';
 import printLog from './app/pipes/printLog';
@@ -63,19 +63,12 @@ const renderOptions = merge(
 const renderSrcDir = path.resolve(rootDir, configFile.options.src);
 const renderExtDir = path.resolve(rootDir, configFile.options.ext);
 
-
-/**
- * Translations
- */
-const translations = TranslationsService.getTranslations(rootDir, configFile.translations[options.lang].src)
-
-
 /**
  * Render Twig template with configuration from config.json.
  *
  * @param {String} pageName Page name in config.json file.
  */
-const renderPage = (pageName: string): Pipeline => {
+const renderPage = (pageName: string, translations: Translations): Pipeline => {
     if (!configFile.pages[options.lang][pageName]) {
         console.error(`"${pageName}" were not found in config file.`);
         process.exit(1);
@@ -131,8 +124,8 @@ const prodMinifyHtml = (data: PipelineData): PipelineData => {
  * Generate page.
  */
 
-const renderPipeline = (page: string): void => {
-    renderPage(page)
+const renderPipeline = (page: string, translations: Translations): void => {
+    renderPage(page, translations)
         .pipe(prodMinifyHtml)
         .pipe(printLog)
         .pipe(saveFile);
@@ -142,28 +135,26 @@ const renderPipeline = (page: string): void => {
  * Run builder
  */
 const run = (): void => {
+    const translations = TranslationsService.getTranslations(rootDir, configFile.translations[options.lang].src)
+
     try {
         console.log(`Environment:\t${options.env}`);
 
         if (options.flags.page && options.flags.lang) {
             // Build single page in selected lang
-            // console.log(`Going to build page "${options.flags.page}" in "${options.flags.lang}" group.`)
-            renderPipeline(options.flags.page);
+            renderPipeline(options.flags.page, translations);
         } else if (options.flags.page) {
-            // console.log(`Going to build page "${options.flags.page}" in "${options.lang}" group.`)
-            renderPipeline(options.flags.page);
+            renderPipeline(options.flags.page, translations);
         } else if (options.flags.lang) {
             // Build all pages in single lang
-            // console.log(`Going to build pages in "${options.flags.lang}" group.`)
             Object.keys(configFile.pages[options.lang]).forEach(item => {
-                renderPipeline(item);
+                renderPipeline(item, translations);
             });
         } else {
             // Build everything
-            // console.log(`Going to build all pages in all groups.`)
             Object.keys(configFile.pages).forEach(lang => {
                 Object.keys(configFile.pages[lang]).forEach(item => {
-                    renderPipeline(item);
+                    renderPipeline(item, translations);
                 });
             });
 

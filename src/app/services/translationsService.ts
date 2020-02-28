@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { Translations } from '../../types';
 
 const cache: any = {};
 
@@ -20,7 +21,7 @@ const translationCache = (filePath: string): any => {
 
 class TranslationsService {
 
-    public static getTranslations (rootDir: string, translationsFilePath: string): any {
+    public static getTranslations (rootDir: string, translationsFilePath: string): Translations {
         try {
             const fullFilePath = path.resolve(rootDir, translationsFilePath);
             const translation = translationCache(fullFilePath);
