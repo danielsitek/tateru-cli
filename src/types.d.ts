@@ -4,11 +4,13 @@ export type Environment = 'dev' | 'prod'
 
 export type DataType = {}
 
-export type ShortLangString = string
+export type Translations = {}
 
-export type PageNameString = string
+export type PageNameString = 'index' | string
 
 export type FileSystemPath = string
+
+export type LanguageString = 'en' | string
 
 interface CustomKey<T> {
     [key: string]: T
@@ -21,7 +23,7 @@ export interface DataObject<T = DataType> {
 export interface BuilderOptions {
     configFile: string
     env: Environment
-    lang: string
+    lang: LanguageString
     flags: {
         [flagName: string]: any
     }
@@ -37,7 +39,7 @@ export interface ConfigFile {
     readonly env: ConfigFileEnvironment
 
     /**
-     *
+     * Options configuration.
      */
     readonly options: ConfigFileOptions
 
@@ -57,7 +59,7 @@ export interface EnvironmentData extends DataObject<EnvironmentOptions> {}
 export interface EnvironmentOptions {
     app: {
         /**
-         *
+         * Working environment.
          */
         environment: Environment
 
@@ -145,7 +147,7 @@ export interface PipelineData {
  */
 export interface PageRenderOptions extends ConfigFileOptionsData {
     href: PagesUrlObject
-    lang: ShortLangString
+    lang: LanguageString
     page: PageNameString
 }
 

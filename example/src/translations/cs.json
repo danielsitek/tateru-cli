@@ -4,5 +4,22 @@
     },
     "about": {
         "title": "Hello There from About page!"
-    }
+    },
+    "sort": [
+        {
+            "key": "a"
+        },
+        {
+            "key": "x"
+        },
+        {
+            "key": "k"
+        },
+        {
+            "key": "c"
+        },
+        {
+            "key": "b"
+        }
+    ]
 }
