@@ -5,5 +5,11 @@
     <body>
         <h1>{{- title -}}</h1>
         <h2>{{- app.environment }} / {{ trans('homepage.title') }}</h2>
+
+        <ul>
+            {% for item in trans('sort')|sort_by('key') -%}
+            <li>{{ item.key }}</li>
+            {% endfor %}
+        </ul>
     </body>
 </html>
