@@ -2,20 +2,23 @@ import Twig from 'twig';
 import { get } from 'lodash';
 import { TwigConfiguration } from '../../types';
 
+const sort = (a: any, b: any): number => {
+    if (!a) return 0;
+    if (a < b) {
+        return -1;
+    }
+    if (a > b) {
+        return 1;
+    }
+    return 0;
+}
+
 const sortBy = (value: any, key: any): any => {
     if (!Array.isArray(value)) {
         return value;
     }
-    value.sort((a, b) => {
-        if (!a[key]) return 0;
-        if (a[key] < b[key]) {
-            return -1;
-        }
-        if (a[key] > b[key]) {
-            return 1;
-        }
-        return 0;
-    });
+
+    value.sort((a, b) => sort(a[key], b[key]));
 
     return value;
 }
