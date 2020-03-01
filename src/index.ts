@@ -4,7 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import { merge } from 'lodash';
 import Pipeline from './app/utils/pipeline';
-import { ConfigFile, PagesUrlObject, PipelineData, Translations } from './types';
+import { ConfigFile, PagesUrlObject, PipelineData, Translations, LanguageString } from './types';
 import minifyHtml from './app/pipes/minifyHtml';
 import saveFile from './app/pipes/saveFile';
 import printLog from './app/pipes/printLog';
@@ -131,14 +131,14 @@ const renderPipeline = (page: string, translations: Translations): void => {
         .pipe(saveFile);
 }
 
-const buildAllPagesInLang = (lang: string) => {
+const buildAllPagesInLang = (lang: LanguageString): void => {
     const translations = TranslationsService.getTranslations(rootDir, configFile.translations[lang].src)
     Object.keys(configFile.pages[lang]).forEach(page => {
         renderPipeline(page, translations);
     });
 }
 
-const buildSinglePage = (lang: string) => {
+const buildSinglePage = (lang: LanguageString): void => {
     const translations = TranslationsService.getTranslations(rootDir, configFile.translations[lang].src)
     renderPipeline(options.flags.page, translations);
 }
