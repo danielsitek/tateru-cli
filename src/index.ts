@@ -131,31 +131,42 @@ const renderPipeline = (page: string, translations: Translations): void => {
         .pipe(saveFile);
 }
 
+const buildAllPagesInLang = (lang: string) => {
+    const translations = TranslationsService.getTranslations(rootDir, configFile.translations[lang].src)
+    Object.keys(configFile.pages[lang]).forEach(page => {
+        renderPipeline(page, translations);
+    });
+}
+
+const buildSinglePage = (lang: string) => {
+    const translations = TranslationsService.getTranslations(rootDir, configFile.translations[lang].src)
+    renderPipeline(options.flags.page, translations);
+}
+
 /**
  * Run builder
  */
 const run = (): void => {
-    const translations = TranslationsService.getTranslations(rootDir, configFile.translations[options.lang].src)
 
     try {
         console.log(`Environment:\t${options.env}`);
 
         if (options.flags.page && options.flags.lang) {
             // Build single page in selected lang
-            renderPipeline(options.flags.page, translations);
+            // const translations = TranslationsService.getTranslations(rootDir, configFile.translations[options.flags.lang].src)
+            // renderPipeline(options.flags.page, translations);
+            buildSinglePage(options.flags.lang);
         } else if (options.flags.page) {
-            renderPipeline(options.flags.page, translations);
+            // const translations = TranslationsService.getTranslations(rootDir, configFile.translations[options.lang].src)
+            // renderPipeline(options.flags.page, translations);
+            buildSinglePage(options.lang);
         } else if (options.flags.lang) {
             // Build all pages in single lang
-            Object.keys(configFile.pages[options.lang]).forEach(item => {
-                renderPipeline(item, translations);
-            });
+            buildAllPagesInLang(options.flags.lang);
         } else {
             // Build everything
             Object.keys(configFile.pages).forEach(lang => {
-                Object.keys(configFile.pages[lang]).forEach(item => {
-                    renderPipeline(item, translations);
-                });
+                buildAllPagesInLang(lang);
             });
 
         }
