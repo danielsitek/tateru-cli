@@ -178,4 +178,4 @@ const run = (): void => {
     }
 }
 
-module.exports = run;
+export default run;

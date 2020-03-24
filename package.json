@@ -24,13 +24,12 @@
     "url": "https://danielsitek.cz"
   },
   "files": [
-    "dist",
-    "bin"
+    "dist"
   ],
   "main": "./dist/index.js",
-  "bin": "./bin/tateru-cli.js",
+  "bin": "./dist/tateru-cli.js",
   "scripts": {
-    "example": "cd ./example && node ../bin/tateru-cli.js config.json",
+    "example": "cd ./example && node ../dist/tateru-cli.js config.json",
     "dist": "rm -rf dist/* && npx tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
