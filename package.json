@@ -31,7 +31,7 @@
   "scripts": {
     "example": "cd ./example && node ../dist/tateru-cli.js config.json",
     "dist": "rm -rf dist/* && npx tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"No test specified\""
   },
   "dependencies": {
     "html-minifier": "^4.0.0",
