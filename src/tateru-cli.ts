@@ -6,35 +6,41 @@ import path from 'path';
 import fs from 'fs';
 import TateruCLI from './index';
 import CliService from './app/services/cliService';
-import { ConfigFile } from './types';
+import { ConfigFile, BuilderOptions } from './types';
 
-const rootDir = path.resolve(process.cwd())
-const options = CliService.init();
-
-const loadConfigurationFromFile = (file: string): ConfigFile => {
+const loadConfigurationFromFile = (file: string, rootDir: string): ConfigFile => {
     const configFileSrc = path.resolve(rootDir, file);
 
     if (!fs.existsSync(configFileSrc)) {
-        console.error(`Cannot find config file "${file}" on path "${configFileSrc}"`);
-        process.exit(1);
-    } else {
-        console.log(`Config file "${file}" loaded`)
+        throw new Error(`Cannot find file "${file}" on path "${configFileSrc}"`);
     }
 
-    let configFile: ConfigFile = {} as ConfigFile;
-
     try {
-        configFile = require(configFileSrc);
-        return configFile
+        const configFileContent: string = fs.readFileSync(configFileSrc).toString();
+        const configFileJson: ConfigFile = JSON.parse(configFileContent);
+        console.log(`Config file "${file}" loaded`)
+        return configFileJson
     } catch (e) {
-        console.error(`Cannot load config file "${configFileSrc}"`)
+        throw new Error(`Cannot load config file "${configFileSrc}"`)
+    }
+}
+
+const runBuilder = () => {
+    try {
+        const rootDir = path.resolve(process.cwd())
+        const options = CliService.init();
+        const configuration = loadConfigurationFromFile(options.configFile, rootDir)
+        const builderOptions: BuilderOptions = {
+            ...options,
+            configuration
+        }
+
+        TateruCLI(builderOptions);
+        process.exit(0);
+    } catch (e) {
+        console.error(e);
         process.exit(1);
     }
 }
 
-const configuration = loadConfigurationFromFile(options.configFile)
-
-TateruCLI({
-    ...options,
-    configuration
-});
+runBuilder();
