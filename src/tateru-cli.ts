@@ -3,5 +3,8 @@
 'use strict';
 
 import TateruCLI from './index';
+import CliService from './app/services/cliService';
 
-TateruCLI();
+const options = CliService.init();
+
+TateruCLI(options);
