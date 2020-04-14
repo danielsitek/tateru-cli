@@ -3,15 +3,13 @@
 import fs from 'fs';
 import path from 'path';
 import { merge } from 'lodash';
-import Pipeline from './app/utils/pipeline';
 import { ConfigFile, PagesUrlObject, PipelineData, Translations, LanguageString } from './types';
 import minifyHtml from './app/pipes/minifyHtml';
 import saveFile from './app/pipes/saveFile';
 import printLog from './app/pipes/printLog';
-import prepareTwigConfiguration from './app/twig/prepareTwigConfiguration';
 import CliService from './app/services/cliService';
 import TranslationsService from './app/services/translationsService';
-import TwigService from './app/services/twigService';
+import renderPage from './app/renderPage';
 
 const options = CliService.init();
 
@@ -64,50 +62,6 @@ const renderSrcDir = path.resolve(rootDir, configFile.options.src);
 const renderExtDir = path.resolve(rootDir, configFile.options.ext);
 
 /**
- * Render Twig template with configuration from config.json.
- *
- * @param {String} pageName Page name in config.json file.
- */
-const renderPage = (pageName: string, translations: Translations): Pipeline => {
-    if (!configFile.pages[options.lang][pageName]) {
-        console.error(`"${pageName}" were not found in config file.`);
-        process.exit(1);
-    }
-
-    const buildPageConfig = configFile.pages[options.lang][pageName];
-    const pathToExt = path.resolve(renderExtDir, buildPageConfig.ext);
-    const pathToSrc = path.resolve(renderSrcDir, buildPageConfig.src);
-    const relativeFileExt = path.join(configFile.options.ext, buildPageConfig.ext);
-    const relativeFileSrc = path.join(configFile.options.src, buildPageConfig.src);
-
-    if (!fs.existsSync(pathToSrc)) {
-        console.error(`File "${pathToSrc}" does not exits`);
-        process.exit(1);
-    }
-
-    const fileTwigConfig = prepareTwigConfiguration(pathToSrc, renderSrcDir);
-
-    const fileRenderOptions: any = merge(
-        renderOptions,
-        buildPageConfig.data
-    );
-
-    const template = TwigService.render(fileTwigConfig, fileRenderOptions, translations);
-
-    return new Pipeline({
-        source: template,
-        filePathExt: pathToExt,
-        filePathSrc: pathToSrc,
-        relativeFileExt,
-        relativeFileSrc,
-        renderSrcDir,
-        renderExtDir,
-        twigConfig: fileTwigConfig,
-        renderOptions: fileRenderOptions
-    });
-};
-
-/**
  * Save generated html in file.
  *
  * @param {Object} data
@@ -125,7 +79,7 @@ const prodMinifyHtml = (data: PipelineData): PipelineData => {
  */
 
 const renderPipeline = (page: string, translations: Translations): void => {
-    renderPage(page, translations)
+    renderPage(page, translations, configFile, options, renderOptions, renderExtDir, renderSrcDir)
         .pipe(prodMinifyHtml)
         .pipe(printLog)
         .pipe(saveFile);
