@@ -63,7 +63,7 @@ const run = (options: BuilderOptions): void => {
      */
 
     const renderPipeline = (page: string, translations: Translations): void => {
-        renderPage(page, translations, options.configuration, options, renderOptions, renderExtDir, renderSrcDir)
+        renderPage(page, translations, options, renderOptions, renderExtDir, renderSrcDir)
             .pipe(prodMinifyHtml)
             .pipe(printLog)
             .pipe(saveFile);
