@@ -1,5 +1,5 @@
 import meow from 'meow';
-import { BuilderOptions, Environment } from '../../types';
+import { BuilderOptions, Environment, ConfigFile } from '../../types';
 import { ENV_DEVELOPMENT, LANG_DEFAULT, ENV_PRODUCTION } from '../defines';
 
 const message: string = `
@@ -32,7 +32,8 @@ const constructOptions = (cli: any): BuilderOptions => {
         configFile: cli.input[0] || 'config.json',
         env: cli.flags.env as Environment || ENV_DEVELOPMENT,
         lang: cli.flags.lang || LANG_DEFAULT,
-        flags: cli.flags
+        flags: cli.flags,
+        configuration: {} as ConfigFile
     };
 
     return options

@@ -27,6 +27,7 @@ export interface BuilderOptions {
     flags: {
         [flagName: string]: any
     }
+    configuration: ConfigFile
 }
 
 /**
