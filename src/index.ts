@@ -9,27 +9,21 @@ import printLog from './app/pipes/printLog';
 import TranslationsService from './app/services/translationsService';
 import renderPage from './app/renderPage';
 
-/**
- * Run builder
- */
-const run = (options: BuilderOptions): void => {
+const rootDir = path.resolve(process.cwd())
 
-    const rootDir = path.resolve(process.cwd())
-
+const prepareRenderOptions = (options: BuilderOptions) => {
     const hrefData: PagesUrlObject = {};
     try {
         Object.keys(options.configuration.pages[options.lang]).forEach(pageName => {
             try {
                 hrefData[pageName] = `/${options.configuration.pages[options.lang][pageName].ext}`;
             } catch (e) {
-                console.error(`Cannot find page ext in lang group "${options.lang}".`);
+                throw new Error(`Cannot find page ext in lang group "${options.lang}".`);
             }
         });
     } catch (e) {
-        console.error(`Cannot find pages in lang group "${options.lang}".`);
-        process.exit(1);
+        throw new Error(`Cannot find pages in lang group "${options.lang}".`);
     }
-
 
     const renderOptions = merge(
         options.configuration.options.data,
@@ -40,8 +34,15 @@ const run = (options: BuilderOptions): void => {
         }
     );
 
-    // console.log(renderOptions);
+    return renderOptions
+}
 
+/**
+ * Run builder
+ */
+const run = (options: BuilderOptions): void => {
+
+    const renderOptions = prepareRenderOptions(options)
     const renderSrcDir = path.resolve(rootDir, options.configuration.options.src);
     const renderExtDir = path.resolve(rootDir, options.configuration.options.ext);
 
@@ -76,6 +77,12 @@ const run = (options: BuilderOptions): void => {
         });
     }
 
+    const buildAllPagesInAllLangs = (): void => {
+        Object.keys(options.configuration.pages).forEach(lang => {
+            buildAllPagesInLang(lang);
+        });
+    }
+
     const buildSinglePage = (lang: LanguageString): void => {
         const translations = TranslationsService.getTranslations(rootDir, options.configuration.translations[lang].src)
         renderPipeline(options.flags.page, translations);
@@ -86,28 +93,18 @@ const run = (options: BuilderOptions): void => {
 
         if (options.flags.page && options.flags.lang) {
             // Build single page in selected lang
-            // const translations = TranslationsService.getTranslations(rootDir, options.configuration.translations[options.flags.lang].src)
-            // renderPipeline(options.flags.page, translations);
             buildSinglePage(options.flags.lang);
         } else if (options.flags.page) {
-            // const translations = TranslationsService.getTranslations(rootDir, options.configuration.translations[options.lang].src)
-            // renderPipeline(options.flags.page, translations);
             buildSinglePage(options.lang);
         } else if (options.flags.lang) {
             // Build all pages in single lang
             buildAllPagesInLang(options.flags.lang);
         } else {
             // Build everything
-            Object.keys(options.configuration.pages).forEach(lang => {
-                buildAllPagesInLang(lang);
-            });
-
+            buildAllPagesInAllLangs();
         }
-
-        process.exit(0);
     } catch (e) {
-        console.error(e);
-        process.exit(1);
+        throw new Error(e);
     }
 }
 
