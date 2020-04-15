@@ -1,6 +1,6 @@
 import Twig from 'twig';
 import { get } from 'lodash';
-import { TwigConfiguration } from '../../types';
+import { TwigConfigurationInterface } from '../../types';
 
 const sort = (a: any, b: any): number => {
     if (!a) return 0;
@@ -25,7 +25,7 @@ const sortBy = (value: any, key: any): any => {
 
 class TwigService {
 
-    public static render (fileTwigConfig: TwigConfiguration, fileRenderOptions: any, translations: any) {
+    public static render (fileTwigConfig: TwigConfigurationInterface, fileRenderOptions: any, translations: any) {
 
         Twig.extendFunction('trans', (value: string) => {
             return get(translations, value) || value;

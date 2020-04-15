@@ -16,7 +16,7 @@ const loadConfigurationFromFile = (file: string, rootDir: string): ConfigFile =>
     }
 
     try {
-        const configFileContent: string = fs.readFileSync(configFileSrc).toString();
+        const configFileContent: string = fs.readFileSync(configFileSrc).toString('utf-8');
         const configFileJson: ConfigFile = JSON.parse(configFileContent);
         console.log(`Config file "${file}" loaded`)
         return configFileJson

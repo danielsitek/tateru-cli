@@ -1,8 +1,8 @@
 import fs from 'fs'
 import path from 'path'
-import { TwigConfiguration } from '../../types';
+import { TwigConfigurationInterface } from '../../types';
 
-const prepareTwigConfiguration = (pathToTwigFile: string, twigBase: string): TwigConfiguration => {
+const prepareTwigConfiguration = (pathToTwigFile: string, twigBase: string): TwigConfigurationInterface => {
     try {
         if (!fs.existsSync(pathToTwigFile)) {
             throw new Error(`File "${pathToTwigFile}" does not exits`);

@@ -139,7 +139,7 @@ export interface PipelineData {
      */
     renderExtDir: FileSystemPath
 
-    twigConfig?: TwigConfiguration
+    twigConfig?: TwigConfigurationInterface
     renderOptions: PageRenderOptions
 }
 
@@ -152,7 +152,7 @@ export interface PageRenderOptions extends ConfigFileOptionsData {
     page: PageNameString
 }
 
-export interface TwigConfiguration extends Twig.Parameters {
+export interface TwigConfigurationInterface extends Twig.Parameters {
     /**
      * Random unique ID.
      */

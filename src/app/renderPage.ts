@@ -2,9 +2,9 @@ import { Translations, BuilderOptions } from '../types';
 import Pipeline from './utils/pipeline';
 import path from 'path';
 import fs from 'fs';
-import prepareTwigConfiguration from './twig/prepareTwigConfiguration';
 import { merge } from 'lodash';
 import TwigService from './services/twigService';
+import TwigConfiguration from './twig/TwigConfiguration';
 
 /**
  * Render Twig template with configuration from config.json.
@@ -26,7 +26,7 @@ const renderPage = (pageName: string, translations: Translations, options: Build
         throw new Error(`File "${pathToSrc}" does not exits`);
     }
 
-    const fileTwigConfig = prepareTwigConfiguration(pathToSrc, renderSrcDir);
+    const fileTwigConfig = new TwigConfiguration(pathToSrc, renderSrcDir);
 
     const fileRenderOptions: any = merge(
         renderOptions,
