@@ -1,7 +1,15 @@
-[*]
-end_of_line = lf
-trim_trailing_whitespace = true
+root = true
 
-[*.js, *.ts]
+[*]
 indent_style = space
 indent_size = 4
+charset = utf-8
+end_of_line = lf
+insert_final_newline = false
+trim_trailing_whitespace = true
+
+[{*.yml, *.json, *.js, *.ts}]
+indent_size = 2
+
+[{*.js, *.ts}]
+insert_final_newline = true
