@@ -30,6 +30,7 @@
   "bin": "./dist/tateru-cli.js",
   "scripts": {
     "example": "cd ./example && node ../dist/tateru-cli.js config.json",
+    "example:prod": "cd ./example && node ../dist/tateru-cli.js config.json --env prod",
     "dist": "rm -rf dist/* && npx tsc",
     "test": "echo \"No test specified\"",
     "snyk-protect": "snyk protect",

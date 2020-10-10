@@ -22,7 +22,8 @@
                 "environment": "dev",
                 "root": "/"
             },
-            "title": "Tateru CLI Example"
+            "title": "Tateru CLI Example",
+            "domain": "https://www.example.com/"
         },
         "src": "src/twig",
         "ext": "dist"
@@ -42,7 +43,8 @@
                     "page": "index"
                 },
                 "src": "views/index.html.twig",
-                "ext": "index.html"
+                "ext": "index.html",
+                "minify": ["prod"]
             },
             "about": {
                 "data": {
@@ -50,7 +52,30 @@
                     "title": "About Page"
                 },
                 "src": "views/about.html.twig",
-                "ext": "about.html"
+                "ext": "about.html",
+                "minify": ["prod"]
+            },
+
+            "robots_txt": {
+                "data": {
+                    "page": "robots_txt"
+                },
+                "src": "views/robots.txt.twig",
+                "ext": "robots.txt"
+            },
+            "sitemap_xml": {
+                "data": {
+                    "page": "sitemap_xml"
+                },
+                "src": "views/sitemap.xml.twig",
+                "ext": "sitemap.xml"
+            },
+            "webmanifest_json": {
+                "data": {
+                    "page": "webmanifest_json"
+                },
+                "src": "views/manifest.json.twig",
+                "ext": "manifest.json"
             }
         }
     }
