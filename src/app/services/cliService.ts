@@ -38,7 +38,7 @@ const constructOptions = (cli: any): BuilderOptions => {
     return options
 }
 
-class CliService {
+export class CliService {
 
     public static init (): BuilderOptions {
 

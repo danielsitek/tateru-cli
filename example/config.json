@@ -40,7 +40,8 @@
         "cs": {
             "index": {
                 "data": {
-                    "page": "index"
+                    "page": "index",
+                    "title": "Index Page"
                 },
                 "src": "views/index.html.twig",
                 "ext": "index.html",

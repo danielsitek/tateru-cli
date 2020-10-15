@@ -107,6 +107,13 @@ const renderPage = (pageName: string, translations: Translations): Pipeline => {
     });
 };
 
+export const buildTemplate = (data: any, translation: any, templateBase: string, templateFile: string): string => {
+    const fileTwigConfig = prepareTwigConfiguration(templateFile, templateBase);
+    const template = TwigService.render(fileTwigConfig, data, translation);
+
+    return template;
+};
+
 /**
  * Save generated html in file.
  *
