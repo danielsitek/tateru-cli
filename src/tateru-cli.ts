@@ -108,40 +108,57 @@ export const composeData = (lang: string, configOptionsData: any, configEnvData:
     return data;
 }
 
-try {
-    const projectDir = getProjectDir(configFile, processCwd);
+const getTranslationKeys = (configOptionLang: any, lang: string): string[] => {
+    if (lang) {
+        return [lang];
+    }
 
-    console.log({ projectDir });
+    return Object.keys(configOptionLang);
+}
+
+try {
+    console.log({ configFile, env, lang });
+
+    const projectDir = getProjectDir(configFile, processCwd);
 
     const config = loadConfiguration(configFile, processCwd);
 
-    console.log({ config });
-
-    const translation = loadTranslation(projectDir, config.translations.cs.src);
-
-    console.log({ translation });
-
     const templateBase = getTemplateBase(projectDir, config.options.src);
 
-    const templateFile = getTemplateFile(templateBase, config.pages.cs.index.src);
+    const translationsKeys = getTranslationKeys(config.translations, lang);
 
-    console.log({ configFile, env, lang });
+    // Lang loop
+    translationsKeys.map((translationKey) => {
+        const translationConfig = {
+            ...config.translations[translationKey]
+        };
+        const pagesConfig = {
+            ...config.pages[translationKey]
+        };
+        const envConfig = {
+            ...config.env[env]
+        };
 
-    const pageData = composeData(
-        lang,
-        config.options.data,
-        config.env.dev.data,
-        config.pages.cs.index.data,
-        config.pages.cs
-    );
+        const translation = loadTranslation(projectDir, translationConfig.src);
 
-    const distFile = path.resolve(processCwd, config.options.ext, config.pages.cs.index.ext);
+        const pageData = composeData(
+            lang,
+            config.options.data,
+            envConfig.data,
+            pagesConfig.index.data,
+            pagesConfig
+        );
 
-    const build = buildTemplate(pageData, translation, templateBase, templateFile);
+        const templateFile = getTemplateFile(templateBase, pagesConfig.index.src);
 
-    console.log({
-        build,
-        distFile
+        const distFile = path.resolve(processCwd, config.options.ext, pagesConfig.index.ext);
+
+        const build = '' // buildTemplate(pageData, translation, templateBase, templateFile);
+
+        console.log({
+            build,
+            distFile
+        });
     });
 } catch (e) {
     console.log(e);
