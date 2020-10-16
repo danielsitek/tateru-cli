@@ -9,7 +9,7 @@ import { buildTemplate } from '.';
 import CliService from './app/services/cliService';
 import { ConfigFile, PagesUrlObject } from './types';
 
-const { configFile, env, lang } = CliService.init();
+const { configFile, env, lang, page } = CliService.init();
 
 const processCwd = process.cwd();
 
@@ -18,7 +18,7 @@ export const getProjectDir = (configFileName: string, cwd: string): string => {
     const dirName = path.dirname(fileSrc);
 
     if (!fs.existsSync(fileSrc)) {
-        throw new Error(`Cannot load project root ${dirName}`);
+        throw new Error(`Cannot find project root ${dirName}`);
     }
 
     return dirName;
@@ -116,8 +116,16 @@ const getTranslationKeys = (configOptionLang: any, lang: string): string[] => {
     return Object.keys(configOptionLang);
 }
 
+const getPagesKeys = (configPages: any, page: string): string[] => {
+    if (page) {
+        return [page];
+    }
+
+    return Object.keys(configPages);
+};
+
 try {
-    console.log({ configFile, env, lang });
+    console.log({ configFile, env, lang, page });
 
     const projectDir = getProjectDir(configFile, processCwd);
 
@@ -138,26 +146,35 @@ try {
         const envConfig = {
             ...config.env[env]
         };
+        const pagesKeys = getPagesKeys(pagesConfig, page);
 
         const translation = loadTranslation(projectDir, translationConfig.src);
 
-        const pageData = composeData(
-            lang,
-            config.options.data,
-            envConfig.data,
-            pagesConfig.index.data,
-            pagesConfig
-        );
+        pagesKeys.map((pageKey) => {
+            const pageConfig = {
+                ...pagesConfig[pageKey]
+            };
 
-        const templateFile = getTemplateFile(templateBase, pagesConfig.index.src);
+            const pageData = composeData(
+                lang,
+                config.options.data,
+                envConfig.data,
+                pagesConfig.index.data,
+                pagesConfig
+            );
 
-        const distFile = path.resolve(processCwd, config.options.ext, pagesConfig.index.ext);
+            const templateFile = getTemplateFile(templateBase, pageConfig.src);
 
-        const build = '' // buildTemplate(pageData, translation, templateBase, templateFile);
+            const distFile = path.resolve(processCwd, config.options.ext, translationConfig.ext ,pageConfig.ext);
 
-        console.log({
-            build,
-            distFile
+            const build = '' // buildTemplate(pageData, translation, templateBase, templateFile);
+
+            console.log(`Created:\t${pageConfig.ext}`);
+
+            console.log({
+                build,
+                distFile
+            });
         });
     });
 } catch (e) {

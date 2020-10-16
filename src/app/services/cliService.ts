@@ -32,6 +32,7 @@ const constructOptions = (cli: any): BuilderOptions => {
         configFile: cli.input[0] || 'config.json',
         env: cli.flags.env as Environment || ENV_DEVELOPMENT,
         lang: cli.flags.lang,
+        page: cli.flags.page,
         flags: cli.flags
     };
 

@@ -24,6 +24,7 @@ export interface BuilderOptions {
     configFile: string
     env: Environment
     lang: LanguageString
+    page: string
     flags: {
         [flagName: string]: any
     }
