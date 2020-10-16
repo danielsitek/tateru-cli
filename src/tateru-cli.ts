@@ -8,15 +8,12 @@ import path from 'path';
 import { buildTemplate } from '.';
 import CliService from './app/services/cliService';
 import { ConfigFile, PagesUrlObject } from './types';
-// import TateruCLI from './index';
-
-// TateruCLI();
 
 const { configFile, env, lang } = CliService.init();
 
 const processCwd = process.cwd();
 
-const getProjectDirt = (configFileName: string, cwd: string): string => {
+export const getProjectDir = (configFileName: string, cwd: string): string => {
     const fileSrc = path.resolve(cwd, configFileName);
     const dirName = path.dirname(fileSrc);
 
@@ -27,7 +24,7 @@ const getProjectDirt = (configFileName: string, cwd: string): string => {
     return dirName;
 };
 
-const loadConfiguration = (configFileName: string, cwd: string): ConfigFile => {
+export const loadConfiguration = (configFileName: string, cwd: string): ConfigFile => {
     const fileSrc = path.resolve(cwd, configFileName);
 
     if (!fs.existsSync(fileSrc)) {
@@ -42,7 +39,7 @@ const loadConfiguration = (configFileName: string, cwd: string): ConfigFile => {
     };
 };
 
-const loadTranslation = (projectRoot: string, translationFilePath: string): any => {
+export const loadTranslation = (projectRoot: string, translationFilePath: string): any => {
     const fileSrc = path.resolve(projectRoot, translationFilePath);
 
     if (!fs.existsSync(fileSrc)) {
@@ -57,7 +54,7 @@ const loadTranslation = (projectRoot: string, translationFilePath: string): any 
     };
 };
 
-const hrefData = (pages: any): any => {
+export const hrefData = (pages: any): any => {
     const href: PagesUrlObject = {};
 
     Object.keys(pages).forEach(pageName => {
@@ -67,7 +64,7 @@ const hrefData = (pages: any): any => {
     return href;
 };
 
-const getTemplateBase = (projectRoot: string, templateSrc: string): string => {
+export const getTemplateBase = (projectRoot: string, templateSrc: string): string => {
     const fileSrc = path.resolve(projectRoot, templateSrc);
 
     if (!fs.existsSync(fileSrc)) {
@@ -77,7 +74,7 @@ const getTemplateBase = (projectRoot: string, templateSrc: string): string => {
     return fileSrc;
 };
 
-const getTemplateFile = (templateBase: string, templateFilePath: string): string => {
+export const getTemplateFile = (templateBase: string, templateFilePath: string): string => {
     const fileSrc = path.resolve(templateBase, templateFilePath);
 
     if (!fs.existsSync(fileSrc)) {
@@ -87,8 +84,32 @@ const getTemplateFile = (templateBase: string, templateFilePath: string): string
     return fileSrc;
 };
 
+export const composeData = (lang: string, configOptionsData: any, configEnvData: any, configPageData: any, cofigPages: any): any => {
+    const href = hrefData(
+        cofigPages // config.pages.cs
+    );
+
+    const data = merge(
+        {
+            ...configOptionsData // config.options.data
+        },
+        {
+            ...configPageData // config.pages.cs.index.data
+        },
+        {
+            ...configEnvData // config.env.dev.data
+        },
+        {
+            lang,
+            href
+        }
+    );
+
+    return data;
+}
+
 try {
-    const projectDir = getProjectDirt(configFile, processCwd);
+    const projectDir = getProjectDir(configFile, processCwd);
 
     console.log({ projectDir });
 
@@ -106,22 +127,12 @@ try {
 
     console.log({ configFile, env, lang });
 
-    const href = hrefData(config.pages.cs);
-
-    const pageData = merge(
-        {
-            ...config.options.data
-        },
-        {
-            ...config.pages.cs.index.data
-        },
-        {
-            ...config.env.dev.data
-        },
-        {
-            lang,
-            href
-        }
+    const pageData = composeData(
+        lang,
+        config.options.data,
+        config.env.dev.data,
+        config.pages.cs.index.data,
+        config.pages.cs
     );
 
     const distFile = path.resolve(processCwd, config.options.ext, config.pages.cs.index.ext);
