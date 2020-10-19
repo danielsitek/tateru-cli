@@ -124,8 +124,23 @@ const getPagesKeys = (configPages: any, page: string): string[] => {
     return Object.keys(configPages);
 };
 
+export const writeFile = (fileContent: string, filePath: string): boolean => {
+    const fileDir = path.dirname(filePath);
+
+    if (!fs.existsSync(fileDir)) {
+        fs.mkdirSync(fileDir, { recursive: true });
+    }
+    fs.writeFileSync(filePath, fileContent);
+
+    if (!fs.existsSync(filePath)) {
+        return false;
+    }
+
+    return true;
+};
+
 try {
-    console.log({ configFile, env, lang, page });
+    // console.log({ configFile, env, lang, page });
 
     const projectDir = getProjectDir(configFile, processCwd);
 
@@ -167,14 +182,13 @@ try {
 
             const distFile = path.resolve(processCwd, config.options.ext, translationConfig.ext ,pageConfig.ext);
 
-            const build = '' // buildTemplate(pageData, translation, templateBase, templateFile);
+            const build = buildTemplate(pageData, translation, templateBase, templateFile);
+
+            writeFile(build, distFile);
 
             console.log(`Created:\t${pageConfig.ext}`);
 
-            console.log({
-                build,
-                distFile
-            });
+            // console.log({ build, distFile });
         });
     });
 } catch (e) {
