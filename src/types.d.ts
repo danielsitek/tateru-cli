@@ -95,6 +95,11 @@ export interface FileSystemPathSettings {
      * Path to generated file or folder.
      */
     readonly ext: FileSystemPath
+
+    /**
+     * Apply file minification for selected enviromnets.
+     */
+    readonly minify?: string[]
 }
 
 export interface ConfigFileOptionsData extends EnvironmentOptions {}

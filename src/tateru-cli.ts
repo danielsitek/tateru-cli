@@ -5,7 +5,9 @@
 import fs from 'fs';
 import { merge } from 'lodash';
 import path from 'path';
+import { PassThrough } from 'stream';
 import { buildTemplate } from '.';
+import { minifyHtml } from './app/pipes/minifyHtml';
 import CliService from './app/services/cliService';
 import { ConfigFile, PagesUrlObject } from './types';
 
@@ -139,6 +141,23 @@ export const writeFile = (fileContent: string, filePath: string): boolean => {
     return true;
 };
 
+export const getFileType = (filePath: string): string | undefined => {
+    const split = filePath.split('.');
+    const last = split.pop();
+
+    return last;
+};
+
+export const minifyBuildContent = (content: string, fileType: string | undefined): string => {
+    const type = `${fileType}`.toLocaleLowerCase().trim();
+
+    if (type === 'html') {
+        return minifyHtml(content);
+    }
+
+    return content;
+};
+
 try {
     // console.log({ configFile, env, lang, page });
 
@@ -178,11 +197,19 @@ try {
                 pagesConfig
             );
 
+            const pageMinify = pageConfig.minify || [];
+
+            const pageFileType = getFileType(pageConfig.ext);
+
             const templateFile = getTemplateFile(templateBase, pageConfig.src);
 
             const distFile = path.resolve(processCwd, config.options.ext, translationConfig.ext ,pageConfig.ext);
 
-            const build = buildTemplate(pageData, translation, templateBase, templateFile);
+            let build = buildTemplate(pageData, translation, templateBase, templateFile);
+
+            if (pageMinify.includes(env)) {
+                build = minifyBuildContent(build, pageFileType);
+            }
 
             writeFile(build, distFile);
 

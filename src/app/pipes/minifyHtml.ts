@@ -8,16 +8,22 @@ import { minify } from 'html-minifier';
  * @param {Object} data
  */
 
-const minifyHtml = (data: PipelineData): PipelineData => {
+const minifyHtmlPipeline = (data: PipelineData): PipelineData => {
     const { source } = data;
-    const minified = minify(source, {
-        collapseWhitespace: true,
-        minifyCSS: true,
-        minifyJS: true,
-    });
+    const minified = minifyHtml(source);
 
     data.source = minified;
     return data;
 };
 
-export default minifyHtml;
+export const minifyHtml = (content: string): string => {
+    const minified = minify(content, {
+        collapseWhitespace: true,
+        minifyCSS: true,
+        minifyJS: true,
+    });
+
+    return minified;
+}
+
+export default minifyHtmlPipeline;

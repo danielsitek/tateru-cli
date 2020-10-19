@@ -45,7 +45,7 @@
                 },
                 "src": "views/index.html.twig",
                 "ext": "index.html",
-                "minify": ["prod"]
+                "minify": ["prod", "dev"]
             },
             "about": {
                 "data": {
