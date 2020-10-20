@@ -38,7 +38,7 @@ try {
     printLog(`Environment:\t${env}\n`);
 
     // Translations loop
-    translationsKeys.map((translationKey) => {
+    translationsKeys.forEach((translationKey) => {
         const translationConfig = {
             ...config.translations[translationKey]
         };
@@ -53,7 +53,7 @@ try {
         const translation = loadTranslation(projectDir, translationConfig.src);
 
         // Pages loop
-        pagesKeys.map((pageKey) => {
+        pagesKeys.forEach((pageKey) => {
             const pageConfig = {
                 ...pagesConfig[pageKey]
             };

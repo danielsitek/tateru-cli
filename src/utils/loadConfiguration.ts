@@ -4,13 +4,13 @@ import { ConfigFile } from '../types';
 
 
 export const loadConfiguration = (configFileName: string, cwd: string): ConfigFile => {
-    const fileSrc = path.resolve(cwd, configFileName);
+    const configurationFileSrc = path.resolve(cwd, configFileName);
 
-    if (!fs.existsSync(fileSrc)) {
-        throw new Error(`Cannot load configuration file ${fileSrc}`);
+    if (!fs.existsSync(configurationFileSrc)) {
+        throw new Error(`Cannot load configuration file ${configurationFileSrc}`);
     }
 
-    const contentString = fs.readFileSync(fileSrc).toString('utf8');
+    const contentString = fs.readFileSync(configurationFileSrc).toString('utf8');
     const contentJson = JSON.parse(contentString);
 
     return {

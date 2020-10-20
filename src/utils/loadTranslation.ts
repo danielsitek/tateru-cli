@@ -3,13 +3,13 @@ import path from 'path';
 
 
 export const loadTranslation = (projectRoot: string, translationFilePath: string): any => {
-    const fileSrc = path.resolve(projectRoot, translationFilePath);
+    const translationFileSrc = path.resolve(projectRoot, translationFilePath);
 
-    if (!fs.existsSync(fileSrc)) {
-        throw new Error(`Cannot load translation file ${fileSrc}`);
+    if (!fs.existsSync(translationFileSrc)) {
+        throw new Error(`Cannot load translation file ${translationFileSrc}`);
     }
 
-    const contentString = fs.readFileSync(fileSrc).toString('utf8');
+    const contentString = fs.readFileSync(translationFileSrc).toString('utf8');
     const contentJson = JSON.parse(contentString);
 
     return {
