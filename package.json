@@ -41,14 +41,14 @@
     "html-minifier": "^4.0.0",
     "lodash": "^4.17.20",
     "meow": "^7.1.1",
-    "snyk": "^1.413.2",
     "twig": "^1.15.0"
   },
   "devDependencies": {
     "@types/html-minifier": "^4.0.0",
-    "@types/lodash": "^4.14.161",
-    "@types/node": "^14.11.8",
-    "@types/twig": "^1.12.3",
+    "@types/lodash": "^4.14.162",
+    "@types/node": "^14.11.11",
+    "@types/twig": "^1.12.4",
+    "snyk": "^1.417.0",
     "typescript": "^3.9.7"
   },
   "engines": {
