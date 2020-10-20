@@ -5,7 +5,6 @@
 import fs from 'fs';
 import { merge } from 'lodash';
 import path from 'path';
-import { PassThrough } from 'stream';
 import { buildTemplate } from '.';
 import { minifyHtml } from './app/pipes/minifyHtml';
 import CliService from './app/services/cliService';
@@ -110,7 +109,7 @@ export const composeData = (lang: string, configOptionsData: any, configEnvData:
     return data;
 }
 
-const getTranslationKeys = (configOptionLang: any, lang: string): string[] => {
+export const getTranslationKeys = (configOptionLang: any, lang: string): string[] => {
     if (lang) {
         return [lang];
     }
@@ -118,7 +117,7 @@ const getTranslationKeys = (configOptionLang: any, lang: string): string[] => {
     return Object.keys(configOptionLang);
 }
 
-const getPagesKeys = (configPages: any, page: string): string[] => {
+export const getPagesKeys = (configPages: any, page: string): string[] => {
     if (page) {
         return [page];
     }
@@ -156,6 +155,10 @@ export const minifyBuildContent = (content: string, fileType: string | undefined
     }
 
     return content;
+};
+
+export const printLog = (pageExt: string): void => {
+    console.log(`Created:\t${pageExt}`);
 };
 
 try {
@@ -213,7 +216,7 @@ try {
 
             writeFile(build, distFile);
 
-            console.log(`Created:\t${pageConfig.ext}`);
+            printLog(pageConfig.ext);
 
             // console.log({ build, distFile });
         });
