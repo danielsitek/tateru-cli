@@ -34,7 +34,8 @@
     "dist": "rm -rf dist/* && npx tsc",
     "test": "echo \"No test specified\"",
     "snyk-protect": "snyk protect",
-    "prepare": "npm run snyk-protect"
+    "prepare": "npm run snyk-protect",
+    "cli": "npx ts-node src/tateru-cli.ts example/config.json"
   },
   "dependencies": {
     "html-minifier": "^4.0.0",
