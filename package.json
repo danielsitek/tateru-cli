@@ -30,24 +30,26 @@
   "bin": "./dist/tateru-cli.js",
   "scripts": {
     "example": "cd ./example && node ../dist/tateru-cli.js config.json",
+    "example:prod": "cd ./example && node ../dist/tateru-cli.js config.json --env prod",
     "dist": "rm -rf dist/* && npx tsc",
     "test": "echo \"No test specified\"",
     "snyk-protect": "snyk protect",
-    "prepare": "npm run snyk-protect"
+    "prepare": "npm run snyk-protect",
+    "cli": "npx ts-node src/tateru-cli.ts example/config.json"
   },
   "dependencies": {
     "html-minifier": "^4.0.0",
     "lodash": "^4.17.20",
-    "meow": "^6.1.0",
-    "twig": "^1.15.0",
-    "snyk": "^1.316.1"
+    "meow": "^7.1.1",
+    "twig": "^1.15.0"
   },
   "devDependencies": {
-    "@types/html-minifier": "^3.5.3",
-    "@types/lodash": "^4.14.149",
-    "@types/node": "^13.7.2",
-    "@types/twig": "^1.12.2",
-    "typescript": "^3.7.5"
+    "@types/html-minifier": "^4.0.0",
+    "@types/lodash": "^4.14.162",
+    "@types/node": "^14.11.11",
+    "@types/twig": "^1.12.4",
+    "snyk": "^1.417.0",
+    "typescript": "^3.9.7"
   },
   "engines": {
     "node": ">= 0.10"

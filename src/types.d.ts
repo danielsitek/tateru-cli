@@ -24,6 +24,7 @@ export interface BuilderOptions {
     configFile: string
     env: Environment
     lang: LanguageString
+    page: string
     flags: {
         [flagName: string]: any
     }
@@ -94,6 +95,11 @@ export interface FileSystemPathSettings {
      * Path to generated file or folder.
      */
     readonly ext: FileSystemPath
+
+    /**
+     * Apply file minification for selected enviromnets.
+     */
+    readonly minify?: string[]
 }
 
 export interface ConfigFileOptionsData extends EnvironmentOptions {}

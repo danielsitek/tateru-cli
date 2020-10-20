@@ -1,6 +1,6 @@
 import meow from 'meow';
 import { BuilderOptions, Environment } from '../../types';
-import { ENV_DEVELOPMENT, LANG_DEFAULT, ENV_PRODUCTION } from '../defines';
+import { ENV_DEVELOPMENT, ENV_PRODUCTION } from '../defines';
 
 const message: string = `
 Usage:
@@ -31,14 +31,15 @@ const constructOptions = (cli: any): BuilderOptions => {
     const options: BuilderOptions = {
         configFile: cli.input[0] || 'config.json',
         env: cli.flags.env as Environment || ENV_DEVELOPMENT,
-        lang: cli.flags.lang || LANG_DEFAULT,
+        lang: cli.flags.lang,
+        page: cli.flags.page,
         flags: cli.flags
     };
 
     return options
 }
 
-class CliService {
+export class CliService {
 
     public static init (): BuilderOptions {
 
@@ -58,7 +59,7 @@ class CliService {
                 },
                 lang: {
                     type: 'string',
-                    default: 'cs',
+                    default: '',
                     alias: 'l',
                     description: 'Select language subset to build.'
                 }
