@@ -59,10 +59,10 @@ try {
             };
 
             const pageData = composeData(
-                lang,
+                translationKey,
                 config.options.data,
                 envConfig.data,
-                pagesConfig.index.data,
+                pageConfig.data,
                 pagesConfig
             );
 
