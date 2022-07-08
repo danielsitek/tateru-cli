@@ -20,6 +20,7 @@ import { getFileType } from './utils/getFileType';
 import { minifyBuildContent } from './utils/minifyBuildContent';
 import { printLog } from './utils/printLog';
 import { getEndTime } from './utils/getEndTime';
+import { formatBuildContent } from './utils/formatBuildContent';
 
 const { configFile, env, lang, page } = CliService.init();
 
@@ -75,6 +76,8 @@ try {
             const distFile = path.resolve(processCwd, config.options.ext, translationConfig.ext ,pageConfig.ext);
 
             let build = buildTemplate(pageData, translation, templateBase, templateFile);
+
+            build = formatBuildContent(build, pageFileType);
 
             if (pageMinify.includes(env)) {
                 build = minifyBuildContent(build, pageFileType);
