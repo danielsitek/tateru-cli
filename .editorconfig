@@ -8,8 +8,8 @@ end_of_line = lf
 insert_final_newline = false
 trim_trailing_whitespace = true
 
-[{*.yml, *.json, *.js, *.ts}]
+[*.{yml,json,js,ts,webmanifest}]
 indent_size = 2
 
-[{*.js, *.ts}]
+[*.{js,ts}]
 insert_final_newline = true
