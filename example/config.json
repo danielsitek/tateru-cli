@@ -71,12 +71,12 @@
                 "src": "views/sitemap.xml.twig",
                 "ext": "sitemap.xml"
             },
-            "webmanifest_json": {
+            "webmanifest_file": {
                 "data": {
-                    "page": "webmanifest_json"
+                    "page": "webmanifest_file"
                 },
-                "src": "views/manifest.json.twig",
-                "ext": "manifest.json"
+                "src": "views/site.webmanifest.twig",
+                "ext": "site.webmanifest"
             }
         }
     }
