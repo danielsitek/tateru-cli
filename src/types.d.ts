@@ -10,7 +10,7 @@ export type PageNameString = 'index' | string
 
 export type FileSystemPath = string
 
-export type LanguageString = 'en' | string
+export type LanguageString = 'en' | 'cs' | string
 
 interface CustomKey<T> {
     [key: string]: T
@@ -35,7 +35,7 @@ export interface BuilderOptions {
  */
 export interface ConfigFile {
     /**
-     * Modifications based on environment - dev ot prod.
+     * Modifications based on environment - dev or prod.
      */
     readonly env: ConfigFileEnvironment
 
@@ -50,7 +50,7 @@ export interface ConfigFile {
     readonly translations: ConfigFileTranslations
 
     /**
-     * Pages configuration
+     * Pages configuration.
      */
     readonly pages: ConfigFilePages
 }
@@ -97,9 +97,9 @@ export interface FileSystemPathSettings {
     readonly ext: FileSystemPath
 
     /**
-     * Apply file minification for selected enviromnets.
+     * Apply file minification for selected environments.
      */
-    readonly minify?: string[]
+    readonly minify?: Array<Environment | undefined>
 }
 
 export interface ConfigFileOptionsData extends EnvironmentOptions {}
