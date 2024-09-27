@@ -1,0 +1,12 @@
+{
+  "name": "simple-test-framework",
+  "version": "1.0.0",
+  "main": "src/index.ts",
+  "types": "src/index.d.ts",
+  "bin": {
+    "run-simple-tests": "./bin/run-tests.ts"
+  },
+  "scripts": {
+    "build": "tsc"
+  }
+}
