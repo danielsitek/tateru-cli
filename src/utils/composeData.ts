@@ -1,26 +1,26 @@
-import { merge } from 'lodash';
 import { getHrefData } from './getHrefData';
+import { deepMerge } from './deepMerge';
 
 
-export const composeData = (lang: string, configOptionsData: any, configEnvData: any, configPageData: any, cofigPages: any): any => {
+export const composeData = (lang: string, configOptionsData: any, configEnvData: any, configPageData: any, configPages: any): any => {
     const href = getHrefData(
-        cofigPages // config.pages.cs
+        configPages // config.pages.cs
     );
 
-    const data = merge(
+    const data = deepMerge(
         {
-            ...configOptionsData // config.options.data
+            ...configOptionsData, // config.options.data
         },
         {
-            ...configPageData // config.pages.cs.index.data
+            ...configPageData, // config.pages.cs.index.data
         },
         {
-            ...configEnvData // config.env.dev.data
+            ...configEnvData, // config.env.dev.data
         },
         {
             lang,
-            href
-        }
+            href,
+        },
     );
 
     return data;
