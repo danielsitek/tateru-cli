@@ -33,30 +33,24 @@
     "example:prod": "cd ./example && node ../dist/tateru-cli.js tateru.config.json --env prod",
     "dist": "rm -rf dist/* && npx tsc",
     "test": "run-simple-tests",
-    "snyk-protect": "snyk protect",
-    "prepare": "npm run snyk-protect",
     "cli": "npx ts-node src/tateru-cli.ts example/tateru.config.json"
   },
   "dependencies": {
     "html-minifier": "^4.0.0",
     "js-beautify": "^1.14.4",
-    "lodash": "^4.17.21",
     "meow": "^8.0.0",
     "twig": "^1.15.0"
   },
   "devDependencies": {
     "@types/html-minifier": "^4.0.0",
     "@types/js-beautify": "^1.13.3",
-    "@types/lodash": "^4.14.162",
     "@types/node": "^14.11.11",
     "@types/twig": "^1.12.4",
     "simple-test-framework": "file:local_modules/simple-test-framework",
-    "snyk": "^1.417.0",
     "typescript": "^3.9.7"
   },
   "engines": {
     "node": ">= 0.10"
   },
-  "types": "./src/types.d.ts",
-  "snyk": true
+  "types": "./src/types.d.ts"
 }
