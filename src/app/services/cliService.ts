@@ -29,7 +29,7 @@ const environmentOptions = (options: BuilderOptions): BuilderOptions => {
 const constructOptions = (cli: any): BuilderOptions => {
 
     const options: BuilderOptions = {
-        configFile: cli.input[0] || 'config.json',
+        configFile: cli.input[0] || 'tateru.config.json',
         env: cli.flags.env as Environment || ENV_DEVELOPMENT,
         lang: cli.flags.lang,
         page: cli.flags.page,

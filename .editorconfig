@@ -7,8 +7,9 @@ charset = utf-8
 end_of_line = lf
 insert_final_newline = false
 trim_trailing_whitespace = true
+quote_type = single
 
-[*.{yml,json,js,ts,webmanifest}]
+[*.{yml,webmanifest}]
 indent_size = 2
 
 [*.{js,ts}]

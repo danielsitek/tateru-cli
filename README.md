@@ -19,8 +19,8 @@ npm i -D tateru-cli
 
 ## Usage
 
-Create config file `config.json` with all settings based on example config file in `/test`. And run following command.
+Create config file `tateru.config.json` with all settings based on example config file in `/test`. And run following command.
 
 ```shell
-npx tateru-cli config.json
+npx tateru-cli tateru.config.json
 ```
