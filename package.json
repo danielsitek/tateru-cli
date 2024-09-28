@@ -27,7 +27,9 @@
     "dist"
   ],
   "main": "./dist/index.js",
-  "bin": "./dist/tateru-cli.js",
+  "bin": {
+    "tateru-cli": "./dist/tateru-cli.js"
+  },
   "scripts": {
     "example": "cd ./example && node ../dist/tateru-cli.js tateru.config.json",
     "example:prod": "cd ./example && node ../dist/tateru-cli.js tateru.config.json --env prod",
@@ -50,7 +52,7 @@
     "typescript": "^3.9.7"
   },
   "engines": {
-    "node": ">= 0.10"
+    "node": ">= 14"
   },
   "types": "./src/types.d.ts"
 }

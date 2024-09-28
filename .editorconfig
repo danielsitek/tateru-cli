@@ -12,5 +12,8 @@ quote_type = single
 [*.{yml,webmanifest}]
 indent_size = 2
 
+[{package,package-lock}.json]
+indent_size = 2
+
 [*.{js,ts}]
 insert_final_newline = true
