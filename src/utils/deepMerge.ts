@@ -11,11 +11,11 @@ export function deepMerge<T, O extends any[] = any[]>(...objects: O): T {
             const oVal = obj[key as keyof object] as object | any[];
 
             if (Array.isArray(pVal) && Array.isArray(oVal)) {
-                (prev as any)[key] = [...pVal, ...oVal];
+                (prev as any)[key as keyof {}] = [...pVal, ...oVal];
             } else if (isObject(pVal) && isObject(oVal)) {
-                (prev as any)[key] = deepMerge(pVal, oVal);
+                (prev as any)[key as keyof {}] = deepMerge(pVal, oVal);
             } else {
-                (prev as any)[key] = oVal;
+                (prev as any)[key as keyof {}] = oVal;
             }
         });
 
