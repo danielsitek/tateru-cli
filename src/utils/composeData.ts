@@ -2,7 +2,7 @@ import { getHrefData } from './getHrefData';
 import { deepMerge } from './deepMerge';
 
 
-export const composeData = (lang: string, configOptionsData: any, configEnvData: any, configPageData: any, configPages: any): any => {
+export const composeData = (lang: string, configOptionsData: any, configEnvData: any, configPageData: any, configPages: any) => {
     const href = getHrefData(
         configPages // config.pages.cs
     );

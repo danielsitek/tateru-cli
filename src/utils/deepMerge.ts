@@ -1,12 +1,12 @@
-export function deepMerge<T, O extends any[] = any[]>(...objects: O): T {
-    const isObject = (obj: any): obj is object => obj && typeof obj === 'object';
+const isObject = (obj: any): obj is object => obj && typeof obj === 'object';
 
+export function deepMerge<T, O extends any[] = any[]>(...objects: O): T {
     return objects.reduce((prev, obj) => {
         if (!isObject(prev) || !isObject(obj)) {
             return obj;
         }
 
-        Object.keys(obj).forEach(key => {
+        Object.keys(obj).forEach((key) => {
             const pVal = prev[key as keyof {}] as object | any[];
             const oVal = obj[key as keyof object] as object | any[];
 

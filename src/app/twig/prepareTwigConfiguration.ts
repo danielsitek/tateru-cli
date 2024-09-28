@@ -1,5 +1,5 @@
-import fs from 'fs'
-import path from 'path'
+import fs from 'fs';
+import path from 'path';
 import { TwigConfiguration } from '../../types';
 
 const prepareTwigConfiguration = (pathToTwigFile: string, twigBase: string): TwigConfiguration => {
@@ -21,8 +21,12 @@ const prepareTwigConfiguration = (pathToTwigFile: string, twigBase: string): Twi
 
         return fileTwigConfig;
     } catch (e) {
-        throw new Error(e)
+        if (e instanceof Error) {
+            throw new Error(e.message);
+        } else {
+            throw new Error(String(e));
+        }
     }
-}
+};
 
-export default prepareTwigConfiguration
+export default prepareTwigConfiguration;

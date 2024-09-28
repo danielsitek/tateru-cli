@@ -1,10 +1,11 @@
-import { minify } from "html-minifier";
+import { minify } from 'html-minifier';
 
 const minifyHtml = (content: string): string => {
     const minified = minify(content, {
         collapseWhitespace: true,
         minifyCSS: true,
         minifyJS: true,
+        removeScriptTypeAttributes: false,
     });
 
     return minified;

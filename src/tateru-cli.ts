@@ -73,7 +73,7 @@ try {
 
             const templateFile = getTemplateFile(templateBase, pageConfig.src);
 
-            const distFile = path.resolve(processCwd, config.options.ext, translationConfig.ext ,pageConfig.ext);
+            const distFile = path.resolve(processCwd, config.options.ext, translationConfig.ext, pageConfig.ext);
 
             let build = buildTemplate(pageData, translation, templateBase, templateFile);
 
