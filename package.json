@@ -27,35 +27,32 @@
     "dist"
   ],
   "main": "./dist/index.js",
-  "bin": "./dist/tateru-cli.js",
+  "bin": {
+    "tateru-cli": "./dist/tateru-cli.js"
+  },
   "scripts": {
     "example": "cd ./example && node ../dist/tateru-cli.js tateru.config.json",
     "example:prod": "cd ./example && node ../dist/tateru-cli.js tateru.config.json --env prod",
     "dist": "rm -rf dist/* && npx tsc",
-    "test": "echo \"No test specified\"",
-    "snyk-protect": "snyk protect",
-    "prepare": "npm run snyk-protect",
+    "test": "run-simple-tests",
     "cli": "npx ts-node src/tateru-cli.ts example/tateru.config.json"
   },
   "dependencies": {
     "html-minifier": "^4.0.0",
     "js-beautify": "^1.14.4",
-    "lodash": "^4.17.21",
     "meow": "^8.0.0",
     "twig": "^1.15.0"
   },
   "devDependencies": {
     "@types/html-minifier": "^4.0.0",
     "@types/js-beautify": "^1.13.3",
-    "@types/lodash": "^4.14.162",
     "@types/node": "^14.11.11",
     "@types/twig": "^1.12.4",
-    "snyk": "^1.417.0",
+    "simple-test-framework": "file:local_modules/simple-test-framework",
     "typescript": "^3.9.7"
   },
   "engines": {
-    "node": ">= 0.10"
+    "node": ">= 14"
   },
-  "types": "./src/types.d.ts",
-  "snyk": true
+  "types": "./src/types.d.ts"
 }
