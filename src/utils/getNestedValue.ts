@@ -6,7 +6,7 @@ export function getNestedValue<T>(
 ): T | undefined {
     // First, try to get the value directly (for i18n-like keys)
     if (typeof path === 'string' && path in obj) {
-        return obj[path];
+        return obj[path as string];
     }
 
     // If not found, proceed with nested object traversal
@@ -21,9 +21,9 @@ export function getNestedValue<T>(
         if (typeof key === 'string' && key.includes('[') && key.includes(']')) {
             const [arrayKey, indexStr] = key.split(/[\[\]]/);
             const index = parseInt(indexStr, 10);
-            result = result[arrayKey]?.[index];
+            result = result[arrayKey as string]?.[index as number];
         } else {
-            result = result[key];
+            result = result[key as string];
         }
     }
 
