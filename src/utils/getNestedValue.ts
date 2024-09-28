@@ -14,8 +14,8 @@ export function getNestedValue<T>(
     let result: any = obj;
 
     for (const key of keys) {
-        if (result == null || typeof result !== 'object') {
-            return undefined;
+        if (result === null || typeof result !== 'object') {
+            return;
         }
 
         if (typeof key === 'string' && key.includes('[') && key.includes(']')) {
@@ -29,4 +29,3 @@ export function getNestedValue<T>(
 
     return result as T | undefined;
 }
-
