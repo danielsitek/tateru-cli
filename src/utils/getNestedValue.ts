@@ -4,6 +4,12 @@ export function getNestedValue<T>(
     obj: Record<string, any>,
     path: GetPath
 ): T | undefined {
+    // First, try to get the value directly (for i18n-like keys)
+    if (typeof path === 'string' && path in obj) {
+        return obj[path];
+    }
+
+    // If not found, proceed with nested object traversal
     const keys = Array.isArray(path) ? path : String(path).split('.');
     let result: any = obj;
 

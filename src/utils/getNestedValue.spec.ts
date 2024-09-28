@@ -15,6 +15,7 @@ describe('getNestedValue', () => {
             },
             title: "Some homepage title",
         },
+        'other-page.header.title': "Other page header title",
     };
 
     test('retrieves nested value using dot notation', () => {
@@ -35,6 +36,11 @@ describe('getNestedValue', () => {
     test('retrieves nested value using bracket notation', () => {
         const result = getNestedValue(obj, 'index.header.b[0]');
         expect(result).toBe(1);
+    });
+
+    test('retrieves value from i18n-like key', () => {
+        const result = getNestedValue(obj, 'other-page.header.title');
+        expect(result).toBe("Other page header title");
     });
 
     test('returns undefined for non-existent path', () => {
