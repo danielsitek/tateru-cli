@@ -18,6 +18,8 @@ export interface DataObject<T = DataType> {
     data: T;
 }
 
+export type PagesUrlObject = Record<string, FileSystemPath>;
+
 export interface BuilderOptions {
     configFile: string;
     env: Environment;
@@ -29,6 +31,58 @@ export interface BuilderOptions {
 /**
  * Config file content
  */
+
+export interface EnvironmentOptions {
+    app: {
+        /**
+         * Working environment.
+         */
+        environment: Environment;
+
+        [key: string]: any;
+    };
+}
+
+export interface EnvironmentData extends DataObject<EnvironmentOptions> { }
+
+export interface FileSystemPathSettings {
+    /**
+     * Path to source file or folder.
+     */
+    readonly src: FileSystemPath;
+
+    /**
+     * Path to generated file or folder.
+     */
+    readonly ext: FileSystemPath;
+
+    /**
+     * Apply file minification for selected environments.
+     */
+    readonly minify?: Array<Environment | undefined>;
+}
+
+export type ConfigFileTranslations = Record<
+    LanguageString,
+    FileSystemPathSettings
+>;
+
+export interface ConfigFileOptionsData extends EnvironmentOptions { }
+
+export interface ConfigFileEnvironment {
+    dev: EnvironmentData;
+    prod: EnvironmentData;
+}
+
+export interface ConfigFileOptions
+    extends FileSystemPathSettings,
+    DataObject<ConfigFileOptionsData> { }
+
+export interface ConfigFilePages
+    extends CustomKey<CustomKey<ConfigFileOptions>> {
+    [shortLangString: string]: Record<PageNameString, ConfigFileOptions>;
+}
+
 export interface ConfigFile {
     /**
      * Modifications based on environment - dev or prod.
@@ -51,58 +105,48 @@ export interface ConfigFile {
     readonly pages: ConfigFilePages;
 }
 
-export interface EnvironmentData extends DataObject<EnvironmentOptions> { }
-
-export interface EnvironmentOptions {
-    app: {
-        /**
-         * Working environment.
-         */
-        environment: Environment;
-
-        [key: string]: any;
-    };
+/**
+ * Concatenated data from ConfigFile.options, ConfigFile.env and ConfigFile.page options for single page.
+ */
+export interface PageRenderOptions extends ConfigFileOptionsData {
+    href: PagesUrlObject;
+    lang: LanguageString;
+    page: PageNameString;
 }
 
-export interface ConfigFileEnvironment {
-    dev: EnvironmentData;
-    prod: EnvironmentData;
-}
-
-export type ConfigFileTranslations = Record<
-    LanguageString,
-    FileSystemPathSettings
->;
-
-export interface ConfigFilePages
-    extends CustomKey<CustomKey<ConfigFileOptions>> {
-    [shortLangString: string]: Record<PageNameString, ConfigFileOptions>;
-}
-
-export interface ConfigFileOptions
-    extends FileSystemPathSettings,
-    DataObject<ConfigFileOptionsData> { }
-
-export interface FileSystemPathSettings {
+export interface TwigConfigurationNamespaces {
     /**
-     * Path to source file or folder.
+     * Absolute path to declared Main namespace.
      */
-    readonly src: FileSystemPath;
+    Main: FileSystemPath;
+}
+
+export interface TwigConfiguration extends Twig.Parameters {
+    /**
+     * Random unique ID.
+     */
+    id: number;
 
     /**
-     * Path to generated file or folder.
+     * Absolute path to twig file.
      */
-    readonly ext: FileSystemPath;
+    path: FileSystemPath;
 
     /**
-     * Apply file minification for selected environments.
+     * Absolute path to twig root folder.
      */
-    readonly minify?: Array<Environment | undefined>;
+    base: FileSystemPath;
+
+    /**
+     * Declared namespaces.
+     */
+    namespaces: TwigConfigurationNamespaces;
+
+    /**
+     * Content of the twig file.
+     */
+    data: string;
 }
-
-export interface ConfigFileOptionsData extends EnvironmentOptions { }
-
-export type PagesUrlObject = Record<string, FileSystemPath>;
 
 export interface PipelineData {
     /**
@@ -142,47 +186,4 @@ export interface PipelineData {
 
     twigConfig?: TwigConfiguration;
     renderOptions: PageRenderOptions;
-}
-
-/**
- * Concatenated data from ConfigFile.options, ConfigFile.env and ConfigFile.page options for single page.
- */
-export interface PageRenderOptions extends ConfigFileOptionsData {
-    href: PagesUrlObject;
-    lang: LanguageString;
-    page: PageNameString;
-}
-
-export interface TwigConfiguration extends Twig.Parameters {
-    /**
-     * Random unique ID.
-     */
-    id: number;
-
-    /**
-     * Absolute path to twig file.
-     */
-    path: FileSystemPath;
-
-    /**
-     * Absolute path to twig root folder.
-     */
-    base: FileSystemPath;
-
-    /**
-     * Declared namespaces.
-     */
-    namespaces: TwigConfigurationNamespaces;
-
-    /**
-     * Content of the twig file.
-     */
-    data: string;
-}
-
-export interface TwigConfigurationNamespaces {
-    /**
-     * Absolute path to declared Main namespace.
-     */
-    Main: FileSystemPath;
 }
