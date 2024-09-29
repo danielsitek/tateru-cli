@@ -1,33 +1,29 @@
-import Twig from 'twig'
+import Twig from 'twig';
 
-export type Environment = 'dev' | 'prod'
+export type Environment = 'dev' | 'prod';
 
-export type DataType = {}
+export type DataType = {};
 
-export type Translations = {}
+export type Translations = {};
 
-export type PageNameString = 'index' | string
+export type PageNameString = 'index' | string;
 
-export type FileSystemPath = string
+export type FileSystemPath = string;
 
-export type LanguageString = 'en' | 'cs' | string
+export type LanguageString = 'en' | 'cs' | string;
 
-interface CustomKey<T> {
-    [key: string]: T
-}
+type CustomKey<T> = Record<string, T>;
 
 export interface DataObject<T = DataType> {
-    data: T
+    data: T;
 }
 
 export interface BuilderOptions {
-    configFile: string
-    env: Environment
-    lang: LanguageString
-    page: string
-    flags: {
-        [flagName: string]: any
-    }
+    configFile: string;
+    env: Environment;
+    lang: LanguageString;
+    page: string;
+    flags: Record<string, any>;
 }
 
 /**
@@ -37,157 +33,156 @@ export interface ConfigFile {
     /**
      * Modifications based on environment - dev or prod.
      */
-    readonly env: ConfigFileEnvironment
+    readonly env: ConfigFileEnvironment;
 
     /**
      * Options configuration.
      */
-    readonly options: ConfigFileOptions
+    readonly options: ConfigFileOptions;
 
     /**
      * Translations configuration.
      */
-    readonly translations: ConfigFileTranslations
+    readonly translations: ConfigFileTranslations;
 
     /**
      * Pages configuration.
      */
-    readonly pages: ConfigFilePages
+    readonly pages: ConfigFilePages;
 }
 
-export interface EnvironmentData extends DataObject<EnvironmentOptions> {}
+export interface EnvironmentData extends DataObject<EnvironmentOptions> { }
 
 export interface EnvironmentOptions {
     app: {
         /**
          * Working environment.
          */
-        environment: Environment
+        environment: Environment;
 
-        [key: string]: any
-    }
+        [key: string]: any;
+    };
 }
 
 export interface ConfigFileEnvironment {
-    dev: EnvironmentData
-    prod: EnvironmentData
+    dev: EnvironmentData;
+    prod: EnvironmentData;
 }
 
-export interface ConfigFileTranslations {
-    [shortLangString: string]: FileSystemPathSettings
+export type ConfigFileTranslations = Record<
+    LanguageString,
+    FileSystemPathSettings
+>;
+
+export interface ConfigFilePages
+    extends CustomKey<CustomKey<ConfigFileOptions>> {
+    [shortLangString: string]: Record<PageNameString, ConfigFileOptions>;
 }
 
-export interface ConfigFilePages extends CustomKey<CustomKey<ConfigFileOptions>> {
-    [shortLangString: string]: {
-        [pageNameString: string]: ConfigFileOptions
-    }
-}
-
-export interface ConfigFileOptions extends FileSystemPathSettings, DataObject<ConfigFileOptionsData> {}
+export interface ConfigFileOptions
+    extends FileSystemPathSettings,
+    DataObject<ConfigFileOptionsData> { }
 
 export interface FileSystemPathSettings {
     /**
      * Path to source file or folder.
      */
-    readonly src: FileSystemPath
+    readonly src: FileSystemPath;
 
     /**
      * Path to generated file or folder.
      */
-    readonly ext: FileSystemPath
+    readonly ext: FileSystemPath;
 
     /**
      * Apply file minification for selected environments.
      */
-    readonly minify?: Array<Environment | undefined>
+    readonly minify?: Array<Environment | undefined>;
 }
 
-export interface ConfigFileOptionsData extends EnvironmentOptions {}
+export interface ConfigFileOptionsData extends EnvironmentOptions { }
 
-export interface PagesUrlObject {
-    [pageName: string]: FileSystemPath
-}
+export type PagesUrlObject = Record<string, FileSystemPath>;
 
 export interface PipelineData {
     /**
      * Compiled source from twig file.
      */
-    source: string
+    source: string;
 
     /**
      * Absolute path to compiled file.
      */
-    filePathExt: FileSystemPath
+    filePathExt: FileSystemPath;
 
     /**
      * Absolute path to twig file.
      */
-    filePathSrc: FileSystemPath
+    filePathSrc: FileSystemPath;
 
     /**
      * Relative path to compiled file.
      */
-    relativeFileExt: FileSystemPath
+    relativeFileExt: FileSystemPath;
 
     /**
      * Relative path to twig file.
      */
-    relativeFileSrc: FileSystemPath
+    relativeFileSrc: FileSystemPath;
 
     /**
      * Absolute path to folder with twig files.
      */
-    renderSrcDir: FileSystemPath
+    renderSrcDir: FileSystemPath;
 
     /**
      * Absolute path to folder for compiled files.
      */
-    renderExtDir: FileSystemPath
+    renderExtDir: FileSystemPath;
 
-    twigConfig?: TwigConfiguration
-    renderOptions: PageRenderOptions
+    twigConfig?: TwigConfiguration;
+    renderOptions: PageRenderOptions;
 }
 
 /**
  * Concatenated data from ConfigFile.options, ConfigFile.env and ConfigFile.page options for single page.
  */
 export interface PageRenderOptions extends ConfigFileOptionsData {
-    href: PagesUrlObject
-    lang: LanguageString
-    page: PageNameString
+    href: PagesUrlObject;
+    lang: LanguageString;
+    page: PageNameString;
 }
 
 export interface TwigConfiguration extends Twig.Parameters {
     /**
      * Random unique ID.
      */
-    id: number
+    id: number;
 
     /**
      * Absolute path to twig file.
      */
-    path: FileSystemPath
+    path: FileSystemPath;
 
     /**
      * Absolute path to twig root folder.
      */
-    base: FileSystemPath
+    base: FileSystemPath;
 
     /**
      * Declared namespaces.
      */
-    namespaces: TwigConfigurationNamespaces
+    namespaces: TwigConfigurationNamespaces;
 
     /**
      * Content of the twig file.
      */
-    data: string
+    data: string;
 }
 
 export interface TwigConfigurationNamespaces {
     /**
      * Absolute path to declared Main namespace.
      */
-    Main: FileSystemPath
+    Main: FileSystemPath;
 }
-
