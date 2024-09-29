@@ -8,6 +8,6 @@ export const getEndTime = (timeKey: any): { s: number; ms: number; ns: number; }
     return {
         s,
         ms,
-        ns
+        ns,
     };
 };

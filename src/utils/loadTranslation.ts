@@ -13,6 +13,6 @@ export const loadTranslation = (projectRoot: string, translationFilePath: string
     const contentJson = JSON.parse(contentString);
 
     return {
-        ...contentJson
+        ...contentJson,
     };
 };

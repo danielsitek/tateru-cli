@@ -14,6 +14,6 @@ export const loadConfiguration = (configFileName: string, cwd: string): ConfigFi
     const contentJson = JSON.parse(contentString);
 
     return {
-        ...contentJson
+        ...contentJson,
     };
 };
