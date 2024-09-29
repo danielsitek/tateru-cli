@@ -9,7 +9,7 @@ const minifyHtml = (content: string): string => {
     });
 
     return minified;
-}
+};
 
 export const minifyBuildContent = (content: string, fileType: string | undefined): string => {
     const type = `${fileType}`.toLocaleLowerCase().trim();
