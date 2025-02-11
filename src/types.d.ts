@@ -23,9 +23,8 @@ export type PagesUrlObject = Record<string, FileSystemPath>;
 export interface BuilderOptions {
     configFile: string;
     env: Environment;
-    lang: LanguageString;
-    page: string;
-    flags: Record<string, any>;
+    lang?: LanguageString;
+    page?: string;
 }
 
 /**

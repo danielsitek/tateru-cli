@@ -1,5 +1,5 @@
 
-export const getTranslationKeys = (configOptionLang: any, lang: string): string[] => {
+export const getTranslationKeys = (configOptionLang: any, lang?: string): string[] => {
     if (lang) {
         return [lang];
     }
