@@ -18,7 +18,7 @@ Simple CLI static site builder tool with Twig.
 - Has integrated **custom Twig extensions** (e.g., translations, sorting)
 - Minifies output HTML.
 - Simple integration with Gulp and other build tools via CLI.
-- Configured via **custom JSON configuration**.
+- Configured via **custom JSON configuration**, allowing for extensive customization of build settings.
 - Zero dependencies on complex frameworks.
 
 ---
@@ -75,6 +75,128 @@ or
 ```sh
 npx tateru-cli --help
 ```
+
+### (Experimental) Integration with Gulp
+
+You can use Tateru CLI within a Gulp task by executing it via `child_process.exec` or `spawn`:
+
+```js
+const { exec } = require('child_process');
+const gulp = require('gulp');
+
+gulp.task('build', (done) => {
+    exec('npx tateru-cli tateru.config.json', (err, stdout, stderr) => {
+        console.log(stdout);
+        console.error(stderr);
+        done(err);
+    });
+});
+```
+
+---
+
+## ⚙️ Configuration
+
+The `tateru.config.json` file defines how Tateru CLI generates your static site. Below is a breakdown of the configuration structure:
+
+### **Environment Settings**
+
+```json
+"env": {
+    "dev": {
+        "data": {
+            "app": {
+                "environment": "dev"
+            }
+        }
+    },
+    "prod": {
+        "data": {
+            "app": {
+                "environment": "prod"
+            }
+        }
+    }
+}
+```
+Defines environment-specific variables (`dev`, `prod`).
+
+- `data`: Overrides specific data in `options.data`, allowing for environment-based customization.
+
+### **Global Options**
+
+```json
+"options": {
+    "data": {
+        "app": {
+            "environment": "dev",
+            "root": "/"
+        },
+        "title": "Tateru CLI Example",
+        "domain": "https://www.example.com/"
+    },
+    "src": "src/twig",
+    "ext": "dist"
+}
+```
+- `data`: Global variables accessible in templates. For example, you can reference `title` in a Twig template using `{{- title -}}`.
+- `src`: Path to source Twig files.
+- `ext`: Output directory for compiled files.
+
+### **Global Data in Templates**
+
+The final data available in Twig templates is composed by merging several configuration sources:
+
+- `options.data`: Global data defined in the `tateru.config.json` file.
+- `env.[env].data`: Environment-specific data (`dev` or `prod`).
+- `pages.[lang].[page].data`: Page-specific overrides.
+- `href`: Automatically generated URLs for each page.
+- `lang`: The current language in use.
+
+Example of referencing global data in a Twig template:
+
+```twig
+<h1>{{ title }}</h1>
+<p>Environment: {{ app.environment }}</p>
+<a href="{{ href.index }}">Home</a>
+```
+
+### **Translations**
+
+```json
+"translations": {
+    "cs": {
+        "src": "src/translations/cs.json",
+        "ext": ""
+    }
+}
+```
+Defines translation files per language.
+
+### **Pages Configuration**
+
+```json
+"pages": {
+    "cs": {
+        "index": {
+            "data": {
+                "page": "index",
+                "title": "Index Page"
+            },
+            "src": "views/index.html.twig",
+            "ext": "index.html",
+            "minify": ["prod", "dev"]
+        }
+    }
+}
+```
+- `pages`: Defines each page with its template source, output name, and optional minification settings.
+- `data`: Page-specific variables that override global data in `options.data`.
+- `src`: Path to the Twig template file for this page.
+- `ext`: Output file name and extension.
+- `minify`: Array specifying environments (`prod`, `dev`) where HTML minification should be applied.
+
+For more complex configurations, refer to `/example/tateru.config.json`.
 
 ---
 

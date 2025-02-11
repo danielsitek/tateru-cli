@@ -45,7 +45,8 @@
     "example:clean": "rm -rf example/dist/*",
     "clean": "rm -rf dist/*",
     "dev": "npx ts-node src/tateru-cli.ts example/tateru.config.json",
-    "dev:help": "npx ts-node src/tateru-cli.ts --help"
+    "dev:help": "npx ts-node src/tateru-cli.ts --help",
+    "dev:version": "npx ts-node src/tateru-cli.ts --version"
   },
   "dependencies": {
     "html-minifier": "4",

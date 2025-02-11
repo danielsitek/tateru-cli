@@ -7,9 +7,10 @@ Usage:
 \tnpx tateru-cli [CONFIG FILE] [OPTIONS] [ARGS]
 
 Options:
-\t--env     \tSet build environment - dev or prod. Default is dev.
+\t--env, -e \tSet build environment - dev or prod. Default is dev.
 \t--page, -p\tBuild only single page from config.
-\t--help    \tDisplay help and usage details
+\t--help    \tDisplay help and usage details.
+\t--version, -V\tDisplay Tateru CLI version.
 `;
 
 const environmentOptions = (options: BuilderOptions): BuilderOptions => {
