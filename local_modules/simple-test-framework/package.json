@@ -8,5 +8,10 @@
   },
   "scripts": {
     "build": "tsc"
-  }
+  },
+  "devDependencies": {
+    "ts-node": "10",
+    "typescript": "3"
+  },
+  "private": true
 }
