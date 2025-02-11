@@ -44,7 +44,8 @@
     "example:build:prod": "cd ./example && node ../dist/tateru-cli.js tateru.config.json --env prod",
     "example:clean": "rm -rf example/dist/*",
     "clean": "rm -rf dist/*",
-    "dev": "npx ts-node src/tateru-cli.ts example/tateru.config.json"
+    "dev": "npx ts-node src/tateru-cli.ts example/tateru.config.json",
+    "dev:help": "npx ts-node src/tateru-cli.ts --help"
   },
   "dependencies": {
     "html-minifier": "4",
