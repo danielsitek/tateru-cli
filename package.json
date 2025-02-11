@@ -54,7 +54,6 @@
   "dependencies": {
     "html-minifier": "4",
     "js-beautify": "1",
-    "meow": "8",
     "twig": "1"
   },
   "devDependencies": {
