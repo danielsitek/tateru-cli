@@ -95,7 +95,7 @@ export function parseCLIArgs(): BuilderOptions {
             default:
                 if (arg.startsWith("-")) {
                     console.error(`Error: Unknown option "${arg}"\n`);
-                    printHelp();
+                    console.log(`Run "npx tateru-cli --help" to see available options.\n`);
                     process.exit(1);
                 }
                 if (!arg.startsWith("-")) {

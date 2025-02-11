@@ -46,6 +46,7 @@
     "clean": "rm -rf dist/*",
     "dev": "npx ts-node src/tateru-cli.ts example/tateru.config.json",
     "dev:error": "npx ts-node src/tateru-cli.ts",
+    "dev:args-error": "npx ts-node src/tateru-cli.ts --foo bar",
     "dev:args": "npx ts-node src/tateru-cli.ts example/tateru.config.json --env prod --lang cs --page about",
     "dev:help": "npx ts-node src/tateru-cli.ts --help",
     "dev:version": "npx ts-node src/tateru-cli.ts --version"
