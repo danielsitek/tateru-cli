@@ -4,20 +4,6 @@ import { BuilderOptions, Environment } from '../../types';
 import { ENV_DEVELOPMENT, ENV_PRODUCTION } from '../defines';
 
 /**
- * Finds the absolute path to package.json.
- */
-function getPackageJsonPath(): string {
-    return path.resolve(__dirname, "../../..", "package.json");
-}
-
-/**
- * Reads and returns the package.json data.
- */
-function getPackageJson(): any {
-    return JSON.parse(readFileSync(getPackageJsonPath(), "utf-8"));
-}
-
-/**
  * Prints the help message.
  */
 function printHelp() {
@@ -39,8 +25,10 @@ function printHelp() {
 /**
  * Parses command-line arguments and returns options.
  * If --help or --version is provided, it prints output and exits the process.
+ *
+ * @param basePath The base path of the project. Used to locale package.json file.
  */
-export function parseCLIArgs(): BuilderOptions {
+export function parseCLIArgs(basePath: string): BuilderOptions {
     const args = process.argv.slice(2);
     const options: BuilderOptions = {
         configFile: "tateru.config.json",
@@ -48,7 +36,8 @@ export function parseCLIArgs(): BuilderOptions {
     };
 
     // Get package.json data
-    const packageJson = getPackageJson();
+    const packageJsonPath = path.resolve(basePath, "package.json");
+    const packageJson = JSON.parse(readFileSync(packageJsonPath, "utf-8"));;
 
     for (let i = 0; i < args.length; i++) {
         const arg = args[i];

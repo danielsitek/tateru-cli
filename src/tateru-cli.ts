@@ -25,11 +25,11 @@ import { parseCLIArgs } from './app/services/cli';
 let exitCode = 0;
 
 try {
-    const options = parseCLIArgs();
+    const options = parseCLIArgs(path.resolve(__dirname, "..",));
 
     console.log("Parsed CLI options:", options, "\n");
 
-    const { configFile, env, lang, page } = parseCLIArgs();
+    const { configFile, env, lang, page } = parseCLIArgs(path.resolve(__dirname, "..",));
 
     const processCwd = process.cwd();
 
@@ -95,7 +95,9 @@ try {
         });
     });
 } catch (e) {
-    console.error(e.message);
+    if (e instanceof Error) {
+        console.error(e.message);
+    }
     exitCode = 1;
 } finally {
     const timeEnd = getEndTime(timeStart);
