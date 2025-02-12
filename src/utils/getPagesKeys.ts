@@ -1,5 +1,5 @@
 
-export const getPagesKeys = (configPages: any, page: string): string[] => {
+export const getPagesKeys = (configPages: any, page?: string): string[] => {
     if (page) {
         return [page];
     }

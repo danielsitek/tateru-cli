@@ -274,10 +274,40 @@ To run the CLI in development mode:
 npm run dev
 ```
 
-To show CLI help:
+Test CLI help:
 
 ```sh
 npm run dev:help
+```
+
+Test CLI version:
+
+```sh
+npm run dev:version
+```
+
+Test CLI with arguments:
+
+```sh
+npm run dev:args
+```
+
+Test CLI error:
+
+```sh
+npm run dev:error
+```
+
+Test CLI arguments error:
+
+```sh
+npm run dev:args-error
+```
+
+Test CLI argument with missing value error:
+
+```sh
+npm run dev:missing-arg-error
 ```
 
 ---

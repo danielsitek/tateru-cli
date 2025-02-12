@@ -6,7 +6,6 @@ const timeStart = process.hrtime();
 
 import path from 'path';
 import { buildTemplate } from '.';
-import CliService from './app/services/cliService';
 import { getProjectDir } from './utils/getProjectDir';
 import { loadConfiguration } from './utils/loadConfiguration';
 import { loadTranslation } from './utils/loadTranslation';
@@ -21,12 +20,15 @@ import { minifyBuildContent } from './utils/minifyBuildContent';
 import { printLog } from './utils/printLog';
 import { getEndTime } from './utils/getEndTime';
 import { formatBuildContent } from './utils/formatBuildContent';
+import { parseCLIArgs } from './app/services/cli';
 
-const { configFile, env, lang, page } = CliService.init();
-
-const processCwd = process.cwd();
+let exitCode = 0;
 
 try {
+    const { configFile, env, lang, page } = parseCLIArgs(path.resolve(__dirname, "..",));
+
+    const processCwd = process.cwd();
+
     const projectDir = getProjectDir(configFile, processCwd);
 
     const config = loadConfiguration(configFile, processCwd);
@@ -89,9 +91,14 @@ try {
         });
     });
 } catch (e) {
-    console.log(e);
-    process.exit(1);
+    if (e instanceof Error) {
+        console.error(e.message);
+    } else {
+        console.error(e);
+    }
+    exitCode = 1;
 } finally {
     const timeEnd = getEndTime(timeStart);
     printLog(`\nTime:\t\t${timeEnd.s}s ${timeEnd.ms}ms`);
+    process.exit(exitCode);
 }
