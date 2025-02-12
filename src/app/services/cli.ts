@@ -37,7 +37,7 @@ export function parseCLIArgs(basePath: string): BuilderOptions {
 
     // Get package.json data
     const packageJsonPath = path.resolve(basePath, "package.json");
-    const packageJson = JSON.parse(readFileSync(packageJsonPath, "utf-8"));;
+    const packageJson = JSON.parse(readFileSync(packageJsonPath, "utf-8"));
 
     for (let i = 0; i < args.length; i++) {
         const arg = args[i];
@@ -47,10 +47,12 @@ export function parseCLIArgs(basePath: string): BuilderOptions {
             case "-h":
                 printHelp();
                 process.exit(0);
+                break;
             case "--version":
             case "-V":
                 console.log(packageJson.version);
                 process.exit(0);
+                break;
             case "--env":
             case "-e":
                 if (args[i + 1] && !args[i + 1].startsWith("-")) {
