@@ -8,18 +8,18 @@ import { ENV_DEVELOPMENT, ENV_PRODUCTION } from '../defines';
  */
 function printHelp() {
     console.log(`
-  Simple CLI static site builder tool with Twig.
+Simple CLI static site builder tool with Twig.
 
-  Usage:
-    \tnpx tateru-cli [CONFIG FILE] [OPTIONS] [ARGS]
+Usage:
+  npx tateru-cli [CONFIG FILE] [OPTIONS] [ARGS]
 
-  Options:
-    \t--env <env>, -e <env> \t\tSet build environment (dev or prod). Default is dev.
-    \t--page <page>, -p <page> \tBuild only a single page from the config.
-    \t--lang <lang>, -l <lang> \tSet a single language to build.
-    \t--help, -h \t\t\tDisplay help and usage details.
-    \t--version, -V \t\t\tDisplay Tateru CLI version.
-    `);
+Options:
+  --env <env>, -e <env>       Set build environment (dev or prod). Default is dev.
+  --page <page>, -p <page>    Build only a single page from the config.
+  --lang <lang>, -l <lang>    Set a single language to build.
+  --help, -h                  Display help and usage details.
+  --version, -V               Display Tateru CLI version.
+`);
 }
 
 /**
