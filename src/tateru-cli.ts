@@ -16,10 +16,10 @@ import { getTranslationKeys } from './utils/getTranslationKeys';
 import { getPagesKeys } from './utils/getPagesKeys';
 import { writeFile } from './utils/writeFile';
 import { getFileType } from './utils/getFileType';
-import { minifyBuildContent } from './utils/minifyBuildContent';
+import { minifyContents } from './minify/minifyContents';
 import { printLog } from './utils/printLog';
 import { getEndTime } from './utils/getEndTime';
-import { formatBuildContent } from './utils/formatBuildContent';
+import { formatContents } from './format/formatContents';
 import { parseCLIArgs } from './app/services/cli';
 
 let exitCode = 0;
@@ -79,10 +79,10 @@ try {
 
             let build = buildTemplate(pageData, translation, templateBase, templateFile);
 
-            build = formatBuildContent(build, pageFileType);
+            build = formatContents(build, pageFileType);
 
             if (pageMinify.includes(env)) {
-                build = minifyBuildContent(build, pageFileType);
+                build = minifyContents(build, pageFileType);
             }
 
             writeFile(build, distFile);

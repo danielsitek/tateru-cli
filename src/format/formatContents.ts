@@ -1,17 +1,17 @@
 import { html, js } from 'js-beautify';
 
-export const formatBuildContent = (content: string, fileType?: string): string => {
+export const formatContents = (contents: string, fileType?: string): string => {
     if (fileType && ['html', 'xml'].includes(fileType)) {
-        return html(content, {
+        return html(contents, {
             'indent_size': 4,
         });
     }
 
     if (fileType && ['json', 'webmanifest'].includes(fileType)) {
-        return js(content, {
+        return js(contents, {
             'indent_size': 2,
         });
     }
 
-    return content;
+    return contents;
 };

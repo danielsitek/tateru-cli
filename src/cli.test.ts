@@ -12,8 +12,8 @@ import { printLog } from './utils/printLog';
 import { parseCLIArgs } from './app/services/cli';
 import { writeFile } from './utils/writeFile';
 import { getEndTime } from './utils/getEndTime';
-import { formatBuildContent } from './utils/formatBuildContent';
-import { minifyBuildContent } from './utils/minifyBuildContent';
+import { formatContents } from './format/formatContents';
+import { minifyContents } from './minify/minifyContents';
 
 let exitCode = 0;
 
@@ -35,8 +35,8 @@ try {
         lang,
         page,
         cwd: projectDir,
-        formatter: formatBuildContent,
-        minify: minifyBuildContent,
+        formatter: formatContents,
+        minify: minifyContents,
     }).forEach(({ contents, ext, path, cwd }) => {
         writeFile(contents, resolve(cwd, path));
 

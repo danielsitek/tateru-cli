@@ -6,8 +6,8 @@ import { loadTranslation } from './utils/loadTranslation';
 import { composeData } from './utils/composeData';
 import { getFileType } from './utils/getFileType';
 import { getTemplateFile } from './utils/getTemplateFile';
-import buildTemplate from './utils/buildTemplate';
-import { minifyBuildContent } from './utils/minifyBuildContent';
+import { buildTemplate } from './utils/buildTemplate';
+import { minifyContents } from './minify/minifyContents';
 import { ENV_DEVELOPMENT } from './app/defines';
 import type { Environment, ConfigFile } from './types';
 
@@ -99,7 +99,7 @@ export const core = ({
                 if (typeof minify === 'function') {
                     file.contents = minify(file.contents, file.type);
                 } else {
-                    file.contents = minifyBuildContent(file.contents, file.type);
+                    file.contents = minifyContents(file.contents, file.type);
                 }
             }
 
