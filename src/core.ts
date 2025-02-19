@@ -3,11 +3,10 @@ import { getTranslationKeys } from './utils/getTranslationKeys';
 import { getPagesKeys } from './utils/getPagesKeys';
 import { loadTranslation } from './utils/loadTranslation';
 import { composeData } from './utils/composeData';
-// import { getFileType } from './utils/getFileType';
+import { getFileType } from './utils/getFileType';
 import { getTemplateFile } from './utils/getTemplateFile';
 import path from 'path';
 import buildTemplate from '.';
-// import { formatBuildContent } from './utils/formatBuildContent';
 import { minifyBuildContent } from './utils/minifyBuildContent';
 import { ENV_DEVELOPMENT } from './app/defines';
 import type { Environment, ConfigFile } from './types';
@@ -27,6 +26,7 @@ export interface CoreFile {
     base: string;
     path: string;
     ext: string;
+    type?: string;
     contents: string;
 }
 
@@ -79,35 +79,34 @@ export const core = ({
                 pagesConfig
             );
 
-            const pageMinify = pageConfig.minify || [];
+            const relativeFilePath = path.join(config.options.ext, translationConfig.ext, pageConfig.ext);
 
-            const pageFileType = path.extname(pageConfig.ext).toLocaleLowerCase().trim();
-
-            const templateFile = getTemplateFile(templateBase, pageConfig.src);
-
-            let build = buildTemplate(pageData, translation, templateBase, templateFile);
-
-            if (typeof formatter === 'function') {
-                build = formatter(build, pageFileType);
-            }
-
-            if (pageMinify.includes(env)) {
-                if (typeof minify === 'function') {
-                    build = minify(build, pageFileType);
-                } else {
-                    build = minifyBuildContent(build, pageFileType);
-                }
-            }
-
-            const relativeFilePath = path.join(config.options.ext, translationConfig.ext, pageConfig.ext)
-
-            files.push({
-                cwd: cwd as string,
+            const file: CoreFile = {
+                cwd,
                 base: path.dirname(relativeFilePath),
                 path: relativeFilePath,
                 ext: pageConfig.ext,
-                contents: build,
-            });
+                type: getFileType(pageConfig.ext)?.toLocaleLowerCase().trim(),
+                contents: '',
+            };
+
+            const templateFile = getTemplateFile(templateBase, pageConfig.src);
+
+            file.contents = buildTemplate(pageData, translation, templateBase, templateFile);
+
+            if (typeof formatter === 'function') {
+                file.contents = formatter(file.contents, file.type);
+            }
+
+            if ((pageConfig.minify || []).includes(env)) {
+                if (typeof minify === 'function') {
+                    file.contents = minify(file.contents, file.type);
+                } else {
+                    file.contents = minifyBuildContent(file.contents, file.type);
+                }
+            }
+
+            files.push(file);
         });
     });
 
