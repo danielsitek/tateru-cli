@@ -1,18 +1,14 @@
-// import { getProjectDir } from './utils/getProjectDir';
-// import { loadConfiguration } from './utils/loadConfiguration';
 import { getTemplateBase } from './utils/getTemplateBase';
 import { getTranslationKeys } from './utils/getTranslationKeys';
-// import { printLog } from './utils/printLog';
 import { getPagesKeys } from './utils/getPagesKeys';
 import { loadTranslation } from './utils/loadTranslation';
 import { composeData } from './utils/composeData';
-import { getFileType } from './utils/getFileType';
+// import { getFileType } from './utils/getFileType';
 import { getTemplateFile } from './utils/getTemplateFile';
 import path from 'path';
 import buildTemplate from '.';
-import { formatBuildContent } from './utils/formatBuildContent';
+// import { formatBuildContent } from './utils/formatBuildContent';
 import { minifyBuildContent } from './utils/minifyBuildContent';
-// import { writeFile } from 'fs';
 import { ENV_DEVELOPMENT } from './app/defines';
 import type { Environment, ConfigFile } from './types';
 
@@ -22,6 +18,8 @@ export interface CoreOptions {
     lang?: string;
     page?: string;
     cwd?: string;
+    formatter?: (contents: string, fileType?: string) => string;
+    minify?: (contents: string, fileType?: string) => string;
 }
 
 export interface CoreFile {
@@ -39,23 +37,18 @@ export const core = ({
     env = ENV_DEVELOPMENT,
     lang,
     page,
-    cwd = '.'
+    cwd = '.',
+    formatter,
+    minify,
 }: CoreOptions): CoreResult => {
 
-    console.log("core: options", { config, env, lang, page, cwd });
+    console.log("core: options", { config, env, lang, page, cwd, formatter, minify });
 
     const files: CoreFile[] = [];
-
-    // const projectDir = getProjectDir(configFile, cwd);
-
-    // const config = loadConfiguration(configFile, cwd);
 
     const templateBase = getTemplateBase(cwd, config.options.src);
 
     const translationsKeys = getTranslationKeys(config.translations, lang);
-
-    // printLog(`Config file "${configFile}" loaded`);
-    // printLog(`Environment:\t${env}\n`);
 
     // Translations loop
     translationsKeys.forEach((translationKey) => {
@@ -88,23 +81,23 @@ export const core = ({
 
             const pageMinify = pageConfig.minify || [];
 
-            const pageFileType = getFileType(pageConfig.ext);
+            const pageFileType = path.extname(pageConfig.ext).toLocaleLowerCase().trim();
 
             const templateFile = getTemplateFile(templateBase, pageConfig.src);
 
-            // const distFile = path.resolve(cwd as string, config.options.ext, translationConfig.ext, pageConfig.ext);
-
             let build = buildTemplate(pageData, translation, templateBase, templateFile);
 
-            build = formatBuildContent(build, pageFileType);
-
-            if (pageMinify.includes(env)) {
-                build = minifyBuildContent(build, pageFileType);
+            if (typeof formatter === 'function') {
+                build = formatter(build, pageFileType);
             }
 
-            // writeFile(build, distFile);
-
-            // printLog(`Created:\t${pageConfig.ext}`);
+            if (pageMinify.includes(env)) {
+                if (typeof minify === 'function') {
+                    build = minify(build, pageFileType);
+                } else {
+                    build = minifyBuildContent(build, pageFileType);
+                }
+            }
 
             const relativeFilePath = path.join(config.options.ext, translationConfig.ext, pageConfig.ext)
 
