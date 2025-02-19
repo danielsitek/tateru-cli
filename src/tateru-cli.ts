@@ -5,7 +5,7 @@
 const timeStart = process.hrtime();
 
 import path from 'path';
-import { buildTemplate } from '.';
+import { buildTemplate } from './utils/buildTemplate';
 import { getProjectDir } from './utils/getProjectDir';
 import { loadConfiguration } from './utils/loadConfiguration';
 import { loadTranslation } from './utils/loadTranslation';

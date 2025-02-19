@@ -1,7 +1,7 @@
 'use strict';
 
-import prepareTwigConfiguration from './app/twig/prepareTwigConfiguration';
-import TwigService from './app/services/twigService';
+import prepareTwigConfiguration from '../app/twig/prepareTwigConfiguration';
+import TwigService from '../app/services/twigService';
 
 /**
  *
@@ -16,5 +16,3 @@ export const buildTemplate = (data: any, translation: any, templateBase: string,
 
     return template;
 };
-
-export default buildTemplate;
