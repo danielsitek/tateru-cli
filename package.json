@@ -33,7 +33,7 @@
     "dist",
     "README.md"
   ],
-  "main": "./dist/index.js",
+  "main": "./dist/core.js",
   "bin": {
     "tateru-cli": "./dist/tateru-cli.js"
   },

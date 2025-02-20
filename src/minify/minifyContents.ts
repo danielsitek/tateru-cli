@@ -1,7 +1,7 @@
 import { minify } from 'html-minifier';
 
-const minifyHtml = (content: string): string => {
-    const minified = minify(content, {
+const minifyHtml = (contents: string): string => {
+    const minified = minify(contents, {
         collapseWhitespace: true,
         minifyCSS: true,
         minifyJS: true,
@@ -11,12 +11,12 @@ const minifyHtml = (content: string): string => {
     return minified;
 };
 
-export const minifyBuildContent = (content: string, fileType: string | undefined): string => {
+export const minifyContents = (contents: string, fileType: string | undefined): string => {
     const type = `${fileType}`.toLocaleLowerCase().trim();
 
     if (type === 'html') {
-        return minifyHtml(content);
+        return minifyHtml(contents);
     }
 
-    return content;
+    return contents;
 };
