@@ -9,7 +9,7 @@ import { getTemplateFile } from './utils/getTemplateFile';
 import { buildTemplate } from './utils/buildTemplate';
 import { minifyContents } from './minify/minifyContents';
 import { ENV_DEVELOPMENT } from './app/defines';
-import type { CoreOptions, CoreResult, CoreFile } from './types';
+import type { CoreOptions, CoreResult, CoreFile } from '../types';
 
 export const core = ({
     config,
