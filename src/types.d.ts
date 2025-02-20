@@ -186,3 +186,24 @@ export interface PipelineData {
     twigConfig?: TwigConfiguration;
     renderOptions: PageRenderOptions;
 }
+
+export interface CoreOptions {
+    config: ConfigFile;
+    env?: Environment;
+    lang?: string;
+    page?: string;
+    cwd?: string;
+    formatter?: (contents: string, fileType?: string) => string;
+    minify?: (contents: string, fileType?: string) => string;
+}
+
+export interface CoreFile {
+    cwd: string;
+    base: string;
+    path: string;
+    ext: string;
+    type?: string;
+    contents: string;
+}
+
+export type CoreResult = CoreFile[];
