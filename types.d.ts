@@ -207,3 +207,5 @@ export interface CoreFile {
 }
 
 export type CoreResult = CoreFile[];
+
+export declare const core: (options: CoreOptions) => CoreResult;
