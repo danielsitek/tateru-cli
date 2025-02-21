@@ -208,37 +208,37 @@ export type CoreMinify = (contents: string, fileType?: string) => string;
  */
 export interface CoreOptions {
     /**
-     * Tateru CLI config.
+     * Tateru CLI configuration object containing environment, options, translations, and pages settings.
      */
     config: ConfigFile;
 
     /**
-     * Working environment. Example: 'dev', 'prod'.
+     * Working environment. Defaults to 'dev' if not specified. Example: 'dev', 'prod'.
      */
     env: Environment;
 
     /**
-     * Language. Example: 'en', 'cs'.
+     * Language code for translations. Optional. Example: 'en', 'cs'.
      */
     lang?: LanguageString;
 
     /**
-     * Page name. Example: 'index', 'about'.
+     * Page name to process. Optional. Example: 'index', 'about'.
      */
     page?: string;
 
     /**
-     * Current working directory.
+     * Current working directory. Optional. Defaults to '.'.
      */
     cwd?: string;
 
     /**
-     * Formatter function.
+     * Function to format the contents. Takes content string and optional file type.
      */
     formatter?: CoreFormatter;
 
     /**
-     * Minify function.
+     * Function to minify the contents. Takes content string and optional file type.
      */
     minify?: CoreMinify;
 }
@@ -248,27 +248,30 @@ export interface CoreOptions {
  */
 export interface CoreFile {
     /**
-     * Current working directory.
+     * Current working directory path.
      */
     cwd: string;
 
     /**
-     * Base path.
+     * Base directory path.
      */
     base: string;
 
     /**
      * Full path to source file.
+     * @example '/path/to/src/file.html'
      */
     path: string;
 
     /**
      * Path to generated file.
+     * @example '/path/to/dist/file.html'
      */
     ext: string;
 
     /**
      * File type from extension. Example: 'html', 'json', 'webmanifest', etc.
+     * @remarks This field is used by formatter and minify functions
      */
     type?: string;
 

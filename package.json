@@ -32,8 +32,7 @@
   "files": [
     "dist",
     "README.md",
-    "types.d.ts",
-    "package.json"
+    "types.d.ts"
   ],
   "main": "./dist/core.js",
   "bin": {
