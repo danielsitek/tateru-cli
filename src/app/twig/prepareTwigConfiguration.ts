@@ -1,6 +1,5 @@
 import fs from 'fs';
-import path from 'path';
-import { TwigConfiguration } from '../../types';
+import { TwigConfiguration } from '../../../types';
 
 const prepareTwigConfiguration = (pathToTwigFile: string, twigBase: string): TwigConfiguration => {
     try {
@@ -14,7 +13,7 @@ const prepareTwigConfiguration = (pathToTwigFile: string, twigBase: string): Twi
             path: pathToTwigFile,
             base: twigBase,
             namespaces: {
-                'Main': twigBase + path.sep,
+                'Main': twigBase,
             },
             data: fileContent.toString('utf-8'),
         };

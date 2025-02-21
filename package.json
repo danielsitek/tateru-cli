@@ -31,7 +31,8 @@
   },
   "files": [
     "dist",
-    "README.md"
+    "README.md",
+    "types.d.ts"
   ],
   "main": "./dist/core.js",
   "bin": {
@@ -69,6 +70,6 @@
   "engines": {
     "node": ">=14.0.0"
   },
-  "types": "./src/types.d.ts",
+  "types": "./types.d.ts",
   "preferGlobal": true
 }

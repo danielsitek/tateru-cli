@@ -1,6 +1,6 @@
 import { readFileSync } from "fs";
 import path from "path";
-import { BuilderOptions, Environment } from '../../types';
+import { BuilderOptions, Environment } from '../../../types';
 import { ENV_DEVELOPMENT, ENV_PRODUCTION } from '../defines';
 
 /**

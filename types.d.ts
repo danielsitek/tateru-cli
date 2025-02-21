@@ -186,3 +186,110 @@ export interface PipelineData {
     twigConfig?: TwigConfiguration;
     renderOptions: PageRenderOptions;
 }
+
+/**
+ * Formatter function type
+ *
+ * @param contents - The contents of the file to format.
+ * @param fileType - The file type to format. Example: 'html', 'json', 'webmanifest', etc.
+ */
+export type CoreFormatter = (contents: string, fileType?: string) => string;
+
+/**
+ * Minify function type
+ *
+ * @param contents - The contents of the file to minify.
+ * @param fileType - The file type to minify. Example: 'html', 'json', 'webmanifest', etc.
+ */
+export type CoreMinify = (contents: string, fileType?: string) => string;
+
+/**
+ * Core options
+ */
+export interface CoreOptions {
+    /**
+     * Tateru CLI configuration object containing environment, options, translations, and pages settings.
+     */
+    config: ConfigFile;
+
+    /**
+     * Working environment. Defaults to 'dev' if not specified. Example: 'dev', 'prod'.
+     */
+    env: Environment;
+
+    /**
+     * Language code for translations. Optional. Example: 'en', 'cs'.
+     */
+    lang?: LanguageString;
+
+    /**
+     * Page name to process. Optional. Example: 'index', 'about'.
+     */
+    page?: string;
+
+    /**
+     * Current working directory. Optional. Defaults to '.'.
+     */
+    cwd?: string;
+
+    /**
+     * Function to format the contents. Takes content string and optional file type.
+     */
+    formatter?: CoreFormatter;
+
+    /**
+     * Function to minify the contents. Takes content string and optional file type.
+     */
+    minify?: CoreMinify;
+}
+
+/**
+ * Core file
+ */
+export interface CoreFile {
+    /**
+     * Current working directory path.
+     */
+    cwd: string;
+
+    /**
+     * Base directory path.
+     */
+    base: string;
+
+    /**
+     * Full path to source file.
+     * @example '/path/to/src/file.html'
+     */
+    path: string;
+
+    /**
+     * Path to generated file.
+     * @example '/path/to/dist/file.html'
+     */
+    ext: string;
+
+    /**
+     * File type from extension. Example: 'html', 'json', 'webmanifest', etc.
+     * @remarks This field is used by formatter and minify functions
+     */
+    type?: string;
+
+    /**
+     * File contents.
+     */
+    contents: string;
+}
+
+/**
+ * Core result
+ */
+export type CoreResult = CoreFile[];
+
+/**
+ * Tateru CLI Core function
+ *
+ * @param options - Core options.
+ * @returns Core result.
+ */
+export declare const core: (options: CoreOptions) => CoreResult;

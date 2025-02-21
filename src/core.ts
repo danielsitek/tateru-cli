@@ -9,28 +9,7 @@ import { getTemplateFile } from './utils/getTemplateFile';
 import { buildTemplate } from './utils/buildTemplate';
 import { minifyContents } from './minify/minifyContents';
 import { ENV_DEVELOPMENT } from './app/defines';
-import type { Environment, ConfigFile } from './types';
-
-export interface CoreOptions {
-    config: ConfigFile;
-    env?: Environment;
-    lang?: string;
-    page?: string;
-    cwd?: string;
-    formatter?: (contents: string, fileType?: string) => string;
-    minify?: (contents: string, fileType?: string) => string;
-}
-
-export interface CoreFile {
-    cwd: string;
-    base: string;
-    path: string;
-    ext: string;
-    type?: string;
-    contents: string;
-}
-
-export type CoreResult = CoreFile[];
+import type { CoreOptions, CoreResult, CoreFile } from '../types';
 
 export const core = ({
     config,
