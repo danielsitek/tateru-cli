@@ -187,25 +187,106 @@ export interface PipelineData {
     renderOptions: PageRenderOptions;
 }
 
+/**
+ * Formatter function type
+ *
+ * @param contents - The contents of the file to format.
+ * @param fileType - The file type to format. Example: 'html', 'json', 'webmanifest', etc.
+ */
+export type CoreFormatter = (contents: string, fileType?: string) => string;
+
+/**
+ * Minify function type
+ *
+ * @param contents - The contents of the file to minify.
+ * @param fileType - The file type to minify. Example: 'html', 'json', 'webmanifest', etc.
+ */
+export type CoreMinify = (contents: string, fileType?: string) => string;
+
+/**
+ * Core options
+ */
 export interface CoreOptions {
+    /**
+     * Tateru CLI config.
+     */
     config: ConfigFile;
+
+    /**
+     * Working environment. Example: 'dev', 'prod'.
+     */
     env?: Environment;
-    lang?: string;
+
+    /**
+     * Language. Example: 'en', 'cs'.
+     */
+    lang?: LanguageString;
+
+    /**
+     * Page name. Example: 'index', 'about'.
+     */
     page?: string;
+
+    /**
+     * Current working directory.
+     */
     cwd?: string;
-    formatter?: (contents: string, fileType?: string) => string;
-    minify?: (contents: string, fileType?: string) => string;
+
+    /**
+     * Formatter function.
+     */
+    formatter?: CoreFormatter;
+
+    /**
+     * Minify function.
+     */
+    minify?: CoreMinify;
 }
 
+/**
+ * Core file
+ */
 export interface CoreFile {
+    /**
+     * Current working directory.
+     */
     cwd: string;
+
+    /**
+     * Base path.
+     */
     base: string;
+
+    /**
+     * Full path to source file.
+     */
     path: string;
+
+    /**
+     * Path to generated file.
+     */
     ext: string;
+
+    /**
+     * File type from extension. Example: 'html', 'json', 'webmanifest', etc.
+     */
     type?: string;
+
+    /**
+     * File contents.
+     */
     contents: string;
 }
 
+/**
+ * Core result
+ */
 export type CoreResult = CoreFile[];
 
+/**
+ * Tateru CLI Core function
+ *
+ * @param options - Core options.
+ * @returns Core result.
+ */
 export declare const core: (options: CoreOptions) => CoreResult;
