@@ -215,7 +215,7 @@ export interface CoreOptions {
     /**
      * Working environment. Example: 'dev', 'prod'.
      */
-    env?: Environment;
+    env: Environment;
 
     /**
      * Language. Example: 'en', 'cs'.
