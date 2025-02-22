@@ -14,9 +14,13 @@ export const twigServiceRender = (
 
     Twig.extendFilter('sort_by', sortBy);
 
-    const template = Twig.twig(fileTwigConfig).render(
-        fileRenderOptions
-    );
+    try {
+        const template = Twig.twig(fileTwigConfig).render(
+            fileRenderOptions
+        );
 
-    return template;
+        return template;
+    } catch (error) {
+        throw new Error(`Failed to render template: ${error instanceof Error ? error.message : String(error)}`);
+    }
 }
