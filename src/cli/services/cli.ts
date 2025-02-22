@@ -1,7 +1,7 @@
 import { readFileSync } from "fs";
 import path from "path";
 import { BuilderOptions, Environment } from '../../../types';
-import { ENV_DEVELOPMENT, ENV_PRODUCTION } from '../defines';
+import { ENV_DEVELOPMENT, ENV_PRODUCTION, CONFIG_FILE_NAME } from '../../definition/defines';
 
 /**
  * Prints the help message.
@@ -31,7 +31,7 @@ Options:
 export function parseCLIArgs(basePath: string): BuilderOptions {
     const args = process.argv.slice(2);
     const options: BuilderOptions = {
-        configFile: "tateru.config.json",
+        configFile: CONFIG_FILE_NAME,
         env: ENV_DEVELOPMENT,
     };
 

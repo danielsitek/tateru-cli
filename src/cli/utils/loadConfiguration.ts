@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { ConfigFile } from '../../types';
+import { ConfigFile } from '../../../types';
 
 
 export const loadConfiguration = (configFileName: string, cwd: string): ConfigFile => {

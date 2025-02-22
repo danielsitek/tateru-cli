@@ -1,6 +1,6 @@
 import Twig from 'twig';
 import { TwigConfiguration } from '../../../types';
-import { getNestedValue } from '../../utils/getNestedValue';
+import { getNestedValue } from '../utils/getNestedValue';
 
 const sort = (a: any, b: any): number => {
     if (!a) {

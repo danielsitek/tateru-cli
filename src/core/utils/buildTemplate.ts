@@ -1,7 +1,7 @@
 'use strict';
 
-import prepareTwigConfiguration from '../app/twig/prepareTwigConfiguration';
-import TwigService from '../app/services/twigService';
+import prepareTwigConfiguration from '../services/prepareTwigConfiguration';
+import TwigService from '../services/twigService';
 
 /**
  *
