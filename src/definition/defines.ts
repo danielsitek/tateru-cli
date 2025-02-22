@@ -5,4 +5,4 @@ export const ENV_PRODUCTION: Environment = 'prod';
 
 export const LANG_DEFAULT: string = 'cs';
 
-export const CONFIG_FILE_NAME: string = 'tateru.config.json';
+export const DEFAULT_CONFIG_FILE_NAME: string = 'tateru.config.json';
