@@ -1,5 +1,6 @@
 import path from 'path';
 import fs from 'fs';
+import { colorize } from './utils/colors';
 
 type TestFunction = () => void | Promise<void>;
 
@@ -130,24 +131,29 @@ async function findAndRunTests(dir: string) {
 
 export const testsRunner = async (cwd: string): Promise<void> => {
     failedTests = [];
+    const startTime = Date.now();
 
     try {
         await findAndRunTests(cwd);
     } catch (error) {
         console.error('Unexpected error while running tests:', error);
     } finally {
+        const duration = Date.now() - startTime;
+
         if (failedTests.length > 0) {
-            console.error(`${failedTests.length} test(s) failed\n`);
+            console.error(colorize.red(`${failedTests.length} test(s) failed\n`));
             console.error('Failed Tests:');
 
             failedTests.forEach((failure, index) => {
                 console.error(`  ${index + 1}. ${failure}`);
             });
 
+            console.log(colorize.gray(`\nFinished in ${duration}ms`));
             process.exit(1);
         }
 
-        console.log('✓ All tests passed successfully');
+        console.log(colorize.green('✓ All tests passed successfully'));
+        console.log(colorize.gray(`\nFinished in ${duration}ms`));
         process.exit(0);
     }
 }
