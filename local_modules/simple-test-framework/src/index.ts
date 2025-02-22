@@ -3,6 +3,8 @@ import fs from 'fs';
 
 type TestFunction = () => void | Promise<void>;
 
+let failedTests: string[] = [];
+
 class TestSuite {
     private tests: { name: string; fn: TestFunction }[] = [];
     private beforeEachFns: TestFunction[] = [];
@@ -31,12 +33,10 @@ class TestSuite {
     }
 
     async runTests() {
-        // console.log('\nRunning tests...');
         this.passedTests = 0;
         this.failedTests = [];
 
         for (const { name, fn } of this.tests) {
-            // console.log(`\n  Test: ${name}`);
             try {
                 for (const beforeEachFn of this.beforeEachFns) {
                     await beforeEachFn();
@@ -45,17 +45,17 @@ class TestSuite {
                 for (const afterEachFn of this.afterEachFns) {
                     await afterEachFn();
                 }
-                // console.log('    ✓ Passed');
                 this.passedTests++;
             } catch (error) {
-                // console.error('    ✗ Failed:', error);
                 this.failedTests.push(`${name}: ${error}`);
+                failedTests.push(`${name}: ${error}`);
             }
         }
-        console.log('\nTest Summary:');
-        console.log(`  Total Tests: ${this.tests.length}`);
-        console.log(`  ✓ Passed: ${this.passedTests}`);
-        console.log(`  ✗ Failed: ${this.failedTests.length}`);
+
+        // Print summary for current test file
+        console.log(`\n   Tests:  ${this.tests.length}`);
+        console.log(` ✓ Passed: ${this.passedTests}`);
+        console.log(` ✗ Failed: ${this.failedTests.length}`);
 
         if (this.failedTests.length > 0) {
             console.log('\nFailed Tests:');
@@ -63,10 +63,10 @@ class TestSuite {
                 console.log(`  ${index + 1}. ${failure}`);
             });
             console.log('');
-            throw new Error(`${this.failedTests.length} test(s) failed`);
+            return;
         }
 
-        console.log('\nAll tests completed successfully.');
+        console.log('\nAll tests completed successfully.\n');
     }
 
     reset() {
@@ -113,7 +113,7 @@ export async function runTestFile(filePath: string) {
     await testSuite.runTests();
 }
 
-export async function findAndRunTests(dir: string) {
+async function findAndRunTests(dir: string) {
     const files = fs.readdirSync(dir);
 
     for (const file of files) {
@@ -125,5 +125,29 @@ export async function findAndRunTests(dir: string) {
         } else if (file.endsWith('.spec.ts')) {
             await runTestFile(filePath);
         }
+    }
+}
+
+export const testsRunner = async (cwd: string): Promise<void> => {
+    failedTests = [];
+
+    try {
+        await findAndRunTests(cwd);
+    } catch (error) {
+        console.error('Unexpected error while running tests:', error);
+    } finally {
+        if (failedTests.length > 0) {
+            console.error(`${failedTests.length} test(s) failed\n`);
+            console.error('Failed Tests:');
+
+            failedTests.forEach((failure, index) => {
+                console.error(`  ${index + 1}. ${failure}`);
+            });
+
+            process.exit(1);
+        }
+
+        console.log('✓ All tests passed successfully');
+        process.exit(0);
     }
 }
