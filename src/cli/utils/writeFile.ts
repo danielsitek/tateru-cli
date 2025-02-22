@@ -8,7 +8,9 @@ export const writeFile = (fileContent: string, filePath: string): boolean => {
     if (!fs.existsSync(fileDir)) {
         fs.mkdirSync(fileDir, { recursive: true });
     }
-    fs.writeFileSync(filePath, fileContent);
+    fs.writeFileSync(filePath, fileContent, {
+        encoding: 'utf8',
+    });
 
     if (!fs.existsSync(filePath)) {
         throw new Error(`Failed to write file ${filePath}`);

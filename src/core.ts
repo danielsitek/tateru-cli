@@ -1,14 +1,14 @@
 import path from 'path';
-import { getTemplateBase } from './utils/getTemplateBase';
-import { getTranslationKeys } from './utils/getTranslationKeys';
-import { getPagesKeys } from './utils/getPagesKeys';
-import { loadTranslation } from './utils/loadTranslation';
-import { composeData } from './utils/composeData';
-import { getFileType } from './utils/getFileType';
-import { getTemplateFile } from './utils/getTemplateFile';
-import { buildTemplate } from './utils/buildTemplate';
+import { getTemplateBase } from './core/utils/getTemplateBase';
+import { getTranslationKeys } from './core/utils/getTranslationKeys';
+import { getPagesKeys } from './core/utils/getPagesKeys';
+import { loadTranslation } from './core/utils/loadTranslation';
+import { composeData } from './core/utils/composeData';
+import { getFileType } from './core/utils/getFileType';
+import { getTemplateFile } from './core/utils/getTemplateFile';
+import { buildTemplate } from './core/services/buildTemplate';
 import { minifyContents } from './minify/minifyContents';
-import { ENV_DEVELOPMENT } from './app/defines';
+import { ENV_DEVELOPMENT } from './definition/defines';
 import type { CoreOptions, CoreResult, CoreFile } from '../types';
 
 export const core = ({

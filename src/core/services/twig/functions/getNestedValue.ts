@@ -20,7 +20,7 @@ export function getNestedValue<T>(
 
         if (typeof key === 'string' && key.includes('[') && key.includes(']')) {
             const [arrayKey, indexStr] = key.split(/[\[\]]/);
-            const index = parseInt(indexStr, 10);
+            const index = Number.parseInt(indexStr, 10);
             result = result[arrayKey as string]?.[index as number];
         } else {
             result = result[key as string];

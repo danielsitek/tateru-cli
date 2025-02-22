@@ -1,17 +1,15 @@
 #!/usr/bin/env node
 
-'use strict';
-
 const timeStart = process.hrtime();
 
 import { resolve } from 'path';
-import { getProjectDir } from './utils/getProjectDir';
-import { loadConfiguration } from './utils/loadConfiguration';
+import { getProjectDir } from './cli/utils/getProjectDir';
+import { loadConfiguration } from './cli/utils/loadConfiguration';
 import { core } from './core';
-import { printLog } from './utils/printLog';
-import { parseCLIArgs } from './app/services/cli';
-import { writeFile } from './utils/writeFile';
-import { getEndTime } from './utils/getEndTime';
+import { printLog } from './cli/utils/printLog';
+import { parseCLIArgs } from './cli/services/cli';
+import { writeFile } from './cli/utils/writeFile';
+import { getEndTime } from './cli/utils/getEndTime';
 import { formatContents } from './format/formatContents';
 import { minifyContents } from './minify/minifyContents';
 
