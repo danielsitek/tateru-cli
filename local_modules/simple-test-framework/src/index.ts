@@ -8,6 +8,8 @@ class TestSuite {
     private beforeEachFns: TestFunction[] = [];
     private afterEachFns: TestFunction[] = [];
     private currentDescribe: string | null = null;
+    private passedTests: number = 0;
+    private failedTests: string[] = [];
 
     test(name: string, fn: TestFunction) {
         this.tests.push({ name: this.currentDescribe ? `${this.currentDescribe} - ${name}` : name, fn });
@@ -29,9 +31,12 @@ class TestSuite {
     }
 
     async runTests() {
-        console.log('Running tests...');
+        // console.log('\nRunning tests...');
+        this.passedTests = 0;
+        this.failedTests = [];
+
         for (const { name, fn } of this.tests) {
-            console.log(`  Test: ${name}`);
+            // console.log(`\n  Test: ${name}`);
             try {
                 for (const beforeEachFn of this.beforeEachFns) {
                     await beforeEachFn();
@@ -40,12 +45,28 @@ class TestSuite {
                 for (const afterEachFn of this.afterEachFns) {
                     await afterEachFn();
                 }
-                console.log('    ✓ Passed');
+                // console.log('    ✓ Passed');
+                this.passedTests++;
             } catch (error) {
-                console.error('    ✗ Failed:', error);
+                // console.error('    ✗ Failed:', error);
+                this.failedTests.push(`${name}: ${error}`);
             }
         }
-        console.log('All tests completed.');
+        console.log('\nTest Summary:');
+        console.log(`  Total Tests: ${this.tests.length}`);
+        console.log(`  ✓ Passed: ${this.passedTests}`);
+        console.log(`  ✗ Failed: ${this.failedTests.length}`);
+
+        if (this.failedTests.length > 0) {
+            console.log('\nFailed Tests:');
+            this.failedTests.forEach((failure, index) => {
+                console.log(`  ${index + 1}. ${failure}`);
+            });
+            console.log('');
+            throw new Error(`${this.failedTests.length} test(s) failed`);
+        }
+
+        console.log('\nAll tests completed successfully.');
     }
 
     reset() {
@@ -53,6 +74,8 @@ class TestSuite {
         this.beforeEachFns = [];
         this.afterEachFns = [];
         this.currentDescribe = null;
+        this.passedTests = 0;
+        this.failedTests = [];
     }
 }
 
