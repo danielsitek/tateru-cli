@@ -1,7 +1,7 @@
 import fs from 'fs';
 import type { TwigConfiguration } from '../../../../types';
 
-const prepareTwigConfiguration = (pathToTwigFile: string, twigBase: string): TwigConfiguration => {
+export const prepareTwigConfiguration = (pathToTwigFile: string, twigBase: string): TwigConfiguration => {
     try {
         if (!fs.existsSync(pathToTwigFile)) {
             throw new Error(`File "${pathToTwigFile}" does not exits`);
@@ -26,5 +26,3 @@ const prepareTwigConfiguration = (pathToTwigFile: string, twigBase: string): Twi
         throw new Error(String(e));
     }
 };
-
-export default prepareTwigConfiguration;
