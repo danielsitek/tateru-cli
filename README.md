@@ -78,19 +78,47 @@ npx tateru-cli --help
 
 ### (Experimental) Integration with Gulp
 
-You can use Tateru CLI within a Gulp task by executing it via `child_process.exec` or `spawn`:
+You can use Tateru CLI within a Gulp task by executing it via `child_process.exec`:
 
 ```js
-const { exec } = require('child_process');
-const gulp = require('gulp');
+/** @file tasks/tateru.js */
 
-gulp.task('build', (done) => {
-    exec('npx tateru-cli tateru.config.json', (err, stdout, stderr) => {
-        console.log(stdout);
+const { exec } = require('child_process');
+
+module.exports = function tateru(cb) {
+  return new Promise((resolve) => {
+    exec('npx tateru-cli tateru.config.json', function (error, stdout, stderr) {
+
+      if (error && stdout) {
+        console.error(stdout);
+      } else if (stdout) {
+        console.info(stdout);
+      }
+
+      if (stderr) {
         console.error(stderr);
-        done(err);
-    });
-});
+      }
+
+      resolve(cb);
+    })
+  })
+}
+```
+
+```js
+/** @file gulpfile.js */
+
+const { series, parallel } = require('gulp');
+const tateru = require('./tasks/tateru');
+
+function build(cb) {
+  return series(clean, parallel(css, tateru))(cb);
+}
+
+module.exports = {
+    build,
+    default: build,
+};
 ```
 
 ---
