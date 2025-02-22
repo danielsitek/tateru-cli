@@ -1,5 +1,5 @@
 import fs from 'fs';
-import { TwigConfiguration } from '../../../types';
+import type { TwigConfiguration } from '../../../types';
 
 const prepareTwigConfiguration = (pathToTwigFile: string, twigBase: string): TwigConfiguration => {
     try {
@@ -22,9 +22,8 @@ const prepareTwigConfiguration = (pathToTwigFile: string, twigBase: string): Twi
     } catch (e) {
         if (e instanceof Error) {
             throw new Error(e.message);
-        } else {
-            throw new Error(String(e));
         }
+        throw new Error(String(e));
     }
 };
 

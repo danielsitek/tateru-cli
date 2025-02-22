@@ -1,5 +1,3 @@
-'use strict';
-
 import prepareTwigConfiguration from '../services/prepareTwigConfiguration';
 import TwigService from '../services/twigService';
 

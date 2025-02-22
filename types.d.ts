@@ -1,4 +1,4 @@
-import Twig from 'twig';
+import type Twig from 'twig';
 
 export type Environment = 'dev' | 'prod';
 

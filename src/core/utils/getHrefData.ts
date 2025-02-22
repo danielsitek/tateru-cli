@@ -1,4 +1,4 @@
-import { ConfigFileOptions, PagesUrlObject } from '../../../types';
+import type { ConfigFileOptions, PagesUrlObject } from '../../../types';
 
 
 export const getHrefData = (pages: Record<string, Pick<ConfigFileOptions, 'ext'>>) => {
