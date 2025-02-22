@@ -1,13 +1,18 @@
 import path from 'path';
 import fs from 'fs';
+import { colorize } from './utils/colors';
 
 type TestFunction = () => void | Promise<void>;
+
+let failedTests: string[] = [];
 
 class TestSuite {
     private tests: { name: string; fn: TestFunction }[] = [];
     private beforeEachFns: TestFunction[] = [];
     private afterEachFns: TestFunction[] = [];
     private currentDescribe: string | null = null;
+    private passedTests: number = 0;
+    private failedTests: string[] = [];
 
     test(name: string, fn: TestFunction) {
         this.tests.push({ name: this.currentDescribe ? `${this.currentDescribe} - ${name}` : name, fn });
@@ -29,9 +34,10 @@ class TestSuite {
     }
 
     async runTests() {
-        console.log('Running tests...');
+        this.passedTests = 0;
+        this.failedTests = [];
+
         for (const { name, fn } of this.tests) {
-            console.log(`  Test: ${name}`);
             try {
                 for (const beforeEachFn of this.beforeEachFns) {
                     await beforeEachFn();
@@ -40,12 +46,28 @@ class TestSuite {
                 for (const afterEachFn of this.afterEachFns) {
                     await afterEachFn();
                 }
-                console.log('    ✓ Passed');
+                this.passedTests++;
             } catch (error) {
-                console.error('    ✗ Failed:', error);
+                this.failedTests.push(`${name}: ${error}`);
+                failedTests.push(`${name}: ${error}`);
             }
         }
-        console.log('All tests completed.');
+
+        // Print summary for current test file
+        console.log(`\n   Tests:  ${this.tests.length}`);
+        console.log(` ✓ Passed: ${this.passedTests}`);
+        console.log(` ✗ Failed: ${this.failedTests.length}`);
+
+        if (this.failedTests.length > 0) {
+            console.log('\nFailed Tests:');
+            this.failedTests.forEach((failure, index) => {
+                console.log(`  ${index + 1}. ${failure}`);
+            });
+            console.log('');
+            return;
+        }
+
+        console.log('\nAll tests completed successfully.\n');
     }
 
     reset() {
@@ -53,6 +75,8 @@ class TestSuite {
         this.beforeEachFns = [];
         this.afterEachFns = [];
         this.currentDescribe = null;
+        this.passedTests = 0;
+        this.failedTests = [];
     }
 }
 
@@ -90,7 +114,7 @@ export async function runTestFile(filePath: string) {
     await testSuite.runTests();
 }
 
-export async function findAndRunTests(dir: string) {
+async function findAndRunTests(dir: string) {
     const files = fs.readdirSync(dir);
 
     for (const file of files) {
@@ -102,5 +126,34 @@ export async function findAndRunTests(dir: string) {
         } else if (file.endsWith('.spec.ts')) {
             await runTestFile(filePath);
         }
+    }
+}
+
+export const testsRunner = async (cwd: string): Promise<void> => {
+    failedTests = [];
+    const startTime = Date.now();
+
+    try {
+        await findAndRunTests(cwd);
+    } catch (error) {
+        console.error('Unexpected error while running tests:', error);
+    } finally {
+        const duration = Date.now() - startTime;
+
+        if (failedTests.length > 0) {
+            console.error(colorize.red(`${failedTests.length} test(s) failed\n`));
+            console.error('Failed Tests:');
+
+            failedTests.forEach((failure, index) => {
+                console.error(`  ${index + 1}. ${failure}`);
+            });
+
+            console.log(colorize.gray(`\nFinished in ${duration}ms`));
+            process.exit(1);
+        }
+
+        console.log(colorize.green('✓ All tests passed successfully'));
+        console.log(colorize.gray(`\nFinished in ${duration}ms`));
+        process.exit(0);
     }
 }
