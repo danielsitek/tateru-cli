@@ -75,8 +75,8 @@ describe('sortBy', () => {
         const expected = [
             { value: 1 },
             { value: '2' },
-            { value: null },
             { value: '3' },
+            { value: null },
             { value: undefined },
         ];
 
