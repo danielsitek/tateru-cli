@@ -9,27 +9,36 @@ describe('sortBy', () => {
         expect(sortBy({}, 'key')).toEqual({});
     });
 
-    test('should sort array of objects by given key', () => {
+    test('should sort array of objects by string key (name)', () => {
         const input = [
             { name: 'Charlie', age: 30 },
             { name: 'Alice', age: 25 },
             { name: 'Bob', age: 35 }
         ];
 
-        const expectedByName = [
+        const expected = [
             { name: 'Alice', age: 25 },
             { name: 'Bob', age: 35 },
             { name: 'Charlie', age: 30 }
         ];
 
-        const expectedByAge = [
+        expect(sortBy(input, 'name')).toEqual(expected);
+    });
+
+    test('should sort array of objects by string key (age)', () => {
+        const input = [
+            { name: 'Charlie', age: 30 },
+            { name: 'Alice', age: 25 },
+            { name: 'Bob', age: 35 }
+        ];
+
+        const expected = [
             { name: 'Alice', age: 25 },
             { name: 'Charlie', age: 30 },
             { name: 'Bob', age: 35 }
         ];
 
-        expect(sortBy(input, 'name')).toEqual(expectedByName);
-        expect(sortBy([...input], 'age')).toEqual(expectedByAge);
+        expect(sortBy([...input], 'age')).toEqual(expected);
     });
 
     test('should handle empty array', () => {
@@ -50,6 +59,8 @@ describe('sortBy', () => {
         ];
 
         expect(sortBy(input, 'name')).toEqual(expected);
+        const result = sortBy(input, 'name');
+        expect(result[result.length - 1]).toEqual({ age: 35 });
     });
 
     test('should handle array with different value types', () => {
