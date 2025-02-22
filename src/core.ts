@@ -6,7 +6,7 @@ import { loadTranslation } from './core/utils/loadTranslation';
 import { composeData } from './core/utils/composeData';
 import { getFileType } from './core/utils/getFileType';
 import { getTemplateFile } from './core/utils/getTemplateFile';
-import { buildTemplate } from './core/utils/buildTemplate';
+import { buildTemplate } from './core/services/buildTemplate';
 import { minifyContents } from './minify/minifyContents';
 import { ENV_DEVELOPMENT } from './definition/defines';
 import type { CoreOptions, CoreResult, CoreFile } from '../types';

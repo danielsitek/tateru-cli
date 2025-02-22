@@ -1,5 +1,5 @@
 import fs from 'fs';
-import type { TwigConfiguration } from '../../../types';
+import type { TwigConfiguration } from '../../../../types';
 
 const prepareTwigConfiguration = (pathToTwigFile: string, twigBase: string): TwigConfiguration => {
     try {

@@ -1,5 +1,5 @@
-import prepareTwigConfiguration from '../services/prepareTwigConfiguration';
-import TwigService from '../services/twigService';
+import prepareTwigConfiguration from './twig/prepareTwigConfiguration';
+import TwigService from './twig/twigService';
 
 /**
  *
