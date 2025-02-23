@@ -1,17 +1,19 @@
-import fs from 'fs';
+import fs from 'fs/promises';
 import path from 'path';
 
-export const loadTranslation = (
+export const loadTranslation = async (
     projectRoot: string,
     translationFilePath: string,
-): Record<string, unknown> => {
+): Promise<Record<string, unknown>> => {
     const translationFileSrc = path.resolve(projectRoot, translationFilePath);
 
-    if (!fs.existsSync(translationFileSrc)) {
+    try {
+        await fs.access(translationFileSrc);
+    } catch {
         throw new Error(`Cannot load translation file ${translationFileSrc}`);
     }
 
-    const contentString = fs.readFileSync(translationFileSrc).toString('utf8');
+    const contentString = await fs.readFile(translationFileSrc, 'utf8');
     const contentJson = JSON.parse(contentString);
 
     return {

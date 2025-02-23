@@ -11,10 +11,10 @@ const minifyHtml = (contents: string): string => {
     return minified;
 };
 
-export const minifyContents = (
+export const minifyContents = async (
     contents: string,
     fileType: string | undefined,
-): string => {
+): Promise<string> => {
     const type = `${fileType}`.toLocaleLowerCase().trim();
 
     if (type === 'html') {

@@ -20,7 +20,7 @@ function* iterateKeys<T>(data: T, key?: keyof T): IterableIterator<keyof T> {
     }
 }
 
-export const core = ({
+export const core = async ({
     config,
     env = ENV_DEVELOPMENT,
     lang,
@@ -28,15 +28,13 @@ export const core = ({
     cwd = '.',
     formatter,
     minify,
-}: CoreOptions): CoreResult => {
+}: CoreOptions): Promise<CoreResult> => {
     const files: CoreFile[] = [];
 
     const templateBase = getTemplateBase(cwd, config.options.src);
 
-    const translationsKeys = iterateKeys(config.translations, lang);
-
     // Translations loop
-    for (const translationKey of translationsKeys) {
+    for (const translationKey of iterateKeys(config.translations, lang)) {
         const translationConfig = {
             ...config.translations[translationKey],
         };
@@ -46,12 +44,10 @@ export const core = ({
         const envConfig = {
             ...config.env[env],
         };
-        const pagesKeys = iterateKeys(pagesConfig, page);
-
-        const translation = loadTranslation(cwd, translationConfig.src);
+        const translationData = await loadTranslation(cwd, translationConfig.src);
 
         // Pages loop
-        for (const pageKey of pagesKeys) {
+        for (const pageKey of iterateKeys(pagesConfig, page)) {
             const pageConfig = {
                 ...pagesConfig[pageKey],
             };
@@ -83,20 +79,20 @@ export const core = ({
 
             file.contents = buildTemplate(
                 pageData,
-                translation,
+                translationData,
                 templateBase,
                 templateFile,
             );
 
             if (typeof formatter === 'function') {
-                file.contents = formatter(file.contents, file.type);
+                file.contents = await formatter(file.contents, file.type);
             }
 
             if ((pageConfig.minify || []).includes(env)) {
                 if (typeof minify === 'function') {
-                    file.contents = minify(file.contents, file.type);
+                    file.contents = await minify(file.contents, file.type);
                 } else {
-                    file.contents = minifyContents(file.contents, file.type);
+                    file.contents = await minifyContents(file.contents, file.type);
                 }
             }
 

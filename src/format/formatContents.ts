@@ -1,4 +1,7 @@
-export const formatContents = (contents: string, fileType?: string): string => {
+export const formatContents = async (
+    contents: string,
+    fileType?: string
+): Promise<string> => {
     if (fileType && ['json', 'webmanifest'].includes(fileType)) {
         try {
             return JSON.stringify(JSON.parse(contents), null, 2);

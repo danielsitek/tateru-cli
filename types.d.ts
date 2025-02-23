@@ -42,7 +42,7 @@ export interface EnvironmentOptions {
     };
 }
 
-export interface EnvironmentData extends DataObject<EnvironmentOptions> {}
+export interface EnvironmentData extends DataObject<EnvironmentOptions> { }
 
 export interface FileSystemPathSettings {
     /**
@@ -66,7 +66,7 @@ export type ConfigFileTranslations = Record<
     FileSystemPathSettings
 >;
 
-export interface ConfigFileOptionsData extends EnvironmentOptions {}
+export interface ConfigFileOptionsData extends EnvironmentOptions { }
 
 export interface ConfigFileEnvironment {
     dev: EnvironmentData;
@@ -75,7 +75,7 @@ export interface ConfigFileEnvironment {
 
 export interface ConfigFileOptions
     extends FileSystemPathSettings,
-        DataObject<ConfigFileOptionsData> {}
+    DataObject<ConfigFileOptionsData> { }
 
 export interface ConfigFilePages
     extends CustomKey<CustomKey<ConfigFileOptions>> {
@@ -193,7 +193,7 @@ export interface PipelineData {
  * @param contents - The contents of the file to format.
  * @param fileType - The file type to format. Example: 'html', 'json', 'webmanifest', etc.
  */
-export type CoreFormatter = (contents: string, fileType?: string) => string;
+export type CoreFormatter = (contents: string, fileType?: string) => Promise<string>;
 
 /**
  * Minify function type
@@ -201,7 +201,7 @@ export type CoreFormatter = (contents: string, fileType?: string) => string;
  * @param contents - The contents of the file to minify.
  * @param fileType - The file type to minify. Example: 'html', 'json', 'webmanifest', etc.
  */
-export type CoreMinify = (contents: string, fileType?: string) => string;
+export type CoreMinify = (contents: string, fileType?: string) => Promise<string>;
 
 /**
  * Core options
