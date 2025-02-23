@@ -16,7 +16,9 @@ import { minifyContents } from './minify/minifyContents';
 let exitCode = 0;
 
 try {
-    const { configFile, env, lang, page } = parseCLIArgs(resolve(__dirname, "..",));
+    const { configFile, env, lang, page } = parseCLIArgs(
+        resolve(__dirname, '..'),
+    );
 
     const processCwd = process.cwd();
 

@@ -13,13 +13,13 @@ describe('sortBy', () => {
         const input = [
             { name: 'Charlie', age: 30 },
             { name: 'Alice', age: 25 },
-            { name: 'Bob', age: 35 }
+            { name: 'Bob', age: 35 },
         ];
 
         const expected = [
             { name: 'Alice', age: 25 },
             { name: 'Bob', age: 35 },
-            { name: 'Charlie', age: 30 }
+            { name: 'Charlie', age: 30 },
         ];
 
         expect(sortBy(input, 'name')).toEqual(expected);
@@ -29,13 +29,13 @@ describe('sortBy', () => {
         const input = [
             { name: 'Charlie', age: 30 },
             { name: 'Alice', age: 25 },
-            { name: 'Bob', age: 35 }
+            { name: 'Bob', age: 35 },
         ];
 
         const expected = [
             { name: 'Alice', age: 25 },
             { name: 'Charlie', age: 30 },
-            { name: 'Bob', age: 35 }
+            { name: 'Bob', age: 35 },
         ];
 
         expect(sortBy([...input], 'age')).toEqual(expected);
@@ -49,13 +49,13 @@ describe('sortBy', () => {
         const input = [
             { name: 'Charlie' },
             { name: 'Alice', age: 25 },
-            { age: 35 }
+            { age: 35 },
         ];
 
         const expected = [
             { name: 'Alice', age: 25 },
             { name: 'Charlie' },
-            { age: 35 }
+            { age: 35 },
         ];
 
         expect(sortBy(input, 'name')).toEqual(expected);
@@ -84,11 +84,7 @@ describe('sortBy', () => {
     });
 
     test('should mutate original array', () => {
-        const input = [
-            { name: 'Charlie' },
-            { name: 'Alice' },
-            { name: 'Bob' }
-        ];
+        const input = [{ name: 'Charlie' }, { name: 'Alice' }, { name: 'Bob' }];
 
         const result = sortBy(input, 'name');
 

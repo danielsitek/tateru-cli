@@ -1,7 +1,6 @@
 import fs from 'fs';
 import path from 'path';
 
-
 export const getProjectDir = (configFileName: string, cwd: string): string => {
     const fileSrc = path.resolve(cwd, configFileName);
     const dirName = path.dirname(fileSrc);

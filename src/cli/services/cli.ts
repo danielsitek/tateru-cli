@@ -1,7 +1,11 @@
-import { readFileSync } from "fs";
-import path from "path";
+import { readFileSync } from 'fs';
+import path from 'path';
 import type { BuilderOptions, Environment } from '../../../types';
-import { ENV_DEVELOPMENT, ENV_PRODUCTION, DEFAULT_CONFIG_FILE_NAME } from '../../definition/defines';
+import {
+    ENV_DEVELOPMENT,
+    ENV_PRODUCTION,
+    DEFAULT_CONFIG_FILE_NAME,
+} from '../../definition/defines';
 
 /**
  * Prints the help message.
@@ -36,60 +40,60 @@ export function parseCLIArgs(basePath: string): BuilderOptions {
     };
 
     // Get package.json data
-    const packageJsonPath = path.resolve(basePath, "package.json");
-    const packageJson = JSON.parse(readFileSync(packageJsonPath, "utf-8"));
+    const packageJsonPath = path.resolve(basePath, 'package.json');
+    const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf-8'));
 
     for (let i = 0; i < args.length; i++) {
         const arg = args[i];
 
         switch (arg) {
-            case "--help":
-            case "-h":
+            case '--help':
+            case '-h':
                 printHelp();
                 process.exit(0);
                 break;
-            case "--version":
-            case "-V":
+            case '--version':
+            case '-V':
                 console.log(packageJson.version);
                 process.exit(0);
                 break;
-            case "--env":
-            case "-e":
-                if (args[i + 1] && !args[i + 1].startsWith("-")) {
+            case '--env':
+            case '-e':
+                if (args[i + 1] && !args[i + 1].startsWith('-')) {
                     options.env = args[i + 1] as Environment;
                     i++;
                 } else {
-                    console.error("Error: Missing value for --env.");
+                    console.error('Error: Missing value for --env.');
                     process.exit(1);
                 }
                 break;
-            case "--page":
-            case "-p":
-                if (args[i + 1] && !args[i + 1].startsWith("-")) {
-                    options.page = args[i + 1] || "";
+            case '--page':
+            case '-p':
+                if (args[i + 1] && !args[i + 1].startsWith('-')) {
+                    options.page = args[i + 1] || '';
                     i++;
                 } else {
-                    console.error("Error: Missing value for --page.");
+                    console.error('Error: Missing value for --page.');
                     process.exit(1);
                 }
                 break;
-            case "--lang":
-            case "-l":
-                if (args[i + 1] && !args[i + 1].startsWith("-")) {
-                    options.lang = args[i + 1] || "";
+            case '--lang':
+            case '-l':
+                if (args[i + 1] && !args[i + 1].startsWith('-')) {
+                    options.lang = args[i + 1] || '';
                     i++;
                 } else {
-                    console.error("Error: Missing value for --lang.");
+                    console.error('Error: Missing value for --lang.');
                     process.exit(1);
                 }
                 break;
             default:
-                if (arg.startsWith("-")) {
+                if (arg.startsWith('-')) {
                     console.error(`Error: Unknown option "${arg}"\n`);
                     console.log(`Run "npx tateru-cli --help" to see available options.\n`);
                     process.exit(1);
                 }
-                if (!arg.startsWith("-")) {
+                if (!arg.startsWith('-')) {
                     options.configFile = arg;
                 }
                 break;

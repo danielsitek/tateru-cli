@@ -2,7 +2,7 @@ type GetPath = string | number | Array<string | number>;
 
 export function getNestedValue<T>(
     obj: Record<string, any>,
-    path: GetPath
+    path: GetPath,
 ): T | undefined {
     // First, try to get the value directly (for i18n-like keys)
     if (typeof path === 'string' && path in obj) {
