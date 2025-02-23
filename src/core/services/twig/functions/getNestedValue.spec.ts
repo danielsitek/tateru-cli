@@ -5,22 +5,22 @@ describe('getNestedValue', () => {
     const obj = {
         index: {
             header: {
-                a: "Some index header A",
+                a: 'Some index header A',
                 b: [1, 2, 3],
             },
         },
         homepage: {
             hero: {
-                title: "Some homepage hero title",
+                title: 'Some homepage hero title',
             },
-            title: "Some homepage title",
+            title: 'Some homepage title',
         },
-        'other-page.header.title': "Other page header title",
+        'other-page.header.title': 'Other page header title',
     };
 
     test('retrieves nested value using dot notation', () => {
         const result = getNestedValue(obj, 'homepage.hero.title');
-        expect(result).toBe("Some homepage hero title");
+        expect(result).toBe('Some homepage hero title');
     });
 
     test('retrieves nested value using array notation', () => {
@@ -40,7 +40,7 @@ describe('getNestedValue', () => {
 
     test('retrieves value from i18n-like key', () => {
         const result = getNestedValue(obj, 'other-page.header.title');
-        expect(result).toBe("Other page header title");
+        expect(result).toBe('Other page header title');
     });
 
     test('returns undefined for non-existent path', () => {
@@ -50,7 +50,7 @@ describe('getNestedValue', () => {
 
     test('handles nested objects correctly', () => {
         const result = getNestedValue(obj, 'index.header');
-        expect(result).toEqual({ a: "Some index header A", b: [1, 2, 3] });
+        expect(result).toEqual({ a: 'Some index header A', b: [1, 2, 3] });
     });
 
     test('handles arrays correctly', () => {
