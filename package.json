@@ -56,12 +56,10 @@
   },
   "dependencies": {
     "html-minifier": "4",
-    "js-beautify": "1",
     "twig": "1"
   },
   "devDependencies": {
     "@types/html-minifier": "4",
-    "@types/js-beautify": "1",
     "@types/node": "14",
     "@types/twig": "1",
     "simple-test-framework": "file:local_modules/simple-test-framework",
