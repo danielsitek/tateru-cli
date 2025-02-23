@@ -1,7 +1,7 @@
 import path from 'path';
 import { getTemplateBase } from './core/utils/getTemplateBase';
 import { iterateKeys } from './core/utils/iterateKeys';
-import { loadTranslation } from './core/utils/loadTranslation';
+import { readJson } from './utils/readJson';
 import { composeData } from './core/utils/composeData';
 import { getFileType } from './core/utils/getFileType';
 import { getTemplateFile } from './core/utils/getTemplateFile';
@@ -34,7 +34,7 @@ export const core = async ({
         const envConfig = {
             ...config.env[env],
         };
-        const translationData = await loadTranslation(cwd, translationConfig.src);
+        const translationData = await readJson(cwd, translationConfig.src);
 
         // Pages loop
         for (const pageKey of iterateKeys(pagesConfig, page)) {

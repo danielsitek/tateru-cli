@@ -4,7 +4,7 @@ const timeStart = process.hrtime();
 
 import { resolve } from 'path';
 import { getProjectDir } from './cli/utils/getProjectDir';
-import { loadConfiguration } from './cli/utils/loadConfiguration';
+import { readJson } from './utils/readJson';
 import { core } from './core';
 import { printLog } from './cli/utils/printLog';
 import { parseCLIArgs } from './cli/services/cli';
@@ -12,6 +12,7 @@ import { writeFile } from './cli/utils/writeFile';
 import { getEndTime } from './cli/utils/getEndTime';
 import { formatContents } from './format/formatContents';
 import { minifyContents } from './minify/minifyContents';
+import type { ConfigFile } from '../types';
 
 (async () => {
     let exitCode = 0;
@@ -25,7 +26,7 @@ import { minifyContents } from './minify/minifyContents';
 
         const projectDir = getProjectDir(configFile, processCwd);
 
-        const config = await loadConfiguration(configFile, processCwd);
+        const config = await readJson<ConfigFile>(processCwd, configFile);
 
         printLog(`Config file "${configFile}" loaded`);
         printLog(`Environment:\t${env}\n`);
