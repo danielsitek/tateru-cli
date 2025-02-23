@@ -19,7 +19,7 @@ const loopTranslations = async ({
     lang?: string;
     cwd: string;
 }) => {
-    return await Promise.all(
+    return Promise.all(
         Array.from(iterateKeys(config.translations, lang)).map(async (translationKey) => {
             const translationConfig = {
                 ...config.translations[translationKey],
