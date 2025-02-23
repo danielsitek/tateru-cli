@@ -42,7 +42,7 @@ export interface EnvironmentOptions {
     };
 }
 
-export interface EnvironmentData extends DataObject<EnvironmentOptions> { }
+export interface EnvironmentData extends DataObject<EnvironmentOptions> {}
 
 export interface FileSystemPathSettings {
     /**
@@ -66,7 +66,7 @@ export type ConfigFileTranslations = Record<
     FileSystemPathSettings
 >;
 
-export interface ConfigFileOptionsData extends EnvironmentOptions { }
+export interface ConfigFileOptionsData extends EnvironmentOptions {}
 
 export interface ConfigFileEnvironment {
     dev: EnvironmentData;
@@ -75,7 +75,7 @@ export interface ConfigFileEnvironment {
 
 export interface ConfigFileOptions
     extends FileSystemPathSettings,
-    DataObject<ConfigFileOptionsData> { }
+        DataObject<ConfigFileOptionsData> {}
 
 export interface ConfigFilePages
     extends CustomKey<CustomKey<ConfigFileOptions>> {

@@ -4,7 +4,7 @@ import path from 'path';
 export const loadTranslation = (
     projectRoot: string,
     translationFilePath: string,
-): any => {
+): Record<string, unknown> => {
     const translationFileSrc = path.resolve(projectRoot, translationFilePath);
 
     if (!fs.existsSync(translationFileSrc)) {
