@@ -1,7 +1,6 @@
 import path from 'path';
 import { getTemplateBase } from './core/utils/getTemplateBase';
-import { getTranslationKeys } from './core/utils/getTranslationKeys';
-import { getPagesKeys } from './core/utils/getPagesKeys';
+import { getKeys } from './core/utils/getKeys';
 import { loadTranslation } from './core/utils/loadTranslation';
 import { composeData } from './core/utils/composeData';
 import { getFileType } from './core/utils/getFileType';
@@ -24,7 +23,7 @@ export const core = ({
 
     const templateBase = getTemplateBase(cwd, config.options.src);
 
-    const translationsKeys = getTranslationKeys(config.translations, lang);
+    const translationsKeys = getKeys(config.translations, lang);
 
     // Translations loop
     translationsKeys.forEach((translationKey) => {
@@ -37,7 +36,7 @@ export const core = ({
         const envConfig = {
             ...config.env[env],
         };
-        const pagesKeys = getPagesKeys(pagesConfig, page);
+        const pagesKeys = getKeys(pagesConfig, page);
 
         const translation = loadTranslation(cwd, translationConfig.src);
 
