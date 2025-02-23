@@ -27,7 +27,14 @@ describe('deepMerge', () => {
         const obj1 = { amit: [{ susanta: 20 }, { durgam: 40 }] };
         const obj2 = { amit: [{ chinmoy: 30 }, { kripamoy: 50 }] };
         const result = deepMerge(obj1, obj2);
-        expect(result).toEqual({ amit: [{ susanta: 20 }, { durgam: 40 }, { chinmoy: 30 }, { kripamoy: 50 }] });
+        expect(result).toEqual({
+            amit: [
+                { susanta: 20 },
+                { durgam: 40 },
+                { chinmoy: 30 },
+                { kripamoy: 50 },
+            ],
+        });
     });
 
     test('overwrites primitives', () => {
@@ -62,7 +69,14 @@ describe('deepMerge', () => {
     });
 
     test('returns last item if all are non-objects', () => {
-        const result = deepMerge<number>(1, 'string', true, null, undefined, 42);
+        const result = deepMerge<number>(
+            1,
+            'string',
+            true,
+            null,
+            undefined,
+            42,
+        );
         expect(result).toBe(42);
     });
 });

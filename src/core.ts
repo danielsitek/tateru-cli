@@ -29,13 +29,13 @@ export const core = ({
     // Translations loop
     translationsKeys.forEach((translationKey) => {
         const translationConfig = {
-            ...config.translations[translationKey]
+            ...config.translations[translationKey],
         };
         const pagesConfig = {
-            ...config.pages[translationKey]
+            ...config.pages[translationKey],
         };
         const envConfig = {
-            ...config.env[env]
+            ...config.env[env],
         };
         const pagesKeys = getPagesKeys(pagesConfig, page);
 
@@ -44,7 +44,7 @@ export const core = ({
         // Pages loop
         pagesKeys.forEach((pageKey) => {
             const pageConfig = {
-                ...pagesConfig[pageKey]
+                ...pagesConfig[pageKey],
             };
 
             const pageData = composeData(
@@ -52,10 +52,14 @@ export const core = ({
                 config.options.data,
                 envConfig.data,
                 pageConfig.data,
-                pagesConfig
+                pagesConfig,
             );
 
-            const relativeFilePath = path.join(config.options.ext, translationConfig.ext, pageConfig.ext);
+            const relativeFilePath = path.join(
+                config.options.ext,
+                translationConfig.ext,
+                pageConfig.ext,
+            );
 
             const file: CoreFile = {
                 cwd,
@@ -68,7 +72,12 @@ export const core = ({
 
             const templateFile = getTemplateFile(templateBase, pageConfig.src);
 
-            file.contents = buildTemplate(pageData, translation, templateBase, templateFile);
+            file.contents = buildTemplate(
+                pageData,
+                translation,
+                templateBase,
+                templateFile,
+            );
 
             if (typeof formatter === 'function') {
                 file.contents = formatter(file.contents, file.type);

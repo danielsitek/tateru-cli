@@ -1,7 +1,8 @@
 import type { ConfigFileOptions, PagesUrlObject } from '../../../types';
 
-
-export const getHrefData = (pages: Record<string, Pick<ConfigFileOptions, 'ext'>>) => {
+export const getHrefData = (
+    pages: Record<string, Pick<ConfigFileOptions, 'ext'>>,
+) => {
     const href: PagesUrlObject = {};
 
     Object.keys(pages).forEach((pageName) => {

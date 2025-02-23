@@ -1,7 +1,6 @@
 import fs from 'fs';
 import path from 'path';
 
-
 export const writeFile = (fileContent: string, filePath: string): boolean => {
     const fileDir = path.dirname(filePath);
 

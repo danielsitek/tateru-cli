@@ -8,7 +8,12 @@ import { twigServiceRender } from './twig/twigService';
  * @param templateBase String - path to base dir with twig template files, usually src/twig.
  * @param templateFile String - path to twig template, usually src/twig/page.html.twig
  */
-export const buildTemplate = (data: any, translation: any, templateBase: string, templateFile: string): string => {
+export const buildTemplate = (
+    data: any,
+    translation: any,
+    templateBase: string,
+    templateFile: string,
+): string => {
     const fileTwigConfig = prepareTwigConfiguration(templateFile, templateBase);
     const template = twigServiceRender(fileTwigConfig, data, translation);
 

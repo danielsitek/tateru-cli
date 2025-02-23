@@ -11,7 +11,10 @@ const minifyHtml = (contents: string): string => {
     return minified;
 };
 
-export const minifyContents = (contents: string, fileType: string | undefined): string => {
+export const minifyContents = (
+    contents: string,
+    fileType: string | undefined,
+): string => {
     const type = `${fileType}`.toLocaleLowerCase().trim();
 
     if (type === 'html') {

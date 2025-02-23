@@ -6,7 +6,7 @@ import { sortBy } from './filters/sortBy';
 export const twigServiceRender = (
     fileTwigConfig: TwigConfiguration,
     fileRenderOptions: any,
-    translations: any
+    translations: any,
 ) => {
     Twig.extendFunction('trans', (key: string) => {
         return getNestedValue(translations, key) || key;
@@ -15,12 +15,12 @@ export const twigServiceRender = (
     Twig.extendFilter('sort_by', sortBy);
 
     try {
-        const template = Twig.twig(fileTwigConfig).render(
-            fileRenderOptions
-        );
+        const template = Twig.twig(fileTwigConfig).render(fileRenderOptions);
 
         return template;
     } catch (error) {
-        throw new Error(`Failed to render template: ${error instanceof Error ? error.message : String(error)}`);
+        throw new Error(
+            `Failed to render template: ${error instanceof Error ? error.message : String(error)}`,
+        );
     }
-}
+};

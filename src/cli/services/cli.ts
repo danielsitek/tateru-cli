@@ -1,7 +1,11 @@
 import { readFileSync } from 'fs';
 import path from 'path';
 import type { BuilderOptions, Environment } from '../../../types';
-import { ENV_DEVELOPMENT, ENV_PRODUCTION, DEFAULT_CONFIG_FILE_NAME } from '../../definition/defines';
+import {
+    ENV_DEVELOPMENT,
+    ENV_PRODUCTION,
+    DEFAULT_CONFIG_FILE_NAME,
+} from '../../definition/defines';
 
 /**
  * Prints the help message.
