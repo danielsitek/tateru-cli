@@ -30,7 +30,21 @@ import { minifyContents } from './minify/minifyContents';
         printLog(`Config file "${configFile}" loaded`);
         printLog(`Environment:\t${env}\n`);
 
-        for (const { contents, ext, path, cwd } of await core({
+        // for (const { contents, ext, path, cwd } of await core({
+        //     config,
+        //     env,
+        //     lang,
+        //     page,
+        //     cwd: projectDir,
+        //     formatter: formatContents,
+        //     minify: minifyContents,
+        // })) {
+        //     await writeFile(contents, resolve(cwd, path));
+
+        //     printLog(`Created:\t${ext}`);
+        // }
+
+        const files = await core({
             config,
             env,
             lang,
@@ -38,11 +52,14 @@ import { minifyContents } from './minify/minifyContents';
             cwd: projectDir,
             formatter: formatContents,
             minify: minifyContents,
-        })) {
-            await writeFile(contents, resolve(cwd, path));
+        });
 
-            printLog(`Created:\t${ext}`);
-        }
+        await Promise.all(
+            files.map(async ({ contents, ext, path, cwd }) => {
+                await writeFile(contents, resolve(cwd, path));
+                printLog(`Created:\t${ext}`);
+            }),
+        );
     } catch (e) {
         if (e instanceof Error) {
             console.error(e.message);
@@ -55,4 +72,4 @@ import { minifyContents } from './minify/minifyContents';
         printLog(`\nTime:\t\t${timeEnd.s}s ${timeEnd.ms}ms`);
         process.exit(exitCode);
     }
-})()
+})();
