@@ -1,16 +1,42 @@
 import path from 'path';
 import { getTemplateBase } from './core/utils/getTemplateBase';
-import { getKeys } from './core/utils/getKeys';
-import { loadTranslation } from './core/utils/loadTranslation';
+import { iterateKeys } from './core/utils/iterateKeys';
+import { readJson } from './utils/readJson';
 import { composeData } from './core/utils/composeData';
 import { getFileType } from './core/utils/getFileType';
 import { getTemplateFile } from './core/utils/getTemplateFile';
 import { buildTemplate } from './core/services/buildTemplate';
 import { minifyContents } from './minify/minifyContents';
 import { ENV_DEVELOPMENT } from './definition/defines';
-import type { CoreOptions, CoreResult, CoreFile } from '../types';
+import type { CoreOptions, CoreResult, CoreFile, ConfigFile } from '../types';
 
-export const core = ({
+const loopTranslations = async ({
+    config,
+    lang,
+    cwd,
+}: {
+    config: ConfigFile;
+    lang?: string;
+    cwd: string;
+}) => {
+    return Promise.all(
+        Array.from(iterateKeys(config.translations, lang)).map(async (translationKey) => {
+            const translationConfig = {
+                ...config.translations[translationKey],
+            };
+
+            const translationData = await readJson(cwd, translationConfig.src);
+
+            return {
+                translationKey,
+                translationConfig,
+                translationData,
+            };
+        })
+    );
+};
+
+export const core = async ({
     config,
     env = ENV_DEVELOPMENT,
     lang,
@@ -18,30 +44,23 @@ export const core = ({
     cwd = '.',
     formatter,
     minify,
-}: CoreOptions): CoreResult => {
+}: CoreOptions): Promise<CoreResult> => {
     const files: CoreFile[] = [];
 
     const templateBase = getTemplateBase(cwd, config.options.src);
-
-    const translationsKeys = getKeys(config.translations, lang);
+    const translations = await loopTranslations({ config, lang, cwd })
 
     // Translations loop
-    translationsKeys.forEach((translationKey) => {
-        const translationConfig = {
-            ...config.translations[translationKey],
-        };
+    for (const { translationKey, translationConfig, translationData } of translations) {
         const pagesConfig = {
             ...config.pages[translationKey],
         };
         const envConfig = {
             ...config.env[env],
         };
-        const pagesKeys = getKeys(pagesConfig, page);
-
-        const translation = loadTranslation(cwd, translationConfig.src);
 
         // Pages loop
-        pagesKeys.forEach((pageKey) => {
+        for (const pageKey of iterateKeys(pagesConfig, page)) {
             const pageConfig = {
                 ...pagesConfig[pageKey],
             };
@@ -73,26 +92,26 @@ export const core = ({
 
             file.contents = buildTemplate(
                 pageData,
-                translation,
+                translationData,
                 templateBase,
                 templateFile,
             );
 
             if (typeof formatter === 'function') {
-                file.contents = formatter(file.contents, file.type);
+                file.contents = await formatter(file.contents, file.type);
             }
 
             if ((pageConfig.minify || []).includes(env)) {
                 if (typeof minify === 'function') {
-                    file.contents = minify(file.contents, file.type);
+                    file.contents = await minify(file.contents, file.type);
                 } else {
-                    file.contents = minifyContents(file.contents, file.type);
+                    file.contents = await minifyContents(file.contents, file.type);
                 }
             }
 
             files.push(file);
-        });
-    });
+        };
+    };
 
     return files;
 };

@@ -1,19 +1,18 @@
-import fs from 'fs';
+import fs from 'fs/promises';
 import path from 'path';
 
-export const writeFile = (fileContent: string, filePath: string): boolean => {
+export const writeFile = async (fileContent: string, filePath: string): Promise<boolean> => {
     const fileDir = path.dirname(filePath);
 
-    if (!fs.existsSync(fileDir)) {
-        fs.mkdirSync(fileDir, { recursive: true });
+    try {
+        await fs.access(fileDir);
+    } catch {
+        await fs.mkdir(fileDir, { recursive: true });
     }
-    fs.writeFileSync(filePath, fileContent, {
+
+    await fs.writeFile(filePath, fileContent, {
         encoding: 'utf8',
     });
-
-    if (!fs.existsSync(filePath)) {
-        throw new Error(`Failed to write file ${filePath}`);
-    }
 
     return true;
 };
