@@ -8,7 +8,33 @@ import { getTemplateFile } from './core/utils/getTemplateFile';
 import { buildTemplate } from './core/services/buildTemplate';
 import { minifyContents } from './minify/minifyContents';
 import { ENV_DEVELOPMENT } from './definition/defines';
-import type { CoreOptions, CoreResult, CoreFile } from '../types';
+import type { CoreOptions, CoreResult, CoreFile, ConfigFile } from '../types';
+
+const loopTranslations = async ({
+    config,
+    lang,
+    cwd,
+}: {
+    config: ConfigFile;
+    lang?: string;
+    cwd: string;
+}) => {
+    return await Promise.all(
+        Array.from(iterateKeys(config.translations, lang)).map(async (translationKey) => {
+            const translationConfig = {
+                ...config.translations[translationKey],
+            };
+
+            const translationData = await readJson(cwd, translationConfig.src);
+
+            return {
+                translationKey,
+                translationConfig,
+                translationData,
+            };
+        })
+    );
+};
 
 export const core = async ({
     config,
@@ -22,19 +48,16 @@ export const core = async ({
     const files: CoreFile[] = [];
 
     const templateBase = getTemplateBase(cwd, config.options.src);
+    const translations = await loopTranslations({ config, lang, cwd })
 
     // Translations loop
-    for (const translationKey of iterateKeys(config.translations, lang)) {
-        const translationConfig = {
-            ...config.translations[translationKey],
-        };
+    for (const { translationKey, translationConfig, translationData } of translations) {
         const pagesConfig = {
             ...config.pages[translationKey],
         };
         const envConfig = {
             ...config.env[env],
         };
-        const translationData = await readJson(cwd, translationConfig.src);
 
         // Pages loop
         for (const pageKey of iterateKeys(pagesConfig, page)) {
