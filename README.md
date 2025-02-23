@@ -76,9 +76,9 @@ or
 npx tateru-cli --help
 ```
 
-### (Experimental) Integration with Gulp
+### (Experimental) Integration with [Gulp](http://gulpjs.com/)
 
-You can use Tateru CLI within a Gulp task by executing it via `child_process.exec`:
+You can use Tateru CLI within a [Gulp](http://gulpjs.com/) task by executing it via `child_process.exec`:
 
 ```js
 /** @file tasks/tateru.js */
@@ -336,6 +336,12 @@ Test CLI argument with missing value error:
 
 ```sh
 npm run dev:missing-arg-error
+```
+
+Run unit tests:
+
+```sh
+npm test
 ```
 
 ---
