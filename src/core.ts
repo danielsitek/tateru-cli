@@ -1,6 +1,6 @@
 import path from 'path';
 import { getTemplateBase } from './core/utils/getTemplateBase';
-import { getKeys } from './core/utils/getKeys';
+// import { getKeys } from './core/utils/getKeys';
 import { loadTranslation } from './core/utils/loadTranslation';
 import { composeData } from './core/utils/composeData';
 import { getFileType } from './core/utils/getFileType';
@@ -9,6 +9,16 @@ import { buildTemplate } from './core/services/buildTemplate';
 import { minifyContents } from './minify/minifyContents';
 import { ENV_DEVELOPMENT } from './definition/defines';
 import type { CoreOptions, CoreResult, CoreFile } from '../types';
+
+function* iterateKeys<T>(data: T, key?: keyof T): IterableIterator<keyof T> {
+    if (key) {
+        yield key;
+    } else {
+        for (const k of Object.keys(data) as (keyof T)[]) {
+            yield k;
+        }
+    }
+}
 
 export const core = ({
     config,
@@ -23,10 +33,10 @@ export const core = ({
 
     const templateBase = getTemplateBase(cwd, config.options.src);
 
-    const translationsKeys = getKeys(config.translations, lang);
+    const translationsKeys = iterateKeys(config.translations, lang);
 
     // Translations loop
-    translationsKeys.forEach((translationKey) => {
+    for (const translationKey of translationsKeys) {
         const translationConfig = {
             ...config.translations[translationKey],
         };
@@ -36,12 +46,12 @@ export const core = ({
         const envConfig = {
             ...config.env[env],
         };
-        const pagesKeys = getKeys(pagesConfig, page);
+        const pagesKeys = iterateKeys(pagesConfig, page);
 
         const translation = loadTranslation(cwd, translationConfig.src);
 
         // Pages loop
-        pagesKeys.forEach((pageKey) => {
+        for (const pageKey of pagesKeys) {
             const pageConfig = {
                 ...pagesConfig[pageKey],
             };
@@ -91,8 +101,8 @@ export const core = ({
             }
 
             files.push(file);
-        });
-    });
+        };
+    };
 
     return files;
 };
