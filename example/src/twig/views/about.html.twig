@@ -1,12 +1,14 @@
+<!DOCTYPE html>
+
 <html>
     <head>
         <title>{{- title -}}</title>
     </head>
     <body>
         <h1>{{- title -}}</h1>
-        <h2>{{- app.environment }}
-            /
-            {{ trans('about.title') }}</h2>
+        <h2>{{- app.environment -}}
+            {{- ' / ' -}}
+            {{- trans('about.title') -}}</h2>
 
         <pre><code>{{ href|json_encode }}</code></pre>
 
