@@ -30,20 +30,6 @@ import { minifyContents } from './minify/minifyContents';
         printLog(`Config file "${configFile}" loaded`);
         printLog(`Environment:\t${env}\n`);
 
-        // for (const { contents, ext, path, cwd } of await core({
-        //     config,
-        //     env,
-        //     lang,
-        //     page,
-        //     cwd: projectDir,
-        //     formatter: formatContents,
-        //     minify: minifyContents,
-        // })) {
-        //     await writeFile(contents, resolve(cwd, path));
-
-        //     printLog(`Created:\t${ext}`);
-        // }
-
         const files = await core({
             config,
             env,

@@ -1,6 +1,6 @@
 import path from 'path';
 import { getTemplateBase } from './core/utils/getTemplateBase';
-// import { getKeys } from './core/utils/getKeys';
+import { iterateKeys } from './core/utils/iterateKeys';
 import { loadTranslation } from './core/utils/loadTranslation';
 import { composeData } from './core/utils/composeData';
 import { getFileType } from './core/utils/getFileType';
@@ -9,16 +9,6 @@ import { buildTemplate } from './core/services/buildTemplate';
 import { minifyContents } from './minify/minifyContents';
 import { ENV_DEVELOPMENT } from './definition/defines';
 import type { CoreOptions, CoreResult, CoreFile } from '../types';
-
-function* iterateKeys<T>(data: T, key?: keyof T): IterableIterator<keyof T> {
-    if (key) {
-        yield key;
-    } else {
-        for (const k of Object.keys(data) as (keyof T)[]) {
-            yield k;
-        }
-    }
-}
 
 export const core = async ({
     config,
