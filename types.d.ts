@@ -104,6 +104,51 @@ export interface ConfigFile {
     readonly pages: ConfigFilePages;
 }
 
+export interface ConfigFile2 {
+    /**
+     * Modifications based on environment - dev or prod.
+     */
+
+    readonly env: {
+        [K in Environment]: {
+            data: Partial<ConfigFile2['options']['data']>;
+        };
+    };
+
+    /**
+     * Options configuration.
+     */
+    readonly options: {
+        data: Record<string, unknown>;
+        src: string;
+        ext: string;
+    };
+
+    /**
+     * Translations configuration.
+     */
+    readonly translations: {
+        [translationKey: string]: {
+            src: string;
+            ext: string;
+        };
+    };
+
+    /**
+     * Pages configuration.
+     */
+    readonly pages: {
+        [T in keyof ConfigFile2['translations']]: {
+            [pageKey: string]: {
+                data: Partial<ConfigFile2['options']['data']>;
+                src: string;
+                ext: string;
+                minify?: Array<keyof ConfigFile2['env']>; // např. seznam env, pro které má minifikovat
+            };
+        };
+    };
+}
+
 /**
  * Concatenated data from ConfigFile.options, ConfigFile.env and ConfigFile.page options for single page.
  */
