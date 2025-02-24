@@ -48,7 +48,7 @@ export const core = async ({
     const files: CoreFile[] = [];
 
     const templateBase = getTemplateBase(cwd, config.options.src);
-    const translations = await loopTranslations({ config, lang, cwd })
+    const translations = await loopTranslations({ config, lang, cwd });
 
     // Translations loop
     for (const { translationKey, translationConfig, translationData } of translations) {
