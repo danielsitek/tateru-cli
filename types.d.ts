@@ -108,7 +108,6 @@ export interface ConfigFile2 {
     /**
      * Modifications based on environment - dev or prod.
      */
-
     readonly env: {
         [K in Environment]: {
             data: Partial<ConfigFile2['options']['data']>;
@@ -265,7 +264,7 @@ export interface CoreOptions {
     /**
      * Language code for translations. Optional. Example: 'en', 'cs'.
      */
-    lang?: LanguageString;
+    lang?: string;
 
     /**
      * Page name to process. Optional. Example: 'index', 'about'.
@@ -337,4 +336,4 @@ export type CoreResult = CoreFile[];
  * @param options - Core options.
  * @returns Core result.
  */
-export declare const core: (options: CoreOptions) => CoreResult;
+export declare const core: (options: CoreOptions) => Promise<CoreResult>;
