@@ -13,6 +13,7 @@ import { getEndTime } from './cli/utils/getEndTime';
 import { formatContents } from './format/formatContents';
 import { minifyContents } from './minify/minifyContents';
 import type { ConfigFile } from '../types';
+import { validateSchema, SchemaError } from './schema';
 
 (async () => {
     let exitCode = 0;
@@ -27,6 +28,8 @@ import type { ConfigFile } from '../types';
         const projectDir = getProjectDir(configFile, processCwd);
 
         const config = await readJson<ConfigFile>(processCwd, configFile);
+
+        validateSchema(config);
 
         printLog(`Config file "${configFile}" loaded`);
         printLog(`Environment:\t${env}\n`);
@@ -48,7 +51,9 @@ import type { ConfigFile } from '../types';
             }),
         );
     } catch (e) {
-        if (e instanceof Error) {
+        if (e instanceof SchemaError) {
+            console.error(`Configuration validation error: ${e.message}`);
+        } else if (e instanceof Error) {
             console.error(e.message);
         } else {
             console.error(e);
