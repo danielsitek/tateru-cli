@@ -119,7 +119,15 @@ export interface ConfigFile2 {
      */
     readonly options: {
         data: Record<string, unknown>;
+
+        /**
+         * Path to source file or folder.
+         */
         src: string;
+
+        /**
+         * Path to generated file or folder.
+         */
         ext: string;
     };
 
@@ -128,7 +136,14 @@ export interface ConfigFile2 {
      */
     readonly translations: {
         [translationKey: string]: {
+            /**
+             * Path to source file or folder.
+             */
             src: string;
+
+            /**
+             * Path to generated file or folder.
+             */
             ext: string;
         };
     };
@@ -140,8 +155,20 @@ export interface ConfigFile2 {
         [T in keyof ConfigFile2['translations']]: {
             [pageKey: string]: {
                 data: Partial<ConfigFile2['options']['data']>;
+
+                /**
+                 * Path to source file or folder.
+                 */
                 src: string;
+
+                /**
+                 * Path to generated file or folder.
+                 */
                 ext: string;
+
+                /**
+                 * Apply file minification for selected environments.
+                 */
                 minify?: Array<keyof ConfigFile2['env']>; // např. seznam env, pro které má minifikovat
             };
         };
