@@ -275,3 +275,7 @@ export type CoreResult = CoreFile[];
  * @returns Core result.
  */
 export declare const core: (options: CoreOptions) => Promise<CoreResult>;
+
+export type ValidateSchema = (contents: string | ConfigFile) => Promise<boolean>;
+
+export declare const validateSchema: ValidateSchema;

@@ -13,7 +13,8 @@ import { getEndTime } from './cli/utils/getEndTime';
 import { formatContents } from './format/formatContents';
 import { minifyContents } from './minify/minifyContents';
 import type { ConfigFile } from '../types';
-import { validateSchema, SchemaError } from './schema';
+import { validateSchema } from './schema';
+import { SchemaError } from './schema/services/schemaError';
 
 (async () => {
     let exitCode = 0;
@@ -29,7 +30,7 @@ import { validateSchema, SchemaError } from './schema';
 
         const config = await readJson<ConfigFile>(processCwd, configFile);
 
-        validateSchema(config);
+        await validateSchema(config);
 
         printLog(`Config file "${configFile}" loaded`);
         printLog(`Environment:\t${env}\n`);
