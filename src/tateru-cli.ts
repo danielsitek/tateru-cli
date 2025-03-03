@@ -53,7 +53,7 @@ import { SchemaError } from './schema/services/schemaError';
         );
     } catch (e) {
         if (e instanceof SchemaError) {
-            console.error(`Configuration validation error: ${e.message}`);
+            console.error(`Configuration Schema Error: ${e.message}`);
         } else if (e instanceof Error) {
             console.error(e.message);
         } else {
