@@ -1,25 +1,79 @@
-import { SchemaError } from './schemaError';
+import { SchemaError, SchemaErrorDetails } from './schemaError';
 
-export const ensureProperty = (obj: any, prop: string, path: string): void => {
+/**
+ * Ensures that the property exists on the object
+ *
+ * @param obj - Object to check
+ * @param prop - Property name
+ * @param path - Path to the object (for error reporting)
+ *
+ * @throws {SchemaError} When property does not exist
+ */
+export function ensureProperty(obj: any, prop: string, path: string): void {
     if (obj[prop] === undefined) {
-        throw new SchemaError(`Missing required property: ${path}.${prop}`);
+        const details: SchemaErrorDetails = {
+            path: path ? `${path}.${prop}` : prop,
+            value: undefined,
+            expected: 'property to exist'
+        };
+        throw new SchemaError(`Missing required property: ${details.path}`, details);
     }
-};
+}
 
-export const ensureType = (value: unknown, type: string, path: string): void => {
-    if (typeof value !== type) {
-        throw new SchemaError(`Invalid type at ${path}: expected ${type}, got ${typeof value}`);
-    }
-};
-
-export const ensureObject = (value: unknown, path: string): void => {
+/**
+ * Ensures that the value is an object
+ *
+ * @param value - Value to check
+ * @param path - Path to the value (for error reporting)
+ *
+ * @throws {SchemaError} When value is not an object
+ */
+export function ensureObject(value: any, path: string): void {
     if (typeof value !== 'object' || value === null || Array.isArray(value)) {
-        throw new SchemaError(`Invalid value at ${path}: expected object`);
+        const details: SchemaErrorDetails = {
+            path,
+            value: Array.isArray(value) ? 'array' : typeof value,
+            expected: 'object'
+        };
+        throw new SchemaError(`Invalid value at ${path}: expected object`, details);
     }
-};
+}
 
-export const ensureArray = (value: unknown, path: string): void => {
-    if (!Array.isArray(value)) {
-        throw new SchemaError(`Invalid value at ${path}: expected array`);
+/**
+ * Ensures that the value is of specified type
+ *
+ * @param value - Value to check
+ * @param type - Expected type
+ * @param path - Path to the value (for error reporting)
+ *
+ * @throws {SchemaError} When value is not of specified type
+ */
+export function ensureType(value: any, type: string, path: string): void {
+    if (typeof value !== type) {
+        const details: SchemaErrorDetails = {
+            path,
+            value: typeof value,
+            expected: type
+        };
+        throw new SchemaError(`Invalid type at ${path}: expected ${type}, got ${typeof value}`, details);
     }
-};
+}
+
+/**
+ * Ensures that the value is an array
+ *
+ * @param value - Value to check
+ * @param path - Path to the value (for error reporting)
+ *
+ * @throws {SchemaError} When value is not an array
+ */
+export function ensureArray(value: any, path: string): void {
+    if (!Array.isArray(value)) {
+        const details: SchemaErrorDetails = {
+            path,
+            value: typeof value,
+            expected: 'array'
+        };
+        throw new SchemaError(`Invalid value at ${path}: expected array`, details);
+    }
+}

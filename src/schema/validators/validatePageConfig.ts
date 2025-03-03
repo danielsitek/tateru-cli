@@ -45,8 +45,12 @@ export const validatePageConfig = async (
             const envName = pageConfig.minify[i];
             if (!environmentKeys.includes(envName as Environment)) {
                 throw new SchemaError(
-                    `Invalid environment in ${path}.minify[${i}]: '${envName}'. ` +
-                    `Expected one of: ${environmentKeys.join(', ')}`
+                    `Invalid environment '${envName}'`,
+                    {
+                        path: `${path}.minify[${i}]`,
+                        value: envName,
+                        expected: environmentKeys
+                    }
                 );
             }
         }

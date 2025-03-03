@@ -34,7 +34,11 @@ export const validatePages = async (config: ConfigFile, translationKeys: string[
     // Check if all translation keys have a matching page configuration
     for (const translationKey of Object.keys(config.pages)) {
         if (!translationKeys.includes(translationKey)) {
-            throw new SchemaError(`Pages key '${translationKey}' has no matching translation key`);
+            throw new SchemaError(`Pages key '${translationKey}' has no matching translation key`, {
+                path: `pages.${translationKey}`,
+                value: translationKey,
+                expected: translationKeys,
+            });
         }
 
         ensureObject(config.pages[translationKey], `pages.${translationKey}`);
@@ -42,7 +46,11 @@ export const validatePages = async (config: ConfigFile, translationKeys: string[
         // Check if there are any pages defined
         const pageEntries = Object.entries(config.pages[translationKey]);
         if (pageEntries.length === 0) {
-            throw new SchemaError(`No pages defined for translation '${translationKey}'`);
+            throw new SchemaError(`No pages defined for translation '${translationKey}'`, {
+                path: `pages.${translationKey}`,
+                value: Object.keys(config.pages[translationKey]).length,
+                expected: 'at least one page'
+            });
         }
 
         for (const [pageKey, pageConfig] of pageEntries) {

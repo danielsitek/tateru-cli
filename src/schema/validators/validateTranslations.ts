@@ -27,7 +27,11 @@ export const validateTranslations = async (config: ConfigFile): Promise<string[]
 
     const translationKeys = Object.keys(config.translations);
     if (translationKeys.length === 0) {
-        throw new SchemaError('No translation keys defined');
+        throw new SchemaError('No translation keys defined', {
+            path: 'translations',
+            value: translationKeys,
+            expected: 'at least one translation key'
+        });
     }
 
     for (const key of translationKeys) {

@@ -1,5 +1,6 @@
 import type { ConfigFile, Environment } from '../../../types';
 import { ensureProperty, ensureObject } from '../services/validators';
+import { SchemaError } from '../services/schemaError';
 
 /**
  * Validates the environment section of the configuration
@@ -29,12 +30,30 @@ export const validateEnvironments = async (config: ConfigFile, supportedEnvironm
 
     const environmentKeys = Object.keys(config.env);
 
-    for (const env of supportedEnvironments) {
-        ensureProperty(config.env, env, 'env');
-        ensureObject(config.env[env], `env.${env}`);
+    for (const requiredEnv of supportedEnvironments) {
+        if (!environmentKeys.includes(requiredEnv)) {
+            throw new SchemaError(`Missing required environment '${requiredEnv}'`, {
+                path: 'env',
+                value: environmentKeys,
+                expected: supportedEnvironments
+            });
+        }
+    }
 
-        ensureProperty(config.env[env], 'data', `env.${env}`);
-        ensureObject(config.env[env].data, `env.${env}.data`);
+    for (const env of environmentKeys) {
+        if (!supportedEnvironments.includes(env as Environment)) {
+            throw new SchemaError(`Invalid environment '${env}'`, {
+                path: `env.${env}`,
+                value: env,
+                expected: supportedEnvironments
+            });
+        }
+
+        const envConfig = config.env[env as unknown as Environment];
+        ensureObject(envConfig, `env.${env}`);
+
+        ensureProperty(envConfig, 'data', `env.${env}`);
+        ensureObject(envConfig.data, `env.${env}.data`);
     }
 
     return { environmentKeys };
