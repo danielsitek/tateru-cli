@@ -2,93 +2,26 @@ import type Twig from 'twig';
 
 export type Environment = 'dev' | 'prod';
 
-// export type DataType = {};
-
-// export type Translations = {};
-
 export type PageNameString = 'index' | string;
 
 export type FileSystemPath = string;
-
-export type LanguageString = 'en' | 'cs' | string;
-
-// type CustomKey<T> = Record<string, T>;
-
-// export interface DataObject<T = DataType> {
-//     data: T;
-// }
 
 export type PagesUrlObject = Record<string, FileSystemPath>;
 
 export interface BuilderOptions {
     configFile: string;
     env: Environment;
-    lang?: LanguageString;
+    lang?: string;
     page?: string;
 }
-
-/**
- * Config file content
- */
-
-// export interface EnvironmentOptions {
-//     app: {
-//         /**
-//          * Working environment.
-//          */
-//         environment: Environment;
-
-//         [key: string]: any;
-//     };
-// }
-
-// export interface EnvironmentData extends DataObject<EnvironmentOptions> { }
-
-// export interface FileSystemPathSettings {
-//     /**
-//      * Path to source file or folder.
-//      */
-//     readonly src: FileSystemPath;
-
-//     /**
-//      * Path to generated file or folder.
-//      */
-//     readonly ext: FileSystemPath;
-
-//     /**
-//      * Apply file minification for selected environments.
-//      */
-//     readonly minify?: Array<Environment | undefined>;
-// }
-
-// export type ConfigFileTranslations = Record<
-//     LanguageString,
-//     FileSystemPathSettings
-// >;
-
-// export interface ConfigFileOptionsData extends EnvironmentOptions { }
-
-// export interface ConfigFileEnvironment {
-//     dev: EnvironmentData;
-//     prod: EnvironmentData;
-// }
-
-// export interface ConfigFileOptions
-//     extends FileSystemPathSettings,
-//     DataObject<ConfigFileOptionsData> { }
-
-// export interface ConfigFilePages
-//     extends CustomKey<CustomKey<ConfigFileOptions>> {
-//     [shortLangString: string]: Record<PageNameString, ConfigFileOptions>;
-// }
 
 export interface ConfigFile {
     /**
      * Modifications based on environment - dev or prod.
      */
     readonly env: {
-        [K in Environment]: {
-            data: Partial<ConfigFile['options']['data']>;
+        readonly [K in Environment]: {
+            readonly data: Partial<ConfigFile['options']['data']>;
         };
     };
 
@@ -96,33 +29,33 @@ export interface ConfigFile {
      * Options configuration.
      */
     readonly options: {
-        data: Record<string, unknown>;
+        readonly data: Record<string, unknown>;
 
         /**
          * Path to source file or folder.
          */
-        src: string;
+        readonly src: string;
 
         /**
          * Path to generated file or folder.
          */
-        ext: string;
+        readonly ext: string;
     };
 
     /**
      * Translations configuration.
      */
     readonly translations: {
-        [translationKey: string]: {
+        readonly [translationKey: string]: {
             /**
              * Path to source file or folder.
              */
-            src: string;
+            readonly src: string;
 
             /**
              * Path to generated file or folder.
              */
-            ext: string;
+            readonly ext: string;
         };
     };
 
@@ -130,24 +63,24 @@ export interface ConfigFile {
      * Pages configuration.
      */
     readonly pages: {
-        [T in keyof ConfigFile['translations']]: {
-            [pageKey: string]: {
-                data: Partial<ConfigFile['options']['data']>;
+        readonly [T in keyof ConfigFile['translations']]: {
+            readonly [pageKey: string]: {
+                readonly data: Partial<ConfigFile['options']['data']>;
 
                 /**
                  * Path to source file or folder.
                  */
-                src: string;
+                readonly src: string;
 
                 /**
                  * Path to generated file or folder.
                  */
-                ext: string;
+                readonly ext: string;
 
                 /**
                  * Apply file minification for selected environments.
                  */
-                minify?: Array<keyof ConfigFile['env']>;
+                readonly minify?: Array<keyof ConfigFile['env']>;
             };
         };
     };
@@ -158,7 +91,7 @@ export interface ConfigFile {
  */
 export interface PageRenderOptions {
     href: PagesUrlObject;
-    lang: LanguageString;
+    lang: string;
     page: PageNameString;
 }
 
