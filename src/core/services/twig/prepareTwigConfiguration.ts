@@ -11,7 +11,7 @@ export const prepareTwigConfiguration = (
         }
 
         const fileContent = fs.readFileSync(pathToTwigFile);
-        const fileTwigConfig = {
+        const fileTwigConfig: TwigConfiguration = {
             id: Math.floor(Math.random() * 1000000),
             path: pathToTwigFile,
             base: twigBase,

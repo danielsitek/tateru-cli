@@ -1,12 +1,12 @@
-import type { ConfigFileOptions, PagesUrlObject } from '../../../types';
+import type { ConfigFile, PagesUrlObject } from '../../../types';
 
 export const getHrefData = (
-    pages: Record<string, Pick<ConfigFileOptions, 'ext'>>,
+    pages: Record<string, Pick<ConfigFile['pages'][string][string], 'ext'>>,
 ) => {
     const href: PagesUrlObject = {};
 
     Object.keys(pages).forEach((pageName) => {
-        href[pageName as string] = `/${pages[pageName as string].ext}`;
+        href[pageName] = `/${pages[pageName].ext}`;
     });
 
     return href;

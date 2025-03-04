@@ -5,8 +5,8 @@ import { sortBy } from './filters/sortBy';
 
 export const twigServiceRender = (
     fileTwigConfig: TwigConfiguration,
-    fileRenderOptions: any,
-    translations: any,
+    renderData: Record<string, unknown>,
+    translations: Record<string, unknown>,
 ) => {
     Twig.extendFunction('trans', (key: string) => {
         return getNestedValue(translations, key) || key;
@@ -15,7 +15,7 @@ export const twigServiceRender = (
     Twig.extendFilter('sort_by', sortBy);
 
     try {
-        const template = Twig.twig(fileTwigConfig).render(fileRenderOptions);
+        const template = Twig.twig(fileTwigConfig).render(renderData);
 
         return template;
     } catch (error) {

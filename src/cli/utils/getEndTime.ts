@@ -1,5 +1,5 @@
 export const getEndTime = (
-    timeKey: any,
+    timeKey: [number, number],
 ): { s: number; ms: number; ns: number } => {
     const endTime = process.hrtime(timeKey);
     const s = endTime[0];

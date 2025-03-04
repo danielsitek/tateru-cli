@@ -28,7 +28,7 @@ const loopTranslations = async ({
             const translationData = await readJson(cwd, translationConfig.src);
 
             return {
-                translationKey,
+                translationKey: String(translationKey),
                 translationConfig,
                 translationData,
             };
