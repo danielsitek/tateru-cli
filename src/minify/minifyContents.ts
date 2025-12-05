@@ -1,7 +1,7 @@
-import { minify } from 'html-minifier';
+import { minify } from 'html-minifier-next';
 
-const minifyHtml = (contents: string): string => {
-    const minified = minify(contents, {
+const minifyHtml = async (contents: string): Promise<string> => {
+    const minified = await minify(contents, {
         collapseWhitespace: true,
         minifyCSS: true,
         minifyJS: true,
@@ -18,7 +18,7 @@ export const minifyContents = async (
     const type = `${fileType}`.toLocaleLowerCase().trim();
 
     if (type === 'html') {
-        return minifyHtml(contents);
+        return await minifyHtml(contents);
     }
 
     return contents;

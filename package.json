@@ -55,11 +55,11 @@
     "prepack": "npm run build"
   },
   "dependencies": {
-    "html-minifier": "4.0.0",
+    "html-minifier-next": "4.6.1",
     "twig": "1.17.1"
   },
   "devDependencies": {
-    "@types/html-minifier": "4.0.6",
+    "@types/html-minifier-next": "2.1.1",
     "@types/node": "24.10.1",
     "@types/twig": "1.12.17",
     "simple-test-framework": "file:local_modules/simple-test-framework",
