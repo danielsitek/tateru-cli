@@ -122,6 +122,9 @@ async function findAndRunTests(dir: string) {
         const stat = fs.statSync(filePath);
 
         if (stat.isDirectory()) {
+            if (file === 'node_modules') {
+                continue;
+            }
             await findAndRunTests(filePath);
         } else if (file.endsWith('.spec.ts')) {
             await runTestFile(filePath);
