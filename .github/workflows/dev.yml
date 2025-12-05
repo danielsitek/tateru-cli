@@ -12,6 +12,10 @@ jobs:
     name: Tests for Node ${{ matrix.node-version }}
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: read
+      pull-requests: write
+
     strategy:
       matrix:
         node-version: [18, 20, 22, 24]
