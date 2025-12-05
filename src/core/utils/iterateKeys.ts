@@ -1,4 +1,4 @@
-export function* iterateKeys<T>(data: T, key?: keyof T): IterableIterator<keyof T> {
+export function* iterateKeys<T extends object>(data: T, key?: keyof T): IterableIterator<keyof T> {
     if (key) {
         yield key;
     } else {
