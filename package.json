@@ -1,6 +1,6 @@
 {
   "name": "tateru-cli",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "description": "Simple CLI static site builder tool with Twig.",
   "keywords": [
     "cli",
