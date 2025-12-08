@@ -1,14 +1,12 @@
-import { minify } from 'html-minifier-next';
+import minifyHtml from "@minify-html/node";
 
-const minifyHtml = async (contents: string): Promise<string> => {
-    const minified = await minify(contents, {
-        collapseWhitespace: true,
-        minifyCSS: true,
-        minifyJS: true,
-        removeScriptTypeAttributes: false,
+const minifyContentsHtml = async (contents: string): Promise<string> => {
+    const minified = await minifyHtml.minify(Buffer.from(contents), {
+        minify_css: true,
+        minify_js: true,
     });
 
-    return minified;
+    return minified.toString();
 };
 
 export const minifyContents = async (
@@ -18,7 +16,7 @@ export const minifyContents = async (
     const type = `${fileType}`.toLocaleLowerCase().trim();
 
     if (type === 'html') {
-        return await minifyHtml(contents);
+        return await minifyContentsHtml(contents);
     }
 
     return contents;

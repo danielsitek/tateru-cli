@@ -55,7 +55,7 @@
     "prepack": "npm run build"
   },
   "dependencies": {
-    "html-minifier-next": "4.7.0",
+    "@minify-html/node": "0.18.1",
     "twig": "1.17.1"
   },
   "devDependencies": {
