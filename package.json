@@ -59,7 +59,6 @@
     "twig": "1.17.1"
   },
   "devDependencies": {
-    "@types/html-minifier-next": "2.1.1",
     "@types/node": "24.10.1",
     "@types/twig": "1.12.17",
     "simple-test-framework": "file:local_modules/simple-test-framework",
