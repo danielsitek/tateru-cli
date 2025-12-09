@@ -27,13 +27,11 @@ describe('minifyContents', () => {
         const minified = await minifyContents(html, 'html');
 
         // Basic checks for minification
-        expect(minified.includes('  Hello   World  ')).toBe(false);
-        expect(minified.includes('Hello World')).toBe(true);
-        expect(minified.includes('\n')).toBe(false);
-        expect(minified.includes('<!doctype html>')).toBe(true); // @minify-html usually lowercases doctype
-    });
-
-    test('should return original content if fileType is not html', async () => {
+        expect(minified).not.toContain('  Hello   World  ');
+        expect(minified).toContain('Hello World');
+        expect(minified).not.toContain('\n');
+        expect(minified).toContain('<!doctype html>'); // @minify-html usually lowercases doctype
+    }); test('should return original content if fileType is not html', async () => {
         const css = `
             body {
                 color: red;
