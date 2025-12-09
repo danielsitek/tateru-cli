@@ -104,6 +104,39 @@ export function expect<T>(actual: T) {
                 throw new Error(`Expected undefined, but got ${actual}`);
             }
         },
+        toContain: (expected: any) => {
+            if (Array.isArray(actual)) {
+                if (!actual.includes(expected)) {
+                    throw new Error(`Expected array to contain ${expected}, but it did not.`);
+                }
+            } else if (typeof actual === 'string') {
+                if (!actual.includes(expected)) {
+                    throw new Error(`Expected string to contain "${expected}", but it did not.`);
+                }
+            } else {
+                throw new Error(`Expected toContain to be used with an array or string, but got ${typeof actual}`);
+            }
+        },
+        not: {
+            toContain: (expected: any) => {
+                if (Array.isArray(actual)) {
+                    if (actual.includes(expected)) {
+                        throw new Error(`Expected array NOT to contain ${expected}, but it did.`);
+                    }
+                } else if (typeof actual === 'string') {
+                    if (actual.includes(expected)) {
+                        throw new Error(`Expected string NOT to contain "${expected}", but it did.`);
+                    }
+                } else {
+                    throw new Error(`Expected not.toContain to be used with an array or string, but got ${typeof actual}`);
+                }
+            },
+            toBe: (expected: T) => {
+                if (actual === expected) {
+                    throw new Error(`Expected not to be ${expected}, but it was.`);
+                }
+            }
+        }
     };
 }
 

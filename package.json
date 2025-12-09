@@ -59,14 +59,14 @@
     "twig": "1.17.1"
   },
   "devDependencies": {
-    "@types/html-minifier-next": "2.1.1",
     "@types/node": "24.10.1",
     "@types/twig": "1.12.17",
     "simple-test-framework": "file:local_modules/simple-test-framework",
+    "ts-node": "10.9.2",
     "typescript": "5.9.3"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": ">=20.0.0"
   },
   "types": "./types.d.ts",
   "preferGlobal": true
