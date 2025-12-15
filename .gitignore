@@ -5,3 +5,8 @@ node_modules
 dist/
 example/dist
 /*.tgz
+
+
+#Ignore vscode AI rules
+.github/instructions/codacy.instructions.md
+.codacy
